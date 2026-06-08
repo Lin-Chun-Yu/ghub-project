@@ -1,0 +1,573 @@
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0a0f;--bg2:#111118;--bg3:#18181f;--bg4:#1e1e28;--bd:#2a2a38;--bd2:#363648;--t1:#f0f0f8;--t2:#9090a8;--t3:#5a5a70;--blue:#378ADD;--blue2:#85B7EB;--blue3:#0C447C}
+body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
+.shell{display:flex;flex-direction:column;height:720px}
+.navbar{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:52px;background:var(--bg2);border-bottom:0.5px solid var(--bd2);flex-shrink:0}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-name{font-size:15px;font-weight:500;color:var(--t1);letter-spacing:.04em}
+.brand-sub{font-size:9px;color:var(--t3);letter-spacing:.06em;text-transform:uppercase}
+.nav-links{display:flex;gap:2px}
+.nav-item{display:flex;align-items:center;gap:5px;padding:6px 11px;border-radius:8px;cursor:pointer;font-size:12px;color:var(--t2);border:none;background:transparent;transition:all .15s;white-space:nowrap}
+.nav-item i{font-size:14px}
+.nav-item:hover{background:var(--bg3);color:var(--t1)}
+.nav-item.active{background:rgba(55,138,221,0.12);color:var(--blue2)}
+.nav-item.active i{color:var(--blue)}
+.hamburger{display:none;background:transparent;border:none;color:var(--t2);font-size:20px;cursor:pointer;padding:4px}
+.mob-menu{display:none;flex-direction:column;gap:2px;background:var(--bg2);border-bottom:0.5px solid var(--bd2);padding:8px 12px 12px}
+.mob-menu.open{display:flex}
+.mob-menu .nav-item{width:100%;padding:10px 12px;justify-content:flex-start}
+.content{flex:1;overflow:hidden}
+.page{display:none;height:100%}
+.page.active{display:flex;flex-direction:column;height:100%}
+
+/* HOME */
+.home-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);flex:1;overflow:hidden}
+.map-col{display:flex;flex-direction:column;border-right:0.5px solid var(--bd)}
+.map-hdr{padding:11px 14px 9px;border-bottom:0.5px solid var(--bd);flex-shrink:0}
+.map-hdr h3{font-size:13px;font-weight:500;color:var(--t1);display:flex;align-items:center;gap:6px}
+.map-hdr h3 i{color:var(--blue);font-size:14px}
+.map-sub{font-size:10px;color:var(--t3);margin-top:2px}
+#leaflet-map{flex:1;min-height:0}
+.events-col{display:flex;flex-direction:column;overflow:hidden}
+.etabs{display:flex;border-bottom:0.5px solid var(--bd);flex-shrink:0}
+.etab{flex:1;padding:11px 0;font-size:12px;text-align:center;cursor:pointer;color:var(--t3);border:none;background:transparent;border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:4px}
+.etab i{font-size:13px}
+.etab.active{color:var(--blue2);border-bottom-color:var(--blue)}
+.elist{flex:1;overflow-y:auto;padding:10px}
+.elist::-webkit-scrollbar{width:3px}
+.elist::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+.ecard{background:var(--bg3);border:0.5px solid var(--bd);border-radius:10px;padding:11px;margin-bottom:7px;cursor:pointer;transition:border-color .15s}
+.ecard:hover{border-color:var(--bd2)}
+.ecard.upcoming{border-left:2px solid var(--blue)}
+.ecard.past{border-left:2px solid var(--t3)}
+.etop{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px}
+.ename{font-size:12px;font-weight:500;color:var(--t1);line-height:1.3}
+.ebadge{font-size:10px;padding:2px 7px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.badge-open{background:rgba(29,158,117,0.15);color:#5DCAA5;border:0.5px solid rgba(29,158,117,0.3)}
+.badge-soon{background:rgba(55,138,221,0.15);color:var(--blue2);border:0.5px solid rgba(55,138,221,0.3)}
+.badge-past{background:rgba(90,90,112,0.2);color:var(--t3);border:0.5px solid var(--bd)}
+.emeta{display:flex;gap:10px;font-size:10px;color:var(--t3)}
+.emeta span{display:flex;align-items:center;gap:3px}
+.emeta i{font-size:11px}
+
+/* BEY — 雷達圖版 */
+.bey-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.bey-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);flex:1;overflow:hidden}
+
+/* 左：雷達圖區 */
+.col-radar{background:var(--bg3);border-right:0.5px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:12px;overflow:hidden}
+.radar-title{font-size:11px;color:var(--t3);letter-spacing:.06em;text-transform:uppercase;flex-shrink:0}
+#radar-canvas{display:block;flex-shrink:0}
+.radar-legend{display:grid;grid-template-columns:repeat(3,1fr);gap:5px 10px;width:100%;flex-shrink:0}
+.rl-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t2)}
+.rl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* 右：選單 + 屬性 */
+.colr{display:flex;flex-direction:column;overflow-y:auto;padding:12px;gap:9px}
+.colr::-webkit-scrollbar{width:3px}
+.colr::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+.sec-lbl{font-size:10px;font-weight:500;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.pblock{background:var(--bg3);border-radius:12px;border:0.5px solid var(--bd);padding:11px;margin-bottom:8px}
+.phead{font-size:12px;color:var(--t2);margin-bottom:7px;display:flex;align-items:center;gap:5px}
+.phead i{font-size:14px;color:var(--blue)}
+.sel-wrap{position:relative}
+.sel-trig{display:flex;align-items:center;gap:9px;padding:7px 9px;background:var(--bg4);border:0.5px solid var(--bd2);border-radius:8px;cursor:pointer;transition:border-color .15s;user-select:none}
+.sel-trig:hover{border-color:var(--blue3)}
+.sel-icon{width:30px;height:30px;border-radius:6px;flex-shrink:0;overflow:hidden}
+.sel-text{flex:1;min-width:0}
+.sel-name{font-size:12px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sel-sub{font-size:10px;color:var(--t3)}
+.sel-arr{color:var(--t3);font-size:13px;transition:transform .2s;flex-shrink:0}
+.sel-arr.open{transform:rotate(180deg)}
+.dd{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:200;background:var(--bg3);border:0.5px solid var(--bd2);border-radius:10px;overflow:hidden;display:none;box-shadow:0 8px 28px rgba(0,0,0,.65)}
+.dd.open{display:block}
+.dopt{display:flex;align-items:center;gap:9px;padding:7px 9px;cursor:pointer;border-bottom:0.5px solid var(--bd);transition:background .1s}
+.dopt:last-child{border-bottom:none}
+.dopt:hover,.dopt.active{background:rgba(55,138,221,0.08)}
+.dopt-icon{width:34px;height:34px;border-radius:6px;flex-shrink:0;overflow:hidden}
+.dopt-text{flex:1;min-width:0}
+.dopt-name{font-size:12px;font-weight:500;color:var(--t1)}
+.dopt-sub{font-size:10px;color:var(--t3)}
+.hot-b{font-size:10px;padding:2px 6px;border-radius:20px;background:rgba(163,45,45,0.2);color:#F09595;border:0.5px solid rgba(163,45,45,0.3);flex-shrink:0}
+.wt-b{font-size:10px;color:var(--t3);flex-shrink:0}
+
+.stats-bottom{background:var(--bg3);border-radius:12px;border:0.5px solid var(--bd);padding:11px}
+.sg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-bottom:8px}
+.sb{background:var(--bg4);border-radius:7px;border:0.5px solid var(--bd);padding:.5rem;text-align:center}
+.sl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.sv{font-size:16px;font-weight:500}
+.divid{height:0.5px;background:var(--bd);margin:6px 0}
+.brow{display:flex;align-items:center;justify-content:space-between}
+.cname{font-size:11px;font-weight:500;color:var(--t1);line-height:1.4}
+.mrow{display:flex;gap:4px;margin-top:3px;flex-wrap:wrap}
+.mp{font-size:9px;padding:2px 7px;border-radius:20px;background:var(--bg4);color:var(--t2);border:0.5px solid var(--bd)}
+.sbadge{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--bg4);border:0.5px solid var(--bd2);flex-shrink:0}
+
+/* CHANGELOG */
+.cl-wrap{flex:1;overflow-y:auto;padding:16px}
+.cl-wrap::-webkit-scrollbar{width:3px}
+.cl-wrap::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+.cl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.cl-card{background:var(--bg3);border:0.5px solid var(--bd);border-radius:12px;padding:14px}
+.cl-title{font-size:13px;font-weight:500;color:var(--t1);display:flex;align-items:center;gap:7px;margin-bottom:9px}
+.cl-title i{font-size:15px;color:var(--blue)}
+.cl-item{display:flex;gap:7px;padding:5px 0;border-bottom:0.5px solid var(--bd);align-items:flex-start}
+.cl-item:last-child{border-bottom:none}
+.cl-ver{font-size:10px;padding:2px 6px;border-radius:20px;background:rgba(55,138,221,0.15);color:var(--blue2);border:0.5px solid rgba(55,138,221,0.25);white-space:nowrap;margin-top:1px}
+.cl-txt{font-size:11px;color:var(--t2);line-height:1.5;flex:1}
+.fb-card{background:var(--bg3);border:0.5px solid var(--bd);border-radius:12px;padding:14px}
+.fb-title{font-size:13px;font-weight:500;color:var(--t1);margin-bottom:9px;display:flex;align-items:center;gap:7px}
+.fb-title i{font-size:15px;color:#5DCAA5}
+textarea.fb-in{width:100%;background:var(--bg4);border:0.5px solid var(--bd2);border-radius:8px;color:var(--t1);font-size:12px;padding:9px;resize:none;height:75px;font-family:var(--font-sans)}
+textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
+.btn-row{display:flex;gap:8px;margin-top:8px}
+.btn-p{padding:6px 14px;border-radius:8px;border:none;font-size:12px;cursor:pointer;background:var(--blue3);color:var(--blue2);transition:opacity .15s}
+.btn-p:hover{opacity:.8}
+.btn-cf{padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer;background:rgba(186,117,23,0.15);color:#FAC775;border:0.5px solid rgba(186,117,23,0.3);display:flex;align-items:center;gap:4px}
+.sdiv{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;padding:5px 0 7px;margin-top:3px}
+
+.leaflet-container{background:#0d0d14!important}
+.leaflet-tile-pane{filter:brightness(.55) saturate(.6) hue-rotate(180deg)}
+.leaflet-control-zoom a{background:var(--bg3)!important;color:var(--t1)!important;border-color:var(--bd2)!important}
+.leaflet-popup-content-wrapper{background:var(--bg3);border:0.5px solid var(--bd2);border-radius:10px;color:var(--t1);box-shadow:0 4px 16px rgba(0,0,0,.5)}
+.leaflet-popup-tip{background:var(--bg3)}
+.leaflet-popup-content{margin:9px 13px;font-size:12px;font-family:var(--font-sans)}
+.pop-name{font-weight:500;font-size:13px;margin-bottom:3px}
+.pop-meta{font-size:10px;color:var(--t2);display:flex;flex-direction:column;gap:2px}
+
+@media(max-width:540px){
+  .nav-links{display:none}.hamburger{display:block}
+  .home-layout,.bey-layout{grid-template-columns:1fr}
+  .map-col{border-right:none;border-bottom:0.5px solid var(--bd)}
+  #leaflet-map{height:210px;min-height:210px;flex:none}
+  .col-radar{border-right:none;border-bottom:0.5px solid var(--bd);min-height:300px}
+}
+</style>
+
+<div class="shell">
+<nav class="navbar">
+  <div class="brand">
+    <svg width="32" height="32" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+      <rect width="34" height="34" rx="8" fill="#0C447C"/>
+      <circle cx="17" cy="17" r="10" stroke="#378ADD" stroke-width="1.5" fill="none"/>
+      <circle cx="17" cy="17" r="5.5" stroke="#85B7EB" stroke-width="1" fill="none"/>
+      <line x1="17" y1="7" x2="17" y2="27" stroke="#378ADD" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="7" y1="17" x2="27" y2="17" stroke="#378ADD" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="9.9" y1="9.9" x2="24.1" y2="24.1" stroke="#85B7EB" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.6"/>
+      <line x1="24.1" y1="9.9" x2="9.9" y2="24.1" stroke="#85B7EB" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.6"/>
+      <circle cx="17" cy="17" r="2.5" fill="#85B7EB"/>
+      <polygon points="17,3 18.2,6.5 17,6 15.8,6.5" fill="#FAC775" opacity="0.9"/>
+    </svg>
+    <div><div class="brand-name">G-Hub</div><div class="brand-sub">戰鬥陀螺 X 台灣</div></div>
+  </div>
+  <div class="nav-links">
+    <button class="nav-item active" onclick="goto('home',this)" id="nb-home"><i class="ti ti-map-2" aria-hidden="true"></i>賽事中心</button>
+    <button class="nav-item" onclick="goto('bey',this)" id="nb-bey"><i class="ti ti-tornado" aria-hidden="true"></i>神配置計算機</button>
+    <button class="nav-item" onclick="goto('cl',this)" id="nb-cl"><i class="ti ti-notes" aria-hidden="true"></i>更新日誌</button>
+  </div>
+  <button class="hamburger" onclick="toggleMob()" aria-label="選單"><i class="ti ti-menu-2" aria-hidden="true"></i></button>
+</nav>
+<div class="mob-menu" id="mob-menu">
+  <button class="nav-item active" onclick="goto('home',this);toggleMob()" data-m="home"><i class="ti ti-map-2" aria-hidden="true"></i>賽事中心</button>
+  <button class="nav-item" onclick="goto('bey',this);toggleMob()" data-m="bey"><i class="ti ti-tornado" aria-hidden="true"></i>神配置計算機</button>
+  <button class="nav-item" onclick="goto('cl',this);toggleMob()" data-m="cl"><i class="ti ti-notes" aria-hidden="true"></i>更新日誌</button>
+</div>
+
+<div class="content">
+
+<!-- 賽事中心 -->
+<div class="page active" id="page-home">
+  <div class="home-layout">
+    <div class="map-col">
+      <div class="map-hdr"><h3><i class="ti ti-map-pin" aria-hidden="true"></i>台灣賽事地圖</h3><div class="map-sub">點擊標記查看賽事詳情</div></div>
+      <div id="leaflet-map"></div>
+    </div>
+    <div class="events-col">
+      <div class="etabs">
+        <button class="etab active" onclick="switchTab('upcoming',this)"><i class="ti ti-calendar-event" aria-hidden="true"></i>近期賽事</button>
+        <button class="etab" onclick="switchTab('past',this)"><i class="ti ti-history" aria-hidden="true"></i>歷史賽事</button>
+      </div>
+      <div class="elist" id="elist"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 神配置計算機 -->
+<div class="page" id="page-bey">
+  <div class="bey-wrap">
+    <div class="bey-layout">
+
+      <!-- 左：雷達圖 -->
+      <div class="col-radar">
+        <div class="radar-title">屬性雷達圖</div>
+        <canvas id="radar-canvas" width="260" height="260"></canvas>
+        <div class="radar-legend" id="radar-legend"></div>
+      </div>
+
+      <!-- 右：零件選擇 + 數值 -->
+      <div class="colr">
+        <div class="sec-lbl">零件選擇</div>
+        <div class="pblock"><div class="phead"><i class="ti ti-sword" aria-hidden="true"></i>戰刃 Blade</div><div class="sel-wrap" id="cs-blade"></div></div>
+        <div class="pblock"><div class="phead"><i class="ti ti-circle-dashed" aria-hidden="true"></i>固鎖輪盤 Ratchet</div><div class="sel-wrap" id="cs-ratchet"></div></div>
+        <div class="pblock"><div class="phead"><i class="ti ti-point" aria-hidden="true"></i>軸心 Bit</div><div class="sel-wrap" id="cs-bit"></div></div>
+
+        <div class="stats-bottom">
+          <div class="sg">
+            <div class="sb"><div class="sl">攻擊</div><div class="sv" style="color:#D85A30" id="v-atk">—</div></div>
+            <div class="sb"><div class="sl">防禦</div><div class="sv" style="color:#378ADD" id="v-def">—</div></div>
+            <div class="sb"><div class="sl">持久</div><div class="sv" style="color:#1D9E75" id="v-dur">—</div></div>
+            <div class="sb"><div class="sl">高度</div><div class="sv" style="color:#9B6FD8" id="v-hgt">—</div></div>
+            <div class="sb"><div class="sl">加速</div><div class="sv" style="color:#D8A030" id="v-spd">—</div></div>
+            <div class="sb"><div class="sl">耐久度</div><div class="sv" style="color:#D85070" id="v-end">—</div></div>
+          </div>
+          <div class="divid"></div>
+          <div class="brow">
+            <div><div class="cname" id="combo-name">—</div><div class="mrow" id="mrow"></div></div>
+            <div class="sbadge" id="sbadge">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 更新日誌 -->
+<div class="page" id="page-cl">
+  <div class="cl-wrap">
+    <div class="cl-grid">
+      <div>
+        <div class="sdiv">版本記錄</div>
+        <div class="cl-card">
+          <div class="cl-title"><i class="ti ti-git-branch" aria-hidden="true"></i>更新日誌</div>
+          <div class="cl-item"><span class="cl-ver">v0.5</span><div class="cl-txt">神配置計算機改為雷達圖呈現，移除 3D 預覽，介面更直覺</div></div>
+          <div class="cl-item"><span class="cl-ver">v0.4</span><div class="cl-txt">整合神配置計算機至各頁面、移除價格顯示、BX-02 造型優化</div></div>
+          <div class="cl-item"><span class="cl-ver">v0.3</span><div class="cl-txt">新增 OpenStreetMap 地圖、G-Hub 品牌設計、固鎖輪盤更名、六項屬性</div></div>
+          <div class="cl-item"><span class="cl-ver">v0.2</span><div class="cl-txt">3D 零件預覽、爆炸圖模式、下拉縮圖選單</div></div>
+          <div class="cl-item"><span class="cl-ver">v0.1</span><div class="cl-txt">初版：神配置計算機、屬性評分系統</div></div>
+        </div>
+        <div class="sdiv" style="margin-top:10px">即將推出</div>
+        <div class="cl-card">
+          <div class="cl-title"><i class="ti ti-rocket" aria-hidden="true"></i>開發中功能</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:0.5px solid var(--bd)"><i class="ti ti-clock" style="font-size:12px;color:var(--t3)" aria-hidden="true"></i><span style="font-size:11px;color:var(--t2)">剋制關係分析（鯊魚 vs 龍王）</span></div>
+            <div style="display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:0.5px solid var(--bd)"><i class="ti ti-clock" style="font-size:12px;color:var(--t3)" aria-hidden="true"></i><span style="font-size:11px;color:var(--t2)">AI 配置顧問（Claude API）</span></div>
+            <div style="display:flex;align-items:center;gap:7px;padding:5px 0"><i class="ti ti-clock" style="font-size:12px;color:var(--t3)" aria-hidden="true"></i><span style="font-size:11px;color:var(--t2)">賽事報名 / 成績紀錄</span></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sdiv">快速工具</div>
+        <div class="cl-card" style="margin-bottom:10px">
+          <div class="cl-title"><i class="ti ti-tornado" aria-hidden="true"></i>神配置計算機</div>
+          <p style="font-size:11px;color:var(--t2);line-height:1.6;margin-bottom:10px">選擇戰刃、固鎖輪盤、軸心，雷達圖即時呈現六項屬性評分。</p>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:10px">
+            <div class="sb"><div class="sl">攻擊</div><div class="sv" style="color:#D85A30;font-size:14px" id="cl-atk">—</div></div>
+            <div class="sb"><div class="sl">防禦</div><div class="sv" style="color:#378ADD;font-size:14px" id="cl-def">—</div></div>
+            <div class="sb"><div class="sl">持久</div><div class="sv" style="color:#1D9E75;font-size:14px" id="cl-dur">—</div></div>
+          </div>
+          <button class="btn-p" style="width:100%;display:flex;align-items:center;justify-content:center;gap:5px" onclick="goto('bey',document.getElementById('nb-bey'))">
+            <i class="ti ti-external-link" aria-hidden="true"></i>開啟計算機
+          </button>
+        </div>
+        <div class="sdiv">意見回饋</div>
+        <div class="fb-card">
+          <div class="fb-title"><i class="ti ti-message-circle" aria-hidden="true"></i>回饋與建議</div>
+          <textarea class="fb-in" placeholder="你的建議或遇到的問題…" id="fb-text"></textarea>
+          <div class="btn-row"><button class="btn-p" onclick="submitFb()">送出回饋</button></div>
+          <div id="fb-ok" style="display:none;font-size:11px;color:#5DCAA5;margin-top:8px;align-items:center;gap:5px"><i class="ti ti-check" aria-hidden="true"></i> 感謝你的回饋！</div>
+        </div>
+        <div class="sdiv" style="margin-top:10px">請開發者喝咖啡</div>
+        <div class="fb-card">
+          <div class="fb-title"><i class="ti ti-coffee" aria-hidden="true"></i>支持這個專案</div>
+          <p style="font-size:11px;color:var(--t2);line-height:1.6;margin-bottom:10px">G-Hub 是由玩家自主維護的免費工具，歡迎請開發者喝杯咖啡！</p>
+          <button class="btn-cf" style="width:100%;justify-content:center;padding:9px"><i class="ti ti-coffee" aria-hidden="true"></i>請喝咖啡 Ko-fi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ═══════ 賽事資料 ═══════ */
+const EVT={
+  upcoming:[
+    {name:"2026 台北 BeyBlade X 公開賽",date:"2026/06/15",loc:"台北・中正區",lat:25.042,lng:121.517,badge:"badge-open",bt:"報名中"},
+    {name:"台中夏季個人賽",date:"2026/06/22",loc:"台中・西屯區",lat:24.173,lng:120.641,badge:"badge-soon",bt:"即將開始"},
+    {name:"北部青少年聯賽 Q2",date:"2026/07/05",loc:"台北・內湖區",lat:25.082,lng:121.584,badge:"badge-open",bt:"報名中"},
+    {name:"花蓮盃邀請賽",date:"2026/07/18",loc:"花蓮・壽豐鄉",lat:23.852,lng:121.524,badge:"badge-soon",bt:"籌備中"},
+    {name:"台南南部錦標賽",date:"2026/08/03",loc:"台南・東區",lat:22.999,lng:120.212,badge:"badge-open",bt:"報名中"},
+  ],
+  past:[
+    {name:"2026 台灣冠軍賽（春季）",date:"2026/04/20",loc:"台北・信義區",lat:25.033,lng:121.563,badge:"badge-past",bt:"已結束"},
+    {name:"高雄城市盃",date:"2026/03/30",loc:"高雄・三民區",lat:22.638,lng:120.303,badge:"badge-past",bt:"已結束"},
+    {name:"台中春季友誼賽",date:"2026/03/08",loc:"台中・北屯區",lat:24.187,lng:120.688,badge:"badge-past",bt:"已結束"},
+    {name:"全台青少年聯賽 Q1",date:"2026/02/14",loc:"台北・大安區",lat:25.026,lng:121.543,badge:"badge-past",bt:"已結束"},
+  ]
+};
+let curTab="upcoming",lmap=null,mapMarkers=[];
+function makeIcon(color){return L.divIcon({html:`<svg width="22" height="28" viewBox="0 0 22 28"><path d="M11 0C4.9 0 0 4.9 0 11c0 6.6 11 17 11 17S22 17.6 22 11C22 4.9 17.1 0 11 0z" fill="${color}"/><circle cx="11" cy="11" r="4.5" fill="white" opacity="0.9"/></svg>`,iconSize:[22,28],iconAnchor:[11,28],popupAnchor:[0,-28],className:""});}
+function renderMapMarkers(tab){mapMarkers.forEach(m=>m.remove());mapMarkers=[];EVT[tab].forEach(e=>{const c=tab==="upcoming"?"#378ADD":"#5a5a70";const m=L.marker([e.lat,e.lng],{icon:makeIcon(c)}).addTo(lmap).bindPopup(`<div class="pop-name">${e.name}</div><div class="pop-meta"><span>${e.date}</span><span>${e.loc}</span></div>`);mapMarkers.push(m);});}
+function initMap(){if(lmap)return;lmap=L.map("leaflet-map",{center:[23.8,121.0],zoom:7});L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:'© <a href="https://www.openstreetmap.org/copyright" style="color:#85B7EB">OpenStreetMap</a>',maxZoom:18}).addTo(lmap);renderMapMarkers("upcoming");}
+function renderEvents(tab){document.getElementById("elist").innerHTML=EVT[tab].map(e=>`<div class="ecard ${tab}"><div class="etop"><div class="ename">${e.name}</div><span class="ebadge ${e.badge}">${e.bt}</span></div><div class="emeta"><span><i class="ti ti-calendar" aria-hidden="true"></i>${e.date}</span><span><i class="ti ti-map-pin" aria-hidden="true"></i>${e.loc}</span></div></div>`).join("");}
+function switchTab(tab,el){curTab=tab;document.querySelectorAll(".etab").forEach(b=>b.classList.remove("active"));el.classList.add("active");renderEvents(tab);if(lmap)renderMapMarkers(tab);}
+
+/* ═══════ 導覽 ═══════ */
+function goto(page,el){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("page-"+page).classList.add("active");
+  document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));
+  document.querySelectorAll("[data-m]").forEach(b=>b.classList.remove("active"));
+  const ids={home:"nb-home",bey:"nb-bey",cl:"nb-cl"};
+  if(ids[page])document.getElementById(ids[page]).classList.add("active");
+  document.querySelectorAll(`[data-m="${{home:"home",bey:"bey",cl:"cl"}[page]}"]`).forEach(b=>b.classList.add("active"));
+  if(page==="home"){setTimeout(()=>{initMap();if(lmap)lmap.invalidateSize();},80);}
+}
+function toggleMob(){document.getElementById("mob-menu").classList.toggle("open");}
+function submitFb(){const t=document.getElementById("fb-text");if(!t.value.trim())return;t.value="";const ok=document.getElementById("fb-ok");ok.style.display="flex";setTimeout(()=>ok.style.display="none",3000);}
+
+/* ═══════ 零件資料 ═══════ */
+const BLADES=[
+  {id:"hellsScythe",name:"BX-02 惡魔紅鐮",sub:"平衡型・右迴旋",color:"#A32D2D",accent:"#F09595",darkColor:"#6B1A1A",edgeColor:"#D4D4D4",type:"bx02",bc:4,sharp:1.3,sw:0.42,weight:38.1,atk:30,def:35,dur:35,hgt:45,spd:40,end:38,hot:true},
+  {id:"dranSword",name:"BX-01 蒼龍神劍",sub:"攻擊型・右迴旋",color:"#378ADD",accent:"#B5D4F4",darkColor:"#1A4A7A",type:"dragon",bc:5,sharp:1.2,sw:0.28,weight:35.2,atk:85,def:40,dur:55,hgt:30,spd:70,end:50,hot:true},
+  {id:"wizardArrow",name:"BX-03 魔導幻箭",sub:"持久型・右迴旋",color:"#534AB7",accent:"#CECBF6",darkColor:"#2E2880",type:"arrow",bc:4,sharp:1.1,sw:0.25,weight:33.5,atk:55,def:60,dur:80,hgt:25,spd:45,end:70,hot:false},
+  {id:"cobaltDrake",name:"BX-04 鈷鐵天龍",sub:"防禦型・左迴旋",color:"#0F6E56",accent:"#9FE1CB",darkColor:"#084A3A",type:"shield",bc:6,sharp:0.95,sw:0.4,weight:37.4,atk:65,def:80,dur:65,hgt:55,spd:35,end:75,hot:true},
+  {id:"phoenixWing",name:"BX-05 鳳凰翼焰",sub:"超攻擊・右迴旋",color:"#BA7517",accent:"#FAC775",darkColor:"#7A4A08",type:"phoenix",bc:5,sharp:1.3,sw:0.45,weight:31.8,atk:90,def:35,dur:50,hgt:35,spd:85,end:45,hot:false},
+  {id:"sharkEdge",name:"BX-06 銀牙鯊刃",sub:"攻擊型・右迴旋",color:"#185FA5",accent:"#85B7EB",darkColor:"#0A3D6E",type:"shark",bc:3,sharp:1.5,sw:0.55,weight:34.7,atk:80,def:55,dur:45,hgt:40,spd:75,end:55,hot:true},
+];
+const RATCHETS=[
+  {id:"r3",name:"3-60",sub:"標準齒輪",teeth:3,color:"#888780",accent:"#D3D1C7",weight:8.3,atk:5,def:10,dur:5,hgt:0,spd:5,end:8,hot:false},
+  {id:"r4",name:"4-70",sub:"重型加防",teeth:4,color:"#3C3489",accent:"#CECBF6",weight:10.1,atk:8,def:15,dur:8,hgt:10,spd:0,end:12,hot:false},
+  {id:"r5",name:"5-80",sub:"平衡型",teeth:5,color:"#0F6E56",accent:"#9FE1CB",weight:9.5,atk:10,def:10,dur:10,hgt:5,spd:8,end:10,hot:false},
+  {id:"r9",name:"9-60",sub:"最強防禦",teeth:9,color:"#185FA5",accent:"#B5D4F4",weight:12.4,atk:5,def:25,dur:5,hgt:15,spd:0,end:18,hot:false},
+  {id:"r6",name:"6-60",sub:"攻擊加成",teeth:6,color:"#993C1D",accent:"#F5C4B3",weight:8.8,atk:15,def:5,dur:5,hgt:5,spd:12,end:5,hot:false},
+];
+const BITS=[
+  {id:"pointBit",name:"Point",sub:"尖型・萬用",color:"#888780",accent:"#D3D1C7",shape:"point",weight:5.2,atk:5,def:5,dur:10,hgt:5,spd:5,end:8,hot:false},
+  {id:"flatBit",name:"Flat",sub:"平型・攻擊",color:"#D85A30",accent:"#F5C4B3",shape:"flat",weight:5.0,atk:15,def:0,dur:5,hgt:0,spd:18,end:5,hot:false},
+  {id:"ballBit",name:"Ball",sub:"球型・防禦",color:"#185FA5",accent:"#B5D4F4",shape:"ball",weight:5.5,atk:5,def:15,dur:5,hgt:8,spd:5,end:12,hot:false},
+  {id:"rushBit",name:"Rush",sub:"衝刺・爆發",color:"#BA7517",accent:"#FAC775",shape:"rush",weight:4.8,atk:20,def:0,dur:0,hgt:0,spd:22,end:3,hot:false},
+  {id:"unitBit",name:"Unit",sub:"持久・穩定",color:"#1D9E75",accent:"#9FE1CB",shape:"unit",weight:5.1,atk:0,def:10,dur:20,hgt:10,spd:3,end:18,hot:false},
+];
+
+/* ═══════ 雷達圖 ═══════ */
+const RADAR_AXES=[
+  {key:"atk",label:"攻擊",color:"#D85A30"},
+  {key:"def",label:"防禦",color:"#378ADD"},
+  {key:"dur",label:"持久",color:"#1D9E75"},
+  {key:"hgt",label:"高度",color:"#9B6FD8"},
+  {key:"spd",label:"加速",color:"#D8A030"},
+  {key:"end",label:"耐久度",color:"#D85070"},
+];
+const N=RADAR_AXES.length;
+const RSIZE=260;
+const RCX=RSIZE/2, RCY=RSIZE/2, RMAX=RSIZE*0.38, RSTEPS=5;
+let radarCvs=null,radarCtx=null;
+let radarVals={atk:0,def:0,dur:0,hgt:0,spd:0,end:0};
+let radarTarget={atk:0,def:0,dur:0,hgt:0,spd:0,end:0};
+let radarAnimId=null;
+
+function initRadar(){
+  radarCvs=document.getElementById("radar-canvas");
+  radarCtx=radarCvs.getContext("2d");
+  // 圖例
+  const leg=document.getElementById("radar-legend");
+  leg.innerHTML=RADAR_AXES.map(a=>`<div class="rl-item"><div class="rl-dot" style="background:${a.color}"></div><span>${a.label}</span></div>`).join("");
+  radarLoop();
+}
+
+function setRadarTarget(vals){
+  radarTarget={...vals};
+}
+
+function radarLoop(){
+  // 緩動動畫
+  let changed=false;
+  RADAR_AXES.forEach(a=>{
+    const diff=radarTarget[a.key]-radarVals[a.key];
+    if(Math.abs(diff)>0.2){radarVals[a.key]+=diff*0.12;changed=true;}
+    else{radarVals[a.key]=radarTarget[a.key];}
+  });
+  drawRadar();
+  radarAnimId=requestAnimationFrame(radarLoop);
+}
+
+function getPoint(idx,val){
+  const angle=(idx/N)*Math.PI*2-Math.PI/2;
+  const r=(val/100)*RMAX;
+  return{x:RCX+Math.cos(angle)*r, y:RCY+Math.sin(angle)*r};
+}
+function getGridPoint(idx,step){
+  const angle=(idx/N)*Math.PI*2-Math.PI/2;
+  const r=(step/RSTEPS)*RMAX;
+  return{x:RCX+Math.cos(angle)*r, y:RCY+Math.sin(angle)*r};
+}
+
+function drawRadar(){
+  const c=radarCtx;
+  c.clearRect(0,0,RSIZE,RSIZE);
+
+  // 背景同心多邊形網格
+  for(let s=1;s<=RSTEPS;s++){
+    c.beginPath();
+    for(let i=0;i<N;i++){
+      const p=getGridPoint(i,s);
+      if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);
+    }
+    c.closePath();
+    c.strokeStyle=s===RSTEPS?"#363648":"#2a2a3888";
+    c.lineWidth=s===RSTEPS?1:.6;
+    c.stroke();
+    if(s<RSTEPS){
+      c.fillStyle="rgba(30,30,40,0.3)";
+      c.fill();
+    }
+  }
+
+  // 軸線
+  for(let i=0;i<N;i++){
+    const outer=getGridPoint(i,RSTEPS);
+    c.beginPath();c.moveTo(RCX,RCY);c.lineTo(outer.x,outer.y);
+    c.strokeStyle="#2a2a3888";c.lineWidth=.7;c.stroke();
+  }
+
+  // 資料填充區（半透明漸層）
+  c.beginPath();
+  for(let i=0;i<N;i++){
+    const p=getPoint(i,radarVals[RADAR_AXES[i].key]);
+    if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);
+  }
+  c.closePath();
+  const grad=c.createRadialGradient(RCX,RCY,0,RCX,RCY,RMAX);
+  grad.addColorStop(0,"rgba(55,138,221,0.35)");
+  grad.addColorStop(1,"rgba(55,138,221,0.08)");
+  c.fillStyle=grad;
+  c.fill();
+  c.strokeStyle="rgba(133,183,235,0.7)";
+  c.lineWidth=1.5;
+  c.stroke();
+
+  // 各頂點彩色圓點 + 標籤
+  for(let i=0;i<N;i++){
+    const ax=RADAR_AXES[i];
+    const val=radarVals[ax.key];
+    const p=getPoint(i,val);
+    // 圓點
+    c.beginPath();c.arc(p.x,p.y,4.5,0,Math.PI*2);
+    c.fillStyle=ax.color;c.fill();
+    c.strokeStyle="#0a0a0f";c.lineWidth=1.5;c.stroke();
+
+    // 標籤位置（軸末端外延）
+    const angle=(i/N)*Math.PI*2-Math.PI/2;
+    const lx=RCX+Math.cos(angle)*(RMAX+22);
+    const ly=RCY+Math.sin(angle)*(RMAX+22);
+
+    c.save();
+    c.font="bold 13px sans-serif";
+    c.fillStyle=ax.color;
+    c.textAlign="center";
+    c.textBaseline="middle";
+    c.fillText(Math.round(val), lx, ly+14);
+    c.font="10px sans-serif";
+    c.fillStyle="#9090a8";
+    c.fillText(ax.label, lx, ly);
+    c.restore();
+  }
+}
+
+/* ═══════ 縮圖動畫 ═══════ */
+let thumbAnims=[],thumbA=0;
+function drawThumb(c2,part,type,size,a){
+  const cx=size/2,cy=size/2;c2.clearRect(0,0,size,size);c2.fillStyle="#18181f";c2.beginPath();c2.roundRect(0,0,size,size,5);c2.fill();
+  if(type==="blade"){
+    if(part.type==="bx02"){
+      const n=4,OR=size*.44,IR=size*.16;
+      for(let i=0;i<n;i++){const ba=a+(i/n)*Math.PI*2;const pts=[];const S=10;for(let s=0;s<=S;s++){const t=s/S,ca2=ba+t*.72,cr=IR+(OR-IR)*(t*t);const nx=-Math.sin(ca2),nz=Math.cos(ca2);const fat=size*.1*(1-Math.pow(t-.3,2)*2.2)+size*.02;pts.push({x:cx+Math.cos(ca2)*cr+nx*fat*.3,y:cy+Math.sin(ca2)*cr+nz*fat*.3});}for(let s=S;s>=0;s--){const t=s/S,ca2=ba+t*.72,cr=IR+(OR-IR)*(t*t);const nx=-Math.sin(ca2),nz=Math.cos(ca2);const fat=size*.1*(1-Math.pow(t-.3,2)*2.2)+size*.02;pts.push({x:cx+Math.cos(ca2)*cr-nx*fat*.5,y:cy+Math.sin(ca2)*cr-nz*fat*.5});}c2.beginPath();c2.moveTo(pts[0].x,pts[0].y);pts.forEach(p=>c2.lineTo(p.x,p.y));c2.closePath();const g=c2.createLinearGradient(cx-OR,cy,cx+OR,cy);g.addColorStop(0,part.accent);g.addColorStop(1,part.color);c2.fillStyle=g;c2.fill();}
+      c2.beginPath();c2.arc(cx,cy,size*.2,0,Math.PI*2);const rg=c2.createRadialGradient(cx,cy,2,cx,cy,size*.2);rg.addColorStop(0,"#CC2222");rg.addColorStop(1,"#660000");c2.fillStyle=rg;c2.fill();c2.beginPath();c2.arc(cx,cy,size*.08,0,Math.PI*2);c2.fillStyle="#ddd";c2.fill();
+    } else {
+      const OR=size*.42*(part.sharp||1),IR=size*.15,n=part.bc||4;for(let i=0;i<n;i++){const a0=a+(i/n)*Math.PI*2,a1=a0+(part.sw||.3)*Math.PI*2/n,pts=[],S=10;for(let s=0;s<=S;s++){const ang=a0+s*(a1-a0)/S,r=IR+(OR-IR)*(s/S);pts.push({x:cx+Math.cos(ang)*r,y:cy+Math.sin(ang)*r});}for(let s=S;s>=0;s--){const ang=a0+s*(a1-a0)/S,r=(IR+(OR-IR)*(s/S))*.5;pts.push({x:cx+Math.cos(ang)*r,y:cy+Math.sin(ang)*r});}c2.beginPath();c2.moveTo(pts[0].x,pts[0].y);pts.forEach(p=>c2.lineTo(p.x,p.y));c2.closePath();const g=c2.createLinearGradient(cx-OR,cy-OR,cx+OR,cy+OR);g.addColorStop(0,part.accent);g.addColorStop(1,part.color);c2.fillStyle=g;c2.fill();}
+      c2.beginPath();c2.arc(cx,cy,size*.1,0,Math.PI*2);c2.fillStyle="#fff";c2.fill();
+    }
+  } else if(type==="ratchet"){
+    const n=part.teeth,OR=size*.42,IR=size*.27;c2.beginPath();for(let i=0;i<n*2;i++){const ang=a+(i/(n*2))*Math.PI*2,r=(i%2===0)?OR:IR;if(i===0)c2.moveTo(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r);else c2.lineTo(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r);}c2.closePath();const g=c2.createRadialGradient(cx,cy,IR*.3,cx,cy,OR);g.addColorStop(0,part.accent);g.addColorStop(1,part.color);c2.fillStyle=g;c2.fill();c2.beginPath();c2.arc(cx,cy,size*.12,0,Math.PI*2);c2.fillStyle=part.color;c2.fill();
+  } else {
+    const sh=part.shape,topR=size*.22,pts=[],S=12;for(let i=0;i<=S;i++){const t=i/S;let r;if(sh==="point")r=topR*(1-t*.88);else if(sh==="flat")r=topR*(1-t*.15);else if(sh==="ball")r=topR*Math.sin(t*Math.PI*.85+.1);else if(sh==="rush")r=topR*(1-t*.82);else r=topR*(.45+.55*Math.cos(t*Math.PI));pts.push({x:cx+r,y:cy-size*.35+t*size*.7,r});}c2.beginPath();c2.moveTo(pts[0].x,pts[0].y);pts.forEach(p=>c2.lineTo(p.x,p.y));for(let i=pts.length-1;i>=0;i--)c2.lineTo(cx-pts[i].r,pts[i].y);c2.closePath();const g=c2.createLinearGradient(cx-topR,0,cx+topR,size);g.addColorStop(0,part.accent);g.addColorStop(1,part.color);c2.fillStyle=g;c2.fill();c2.beginPath();c2.arc(cx,cy+size*.3,size*.05,0,Math.PI*2);c2.fillStyle="#fff";c2.fill();
+  }
+}
+function startThumbAnim(){cancelAnimationFrame(startThumbAnim._id);function tick(){thumbA+=0.025;thumbAnims.forEach(({c2,p,t,s})=>drawThumb(c2,p,t,s,thumbA));startThumbAnim._id=requestAnimationFrame(tick);}tick();}
+function makeThumb(part,type,size){const c=document.createElement("canvas");c.width=c.height=size;thumbAnims.push({c2:c.getContext("2d"),p:part,t:type,s:size});return c;}
+
+/* ═══════ 下拉選單 ═══════ */
+let selB=0,selR=0,selBit=0;
+function buildDD(cid,parts,type,sel,onSel){
+  const wrap=document.getElementById(cid);
+  const outer=document.createElement("div");outer.style.position="relative";
+  const trig=document.createElement("div");trig.className="sel-trig";
+  const ic=makeThumb(parts[sel],type,30);const iw=document.createElement("div");iw.className="sel-icon";iw.appendChild(ic);
+  const tx=document.createElement("div");tx.className="sel-text";tx.innerHTML=`<div class="sel-name">${parts[sel].name}</div><div class="sel-sub">${parts[sel].sub}</div>`;
+  const arr=document.createElement("i");arr.className="ti ti-chevron-down sel-arr";arr.setAttribute("aria-hidden","true");
+  trig.appendChild(iw);trig.appendChild(tx);trig.appendChild(arr);
+  const dd=document.createElement("div");dd.className="dd";
+  parts.forEach((p,i)=>{
+    const opt=document.createElement("div");opt.className="dopt"+(i===sel?" active":"");
+    const dic=makeThumb(p,type,34);const diw=document.createElement("div");diw.className="dopt-icon";diw.appendChild(dic);
+    const dt=document.createElement("div");dt.className="dopt-text";dt.innerHTML=`<div class="dopt-name">${p.name}</div><div class="dopt-sub">${p.sub}</div>`;
+    opt.appendChild(diw);opt.appendChild(dt);
+    if(p.hot){const hb=document.createElement("span");hb.className="hot-b";hb.textContent="熱門";opt.appendChild(hb);}
+    const wb=document.createElement("span");wb.className="wt-b";wb.textContent=p.weight+"g";opt.appendChild(wb);
+    opt.addEventListener("click",()=>{dd.classList.remove("open");arr.classList.remove("open");onSel(i);});
+    dd.appendChild(opt);
+  });
+  trig.addEventListener("click",e=>{e.stopPropagation();const op=dd.classList.contains("open");document.querySelectorAll(".dd.open").forEach(d=>d.classList.remove("open"));document.querySelectorAll(".sel-arr.open").forEach(a=>a.classList.remove("open"));if(!op){dd.classList.add("open");arr.classList.add("open");}});
+  wrap.innerHTML="";outer.appendChild(trig);outer.appendChild(dd);wrap.appendChild(outer);
+}
+document.addEventListener("click",()=>{document.querySelectorAll(".dd.open").forEach(d=>d.classList.remove("open"));document.querySelectorAll(".sel-arr.open").forEach(a=>a.classList.remove("open"));});
+
+/* ═══════ 屬性計算 ═══════ */
+function updateStats(){
+  const b=BLADES[selB],r=RATCHETS[selR],bt=BITS[selBit];
+  const atk=Math.min(100,b.atk+r.atk+bt.atk),def=Math.min(100,b.def+r.def+bt.def),dur=Math.min(100,b.dur+r.dur+bt.dur);
+  const hgt=Math.min(100,b.hgt+r.hgt+bt.hgt),spd=Math.min(100,b.spd+r.spd+bt.spd),end=Math.min(100,b.end+r.end+bt.end);
+  const w=(b.weight+r.weight+bt.weight).toFixed(1);
+  const score=Math.round((atk*.2+def*.2+dur*.2+hgt*.1+spd*.15+end*.15)*.9+5);
+  const vals={atk,def,dur,hgt,spd,end};
+  Object.keys(vals).forEach(k=>{
+    const el=document.getElementById("v-"+k);if(el)el.textContent=vals[k];
+  });
+  // 更新雷達圖目標
+  setRadarTarget(vals);
+  document.getElementById("combo-name").textContent=b.name+" / "+r.name+" / "+bt.name;
+  const max=Math.max(atk,def,dur);let type="平衡型",tc="#BA7517";
+  if(max===atk&&atk-def>15){type="攻擊型";tc="#D85A30";}else if(max===def&&def-atk>15){type="防禦型";tc="#378ADD";}else if(max===dur&&dur-atk>15){type="持久型";tc="#1D9E75";}
+  const sb=document.getElementById("sbadge");sb.textContent=score+" 分・"+type;sb.style.color=tc;sb.style.borderColor=tc+"44";
+  document.getElementById("mrow").innerHTML=`<span class="mp">⚖ ${w}g</span>`;
+  // 同步更新日誌快速工具
+  document.getElementById("cl-atk").textContent=atk;
+  document.getElementById("cl-def").textContent=def;
+  document.getElementById("cl-dur").textContent=dur;
+}
+
+function rebuild(){
+  thumbAnims=[];
+  buildDD("cs-blade",BLADES,"blade",selB,i=>{selB=i;rebuild();});
+  buildDD("cs-ratchet",RATCHETS,"ratchet",selR,i=>{selR=i;rebuild();});
+  buildDD("cs-bit",BITS,"bit",selBit,i=>{selBit=i;rebuild();});
+  updateStats();startThumbAnim();
+}
+
+/* ═══════ 初始化 ═══════ */
+renderEvents("upcoming");
+setTimeout(()=>{initMap();},200);
+initRadar();
+rebuild();
+const _b=BLADES[0],_r=RATCHETS[0],_bt=BITS[0];
+document.getElementById("cl-atk").textContent=Math.min(100,_b.atk+_r.atk+_bt.atk);
+document.getElementById("cl-def").textContent=Math.min(100,_b.def+_r.def+_bt.def);
+document.getElementById("cl-dur").textContent=Math.min(100,_b.dur+_r.dur+_bt.dur);
+</script>

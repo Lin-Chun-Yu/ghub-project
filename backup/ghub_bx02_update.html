@@ -1,0 +1,583 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0f;--bg2:#111118;--bg3:#18181f;--bg4:#1e1e28;
+  --bd:#2a2a38;--bd2:#363648;
+  --t1:#f0f0f8;--t2:#9090a8;--t3:#5a5a70;
+  --blue:#378ADD;--blue2:#85B7EB;--blue3:#0C447C;
+}
+body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
+.shell{display:flex;flex-direction:column;height:700px}
+.navbar{display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:52px;background:var(--bg2);border-bottom:0.5px solid var(--bd2);flex-shrink:0}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-name{font-size:15px;font-weight:500;color:var(--t1);letter-spacing:.04em}
+.brand-sub{font-size:9px;color:var(--t3);letter-spacing:.06em;text-transform:uppercase}
+.nav-badge{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(55,138,221,0.12);color:var(--blue2);border:0.5px solid rgba(55,138,221,0.2)}
+
+/* 神配置計算機 */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;flex:1;overflow:hidden}
+.col-3d{background:var(--bg3);border-right:0.5px solid var(--bd);display:flex;flex-direction:column;padding:12px;gap:8px;overflow:hidden}
+.canvas-area{background:linear-gradient(145deg,#0d0d14,#12121c);border-radius:12px;border:0.5px solid var(--bd2);flex:1;cursor:grab;overflow:hidden;min-height:0;position:relative}
+.canvas-area:active{cursor:grabbing}
+canvas{display:block;width:100%;height:100%}
+.drag-hint{font-size:10px;color:var(--t3);text-align:center;flex-shrink:0}
+.view-row{display:flex;gap:6px;justify-content:space-between;align-items:center;flex-shrink:0}
+.vtabs{display:flex;gap:4px}
+.vtab{font-size:11px;padding:4px 11px;border-radius:20px;border:0.5px solid var(--bd2);background:transparent;color:var(--t2);cursor:pointer;transition:all .15s}
+.vtab.active{background:var(--blue3);color:var(--blue2);border-color:var(--blue3)}
+.spin-btn{font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid var(--bd2);background:transparent;color:var(--t2);cursor:pointer;display:flex;align-items:center;gap:4px}
+.col-right{display:flex;flex-direction:column;overflow-y:auto;padding:12px;gap:10px}
+.col-right::-webkit-scrollbar{width:3px}
+.col-right::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+.sec-lbl{font-size:10px;font-weight:500;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.part-block{background:var(--bg3);border-radius:12px;border:0.5px solid var(--bd);padding:12px;margin-bottom:8px}
+.part-head{font-size:12px;color:var(--t2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.part-head i{font-size:14px;color:var(--blue)}
+
+.sel-trigger{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg4);border:0.5px solid var(--bd2);border-radius:8px;cursor:pointer;transition:border-color .15s;user-select:none;position:relative}
+.sel-trigger:hover{border-color:var(--blue3)}
+.sel-icon{width:32px;height:32px;border-radius:6px;flex-shrink:0;overflow:hidden}
+.sel-text{flex:1;min-width:0}
+.sel-name{font-size:12px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sel-sub{font-size:10px;color:var(--t3)}
+.sel-arrow{color:var(--t3);font-size:13px;transition:transform .2s;flex-shrink:0}
+.sel-arrow.open{transform:rotate(180deg)}
+.dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:200;background:var(--bg3);border:0.5px solid var(--bd2);border-radius:10px;overflow:hidden;display:none;box-shadow:0 8px 28px rgba(0,0,0,.65)}
+.dropdown.open{display:block}
+.dopt{display:flex;align-items:center;gap:10px;padding:8px 10px;cursor:pointer;border-bottom:0.5px solid var(--bd);transition:background .1s}
+.dopt:last-child{border-bottom:none}
+.dopt:hover,.dopt.active{background:rgba(55,138,221,0.08)}
+.dopt-icon{width:36px;height:36px;border-radius:7px;flex-shrink:0;overflow:hidden}
+.dopt-text{flex:1;min-width:0}
+.dopt-name{font-size:12px;font-weight:500;color:var(--t1)}
+.dopt-sub{font-size:10px;color:var(--t3)}
+.hot-badge{font-size:10px;padding:2px 6px;border-radius:20px;background:rgba(163,45,45,0.2);color:#F09595;border:0.5px solid rgba(163,45,45,0.3);flex-shrink:0}
+.wt-lbl{font-size:10px;color:var(--t3);flex-shrink:0}
+
+.stats-card{background:var(--bg3);border-radius:12px;border:0.5px solid var(--bd);padding:12px}
+.stats-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:10px}
+.stat-box{background:var(--bg4);border-radius:8px;border:0.5px solid var(--bd);padding:.55rem;text-align:center}
+.stat-lbl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.stat-num{font-size:17px;font-weight:500}
+.bar-block{margin-bottom:6px}
+.bar-row{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--t3)}
+.bar-lbl{min-width:26px;font-size:10px}
+.bar-bg{flex:1;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.bar-fill{height:4px;border-radius:2px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.bar-num{min-width:20px;text-align:right;font-size:10px;color:var(--t2)}
+.divider{height:0.5px;background:var(--bd);margin:8px 0}
+.bottom-row{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.combo-name{font-size:11px;font-weight:500;color:var(--t1);line-height:1.4}
+.meta-row{display:flex;gap:4px;margin-top:3px;flex-wrap:wrap}
+.mpill{font-size:9px;padding:2px 7px;border-radius:20px;background:var(--bg4);color:var(--t2);border:0.5px solid var(--bd)}
+.score-badge{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--bg4);border:0.5px solid var(--bd2);flex-shrink:0}
+
+@media(max-width:520px){.layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}.col-3d{border-right:none;border-bottom:0.5px solid var(--bd);max-height:280px}.canvas-area{min-height:160px}}
+</style>
+
+<div class="shell">
+<nav class="navbar">
+  <div class="brand">
+    <svg width="32" height="32" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="34" height="34" rx="8" fill="#0C447C"/>
+      <circle cx="17" cy="17" r="10" stroke="#378ADD" stroke-width="1.5" fill="none"/>
+      <circle cx="17" cy="17" r="5.5" stroke="#85B7EB" stroke-width="1" fill="none"/>
+      <line x1="17" y1="7" x2="17" y2="27" stroke="#378ADD" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="7" y1="17" x2="27" y2="17" stroke="#378ADD" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="9.9" y1="9.9" x2="24.1" y2="24.1" stroke="#85B7EB" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.6"/>
+      <line x1="24.1" y1="9.9" x2="9.9" y2="24.1" stroke="#85B7EB" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.6"/>
+      <circle cx="17" cy="17" r="2.5" fill="#85B7EB"/>
+      <polygon points="17,3 18.2,6.5 17,6 15.8,6.5" fill="#FAC775" opacity="0.9"/>
+    </svg>
+    <div>
+      <div class="brand-name">G-Hub</div>
+      <div class="brand-sub">戰鬥陀螺 X 台灣</div>
+    </div>
+  </div>
+  <span class="nav-badge">神配置計算機</span>
+</nav>
+
+<!-- 神配置計算機 -->
+<div class="layout">
+  <div class="col-3d">
+    <div class="drag-hint">拖曳旋轉・滾輪縮放</div>
+    <div class="canvas-area" id="ca">
+      <canvas id="c3d"></canvas>
+    </div>
+    <div class="view-row">
+      <div class="vtabs">
+        <button class="vtab active" onclick="setView('full',this)">完整組合</button>
+        <button class="vtab" onclick="setView('explode',this)">爆炸圖</button>
+      </div>
+      <button class="spin-btn" onclick="toggleSpin()"><i class="ti ti-player-pause" id="spin-icon" aria-hidden="true"></i><span id="spin-lbl">自轉中</span></button>
+    </div>
+  </div>
+
+  <div class="col-right">
+    <div class="sec-lbl">零件選擇</div>
+    <div class="part-block">
+      <div class="part-head"><i class="ti ti-sword" aria-hidden="true"></i>戰刃 Blade</div>
+      <div id="cs-blade" style="position:relative"></div>
+    </div>
+    <div class="part-block">
+      <div class="part-head"><i class="ti ti-circle-dashed" aria-hidden="true"></i>固鎖輪盤 Ratchet</div>
+      <div id="cs-ratchet" style="position:relative"></div>
+    </div>
+    <div class="part-block">
+      <div class="part-head"><i class="ti ti-point" aria-hidden="true"></i>軸心 Bit</div>
+      <div id="cs-bit" style="position:relative"></div>
+    </div>
+
+    <div class="stats-card">
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-lbl">攻擊</div><div class="stat-num" style="color:#D85A30" id="v-atk">—</div></div>
+        <div class="stat-box"><div class="stat-lbl">防禦</div><div class="stat-num" style="color:#378ADD" id="v-def">—</div></div>
+        <div class="stat-box"><div class="stat-lbl">持久</div><div class="stat-num" style="color:#1D9E75" id="v-dur">—</div></div>
+        <div class="stat-box"><div class="stat-lbl">高度</div><div class="stat-num" style="color:#9B6FD8" id="v-hgt">—</div></div>
+        <div class="stat-box"><div class="stat-lbl">加速</div><div class="stat-num" style="color:#D8A030" id="v-spd">—</div></div>
+        <div class="stat-box"><div class="stat-lbl">耐久度</div><div class="stat-num" style="color:#D85070" id="v-end">—</div></div>
+      </div>
+      <div class="bar-block"><div class="bar-row"><span class="bar-lbl">攻擊</span><div class="bar-bg"><div class="bar-fill" id="b-atk" style="background:#D85A30"></div></div><span class="bar-num" id="bn-atk">—</span></div></div>
+      <div class="bar-block"><div class="bar-row"><span class="bar-lbl">防禦</span><div class="bar-bg"><div class="bar-fill" id="b-def" style="background:#378ADD"></div></div><span class="bar-num" id="bn-def">—</span></div></div>
+      <div class="bar-block"><div class="bar-row"><span class="bar-lbl">持久</span><div class="bar-bg"><div class="bar-fill" id="b-dur" style="background:#1D9E75"></div></div><span class="bar-num" id="bn-dur">—</span></div></div>
+      <div class="bar-block"><div class="bar-row"><span class="bar-lbl">高度</span><div class="bar-bg"><div class="bar-fill" id="b-hgt" style="background:#9B6FD8"></div></div><span class="bar-num" id="bn-hgt">—</span></div></div>
+      <div class="bar-block"><div class="bar-row"><span class="bar-lbl">加速</span><div class="bar-bg"><div class="bar-fill" id="b-spd" style="background:#D8A030"></div></div><span class="bar-num" id="bn-spd">—</span></div></div>
+      <div class="bar-block"><div class="bar-row"><span class="bar-lbl">耐久度</span><div class="bar-bg"><div class="bar-fill" id="b-end" style="background:#D85070"></div></div><span class="bar-num" id="bn-end">—</span></div></div>
+      <div class="divider"></div>
+      <div class="bottom-row">
+        <div>
+          <div class="combo-name" id="combo-name">—</div>
+          <div class="meta-row" id="meta-row"></div>
+        </div>
+        <div class="score-badge" id="score-badge">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+/* ── 零件資料（含新三屬性：高度 hgt、加速 spd、耐久度 end） ── */
+const BLADES=[
+  /* BX-02 惡魔紅鐮：4片下旋刃，平衡型，攻30 防35 持35，高度/加速/耐久以官方數值 */
+  {id:"hellsScythe",name:"BX-02 惡魔紅鐮",sub:"地獄鐮・平衡型・右迴旋",
+   color:"#A32D2D",accent:"#F09595",darkColor:"#6B1A1A",edgeColor:"#D4D4D4",
+   type:"bx02",                          // 特殊造型識別
+   bc:4,sharp:1.3,sw:0.42,
+   weight:38.1,atk:30,def:35,dur:35,hgt:45,spd:40,end:38,price:1200,hot:true},
+  {id:"dranSword",name:"BX-01 蒼龍神劍",sub:"龍劍・攻擊型・右迴旋",
+   color:"#378ADD",accent:"#B5D4F4",darkColor:"#1A4A7A",edgeColor:"#AACDE8",
+   type:"dragon",bc:5,sharp:1.2,sw:0.28,
+   weight:35.2,atk:85,def:40,dur:55,hgt:30,spd:70,end:50,price:480,hot:true},
+  {id:"wizardArrow",name:"BX-03 魔導幻箭",sub:"魔箭・持久型・右迴旋",
+   color:"#534AB7",accent:"#CECBF6",darkColor:"#2E2880",edgeColor:"#B0ACE8",
+   type:"arrow",bc:4,sharp:1.1,sw:0.25,
+   weight:33.5,atk:55,def:60,dur:80,hgt:25,spd:45,end:70,price:350,hot:false},
+  {id:"cobaltDrake",name:"BX-04 鈷鐵天龍",sub:"鈷龍・防禦型・左迴旋",
+   color:"#0F6E56",accent:"#9FE1CB",darkColor:"#084A3A",edgeColor:"#7ACDB5",
+   type:"shield",bc:6,sharp:0.95,sw:0.4,
+   weight:37.4,atk:65,def:80,dur:65,hgt:55,spd:35,end:75,price:890,hot:true},
+  {id:"phoenixWing",name:"BX-05 鳳凰翼焰",sub:"鳳翼・超攻擊・右迴旋",
+   color:"#BA7517",accent:"#FAC775",darkColor:"#7A4A08",edgeColor:"#EFB855",
+   type:"phoenix",bc:5,sharp:1.3,sw:0.45,
+   weight:31.8,atk:90,def:35,dur:50,hgt:35,spd:85,end:45,price:620,hot:false},
+  {id:"sharkEdge",name:"BX-06 銀牙鯊刃",sub:"鯊魚刃・攻擊型・右迴旋",
+   color:"#185FA5",accent:"#85B7EB",darkColor:"#0A3D6E",edgeColor:"#6AAED8",
+   type:"shark",bc:3,sharp:1.5,sw:0.55,
+   weight:34.7,atk:80,def:55,dur:45,hgt:40,spd:75,end:55,price:2400,hot:true},
+];
+const RATCHETS=[
+  {id:"r3",name:"3-60",sub:"標準齒輪",teeth:3,color:"#888780",accent:"#D3D1C7",weight:8.3,atk:5,def:10,dur:5,hgt:0,spd:5,end:8,price:0,hot:false},
+  {id:"r4",name:"4-70",sub:"重型加防",teeth:4,color:"#3C3489",accent:"#CECBF6",weight:10.1,atk:8,def:15,dur:8,hgt:10,spd:0,end:12,price:0,hot:false},
+  {id:"r5",name:"5-80",sub:"平衡型",teeth:5,color:"#0F6E56",accent:"#9FE1CB",weight:9.5,atk:10,def:10,dur:10,hgt:5,spd:8,end:10,price:0,hot:false},
+  {id:"r9",name:"9-60",sub:"最強防禦",teeth:9,color:"#185FA5",accent:"#B5D4F4",weight:12.4,atk:5,def:25,dur:5,hgt:15,spd:0,end:18,price:0,hot:false},
+  {id:"r6",name:"6-60",sub:"攻擊加成",teeth:6,color:"#993C1D",accent:"#F5C4B3",weight:8.8,atk:15,def:5,dur:5,hgt:5,spd:12,end:5,price:0,hot:false},
+];
+const BITS=[
+  {id:"pointBit",name:"Point",sub:"尖型・萬用",color:"#888780",accent:"#D3D1C7",shape:"point",weight:5.2,atk:5,def:5,dur:10,hgt:5,spd:5,end:8,price:0,hot:false},
+  {id:"flatBit",name:"Flat",sub:"平型・攻擊",color:"#D85A30",accent:"#F5C4B3",shape:"flat",weight:5.0,atk:15,def:0,dur:5,hgt:0,spd:18,end:5,price:0,hot:false},
+  {id:"ballBit",name:"Ball",sub:"球型・防禦",color:"#185FA5",accent:"#B5D4F4",shape:"ball",weight:5.5,atk:5,def:15,dur:5,hgt:8,spd:5,end:12,price:0,hot:false},
+  {id:"rushBit",name:"Rush",sub:"衝刺・爆發",color:"#BA7517",accent:"#FAC775",shape:"rush",weight:4.8,atk:20,def:0,dur:0,hgt:0,spd:22,end:3,price:0,hot:false},
+  {id:"unitBit",name:"Unit",sub:"持久・穩定",color:"#1D9E75",accent:"#9FE1CB",shape:"unit",weight:5.1,atk:0,def:10,dur:20,hgt:10,spd:3,end:18,price:0,hot:false},
+];
+
+let selB=0,selR=0,selBit=0;
+let angle=0.3,tiltX=0.42,zoom=1,spinning=true;
+let viewMode="full",explodeT=0,explodeDir=1;
+let dragStart=null,dragAngle=0,dragTilt=0;
+let cvs=null,ctx=null,CW=0,CH=0,CX=0,CY=0;
+let thumbAnims=[];
+
+/* ── Canvas 初期化 ── */
+function initCanvas(){
+  if(cvs) return;
+  cvs=document.getElementById("c3d");
+  const ca=document.getElementById("ca");
+  const resize=()=>{
+    CW=ca.offsetWidth||310; CH=ca.offsetHeight||260;
+    cvs.width=CW; cvs.height=CH;
+    CX=CW/2; CY=CH/2-8;
+  };
+  resize();
+  ctx=cvs.getContext("2d");
+  ca.addEventListener("mousedown",e=>{dragStart={x:e.clientX,y:e.clientY};dragAngle=angle;dragTilt=tiltX;});
+  ca.addEventListener("mousemove",e=>{if(!dragStart)return;angle=dragAngle+(e.clientX-dragStart.x)*.012;tiltX=Math.max(-.9,Math.min(.9,dragTilt-(e.clientY-dragStart.y)*.009));});
+  ca.addEventListener("mouseup",()=>dragStart=null);
+  ca.addEventListener("mouseleave",()=>dragStart=null);
+  ca.addEventListener("wheel",e=>{e.preventDefault();zoom=Math.max(.4,Math.min(2.2,zoom-e.deltaY*.001));},{passive:false});
+  ca.addEventListener("touchstart",e=>{if(e.touches.length===1){dragStart={x:e.touches[0].clientX,y:e.touches[0].clientY};dragAngle=angle;dragTilt=tiltX;}});
+  ca.addEventListener("touchmove",e=>{e.preventDefault();if(!dragStart||e.touches.length!==1)return;angle=dragAngle+(e.touches[0].clientX-dragStart.x)*.012;tiltX=Math.max(-.9,Math.min(.9,dragTilt-(e.touches[0].clientY-dragStart.y)*.009));},{passive:false});
+  ca.addEventListener("touchend",()=>dragStart=null);
+  mainLoop();
+}
+
+function proj(x,y,z){
+  const cA=Math.cos(angle),sA=Math.sin(angle),cT=Math.cos(tiltX),sT=Math.sin(tiltX);
+  const rx=x*cA-z*sA,rz=x*sA+z*cA;
+  const ry2=y*cT-rz*sT,rz2=y*sT+rz*cT;
+  const d=500,sc=zoom*d/(d+rz2);
+  return{px:CX+rx*sc,py:CY+ry2*sc,depth:rz2};
+}
+
+/* ─── BX-02 惡魔紅鐮：4片下旋鐮刀刃，六邊形外框，金屬光澤 ─── */
+function drawBX02(b, oy){
+  const c=ctx;
+  const n=4; // 4片刃
+  const OR=zoom*60, MR=zoom*36, IR=zoom*18, HH=zoom*9;
+  const cT=Math.cos(tiltX);
+
+  /* 外側六邊形底盤陰影 */
+  c.beginPath();
+  for(let i=0;i<6;i++){
+    const a=angle+(i/6)*Math.PI*2;
+    const p=proj(Math.cos(a)*OR*1.05, oy+HH*.5, Math.sin(a)*OR*1.05);
+    if(i===0) c.moveTo(p.px,p.py); else c.lineTo(p.px,p.py);
+  }
+  c.closePath();
+  c.fillStyle="#1a0808cc";c.fill();
+
+  /* 底盤六邊形外框（金屬深灰） */
+  for(let pass=0;pass<2;pass++){
+    c.beginPath();
+    for(let i=0;i<6;i++){
+      const a=angle+(i/6)*Math.PI*2;
+      const yy=oy+(pass===0?HH*.35:-HH*.5);
+      const p=proj(Math.cos(a)*OR*0.98, yy, Math.sin(a)*OR*0.98);
+      if(i===0) c.moveTo(p.px,p.py); else c.lineTo(p.px,p.py);
+    }
+    c.closePath();
+    if(pass===0){c.fillStyle="#2a2a2a88";c.fill();}
+    else{
+      const g=c.createRadialGradient(CX,CY,IR,CX,CY,OR);
+      g.addColorStop(0,"#4a4a4a");g.addColorStop(.5,"#2c2c2c");g.addColorStop(1,"#1a1a1a");
+      c.fillStyle=g;c.fill();
+      c.strokeStyle="#555";c.lineWidth=1;c.stroke();
+    }
+  }
+
+  /* 六邊形面板上的楔形分割線 */
+  for(let i=0;i<6;i++){
+    const a=angle+(i/6)*Math.PI*2+(1/12)*Math.PI*2;
+    const inner=proj(Math.cos(a)*IR*1.1, oy-HH*.4, Math.sin(a)*IR*1.1);
+    const outer=proj(Math.cos(a)*OR*.95, oy-HH*.4, Math.sin(a)*OR*.95);
+    c.beginPath();c.moveTo(inner.px,inner.py);c.lineTo(outer.px,outer.py);
+    c.strokeStyle="#55555566";c.lineWidth=.8;c.stroke();
+  }
+
+  /* 4 片鐮刀刃（下旋刃，向外鉤曲） */
+  for(let i=0;i<n;i++){
+    const baseAngle=angle+(i/n)*Math.PI*2;
+    // 每片刃由3個控制點構成彎曲鐮刀形狀
+    const tipAngle=baseAngle+0.7;
+    const backAngle=baseAngle-0.15;
+    const pts_top=[], pts_bot=[];
+    const S=16;
+
+    // 刃的上表面
+    for(let s=0;s<=S;s++){
+      const t=s/S;
+      // 鐮刀曲線：從 IR 往 OR 同時角度偏轉
+      const curAngle=baseAngle + t*0.72;
+      const curR=IR*1.1 + (OR-IR*1.1)*(t*t);
+      // 刃寬：中段最寬，尖端收細
+      const bladeFat=zoom*(8*(1-Math.pow(t-.3,2)*2.2)+2);
+      const nx=-Math.sin(curAngle), nz=Math.cos(curAngle);
+      const p=proj(Math.cos(curAngle)*curR + nx*bladeFat*.3, oy-HH*.5, Math.sin(curAngle)*curR + nz*bladeFat*.3);
+      pts_top.push(p);
+    }
+    for(let s=S;s>=0;s--){
+      const t=s/S;
+      const curAngle=baseAngle + t*0.72;
+      const curR=IR*1.1 + (OR-IR*1.1)*(t*t);
+      const bladeFat=zoom*(8*(1-Math.pow(t-.3,2)*2.2)+2);
+      const nx=-Math.sin(curAngle), nz=Math.cos(curAngle);
+      const p=proj(Math.cos(curAngle)*curR - nx*bladeFat*.5, oy+HH*.3, Math.sin(curAngle)*curR - nz*bladeFat*.5);
+      pts_top.push(p);
+    }
+
+    c.beginPath();
+    c.moveTo(pts_top[0].px,pts_top[0].py);
+    pts_top.forEach(p=>c.lineTo(p.px,p.py));
+    c.closePath();
+
+    const g=c.createLinearGradient(CX-OR,CY,CX+OR,CY);
+    g.addColorStop(0,b.accent);
+    g.addColorStop(.4,b.color);
+    g.addColorStop(1,b.darkColor||b.color);
+    c.fillStyle=g;c.fill();
+
+    // 刃的邊緣高光
+    c.beginPath();
+    for(let s=0;s<=S/2;s++){
+      const t=s/(S/2);
+      const curAngle=baseAngle+t*0.5;
+      const curR=IR*1.2+(OR-IR*1.2)*(t*t*.8);
+      const nx=-Math.sin(curAngle),nz=Math.cos(curAngle);
+      const p=proj(Math.cos(curAngle)*curR+nx*zoom*2,oy-HH*.55,Math.sin(curAngle)*curR+nz*zoom*2);
+      if(s===0)c.moveTo(p.px,p.py);else c.lineTo(p.px,p.py);
+    }
+    c.strokeStyle=(b.edgeColor||"#ccc")+"bb";c.lineWidth=1.2;c.stroke();
+  }
+
+  /* 中央凸起圓環（紅鐮標誌色） */
+  const midH=zoom*6;
+  // 圓環底部
+  const ringBotPts=[];
+  for(let i=0;i<=24;i++){
+    const a=angle+(i/24)*Math.PI*2;
+    const p=proj(Math.cos(a)*MR*.75, oy+midH*.3, Math.sin(a)*MR*.75);
+    ringBotPts.push(p);
+  }
+  c.beginPath();c.moveTo(ringBotPts[0].px,ringBotPts[0].py);
+  ringBotPts.forEach(p=>c.lineTo(p.px,p.py));c.closePath();
+  c.fillStyle="#33000099";c.fill();
+
+  // 圓環面
+  const ringPts=[];
+  for(let i=0;i<=24;i++){
+    const a=angle+(i/24)*Math.PI*2;
+    const p=proj(Math.cos(a)*MR*.75, oy-midH*.5, Math.sin(a)*MR*.75);
+    ringPts.push(p);
+  }
+  c.beginPath();c.moveTo(ringPts[0].px,ringPts[0].py);
+  ringPts.forEach(p=>c.lineTo(p.px,p.py));c.closePath();
+  const rg=c.createRadialGradient(CX,CY,zoom*4,CX,CY,MR*.75);
+  rg.addColorStop(0,"#CC2222");rg.addColorStop(.6,"#991111");rg.addColorStop(1,"#660000");
+  c.fillStyle=rg;c.fill();
+  c.strokeStyle="#ff444466";c.lineWidth=1;c.stroke();
+
+  // 中央鉚釘
+  const cen=proj(0,oy-midH*.6,0);
+  c.beginPath();c.arc(cen.px,cen.py,zoom*7,0,Math.PI*2);
+  const cg2=c.createRadialGradient(cen.px-zoom*2,cen.py-zoom*2,1,cen.px,cen.py,zoom*7);
+  cg2.addColorStop(0,"#eee");cg2.addColorStop(.4,"#aaa");cg2.addColorStop(1,"#555");
+  c.fillStyle=cg2;c.fill();
+  c.strokeStyle="#99999966";c.lineWidth=.8;c.stroke();
+
+  // 中央小點
+  const dot=proj(0,oy-midH*.65,0);
+  c.beginPath();c.arc(dot.px,dot.py,zoom*2.5,0,Math.PI*2);
+  c.fillStyle="#fff";c.fill();
+}
+
+/* ── 通用戰刃（非BX-02） ── */
+function drawGenericBlade(b,oy){
+  const c=ctx,OR=zoom*58*b.sharp,IR=zoom*22,HH=zoom*11,n=b.bc;
+  for(let i=0;i<n;i++){
+    const a0=angle+(i/n)*Math.PI*2,a1=a0+b.sw*Math.PI*2/n,pts=[],S=14;
+    for(let s=0;s<=S;s++){const a=a0+s*(a1-a0)/S,r=IR+(OR-IR)*(s/S),p=proj(Math.cos(a)*r,oy-HH*.4,Math.sin(a)*r);pts.push(p);}
+    for(let s=S;s>=0;s--){const a=a0+s*(a1-a0)/S,r=(IR+(OR-IR)*(s/S))*.55,p=proj(Math.cos(a)*r,oy+HH*.4,Math.sin(a)*r);pts.push(p);}
+    c.beginPath();c.moveTo(pts[0].px,pts[0].py);pts.forEach(p=>c.lineTo(p.px,p.py));c.closePath();
+    const g=c.createLinearGradient(CX-OR,CY-OR,CX+OR,CY+OR);g.addColorStop(0,b.accent);g.addColorStop(1,b.color);
+    c.fillStyle=g;c.fill();c.strokeStyle=b.color+"99";c.lineWidth=.6;c.stroke();
+  }
+  const tc=proj(0,oy,0);
+  c.beginPath();c.ellipse(tc.px,tc.py,zoom*15,zoom*15*Math.abs(Math.cos(tiltX)),0,0,Math.PI*2);
+  const cg=c.createRadialGradient(tc.px,tc.py,2,tc.px,tc.py,zoom*15);cg.addColorStop(0,"#fff");cg.addColorStop(1,b.accent);
+  c.fillStyle=cg;c.fill();c.strokeStyle=b.color;c.lineWidth=.7;c.stroke();
+}
+
+function drawBlade(b,oy){
+  if(b.type==="bx02") drawBX02(b,oy);
+  else drawGenericBlade(b,oy);
+}
+
+function drawRatchet(r,oy){
+  const c=ctx,n=r.teeth,OR=zoom*40,IR=zoom*26,H2=zoom*8;
+  c.beginPath();for(let i=0;i<n*2;i++){const a=angle+(i/(n*2))*Math.PI*2,rr=(i%2===0)?OR:IR,p=proj(Math.cos(a)*rr,oy+H2*.4,Math.sin(a)*rr);if(i===0)c.moveTo(p.px,p.py);else c.lineTo(p.px,p.py);}
+  c.closePath();c.fillStyle=r.accent+"55";c.fill();c.strokeStyle=r.color;c.lineWidth=.5;c.stroke();
+  c.beginPath();for(let i=0;i<n*2;i++){const a=angle+(i/(n*2))*Math.PI*2,rr=(i%2===0)?OR:IR,p=proj(Math.cos(a)*rr,oy-H2*.5,Math.sin(a)*rr);if(i===0)c.moveTo(p.px,p.py);else c.lineTo(p.px,p.py);}
+  c.closePath();const g=c.createRadialGradient(CX,CY,OR*.2,CX,CY,OR);g.addColorStop(0,r.accent);g.addColorStop(1,r.color);
+  c.fillStyle=g;c.fill();c.strokeStyle=r.color+"88";c.lineWidth=.5;c.stroke();
+  const cc=proj(0,oy,0);c.beginPath();c.ellipse(cc.px,cc.py,zoom*11,zoom*11*Math.abs(Math.cos(tiltX)),0,0,Math.PI*2);c.fillStyle=r.color;c.fill();
+}
+
+function drawBit(bt,oy){
+  const c=ctx,topR=zoom*19,H2=zoom*50,sh=bt.shape,S=18,lp=[],rp=[];
+  for(let i=0;i<=S;i++){
+    const t=i/S;let r;
+    if(sh==="point")r=topR*(1-t*.88);else if(sh==="flat")r=topR*(1-t*.15);else if(sh==="ball")r=topR*Math.sin(t*Math.PI*.85+.1);else if(sh==="rush")r=topR*(1-t*.82);else r=topR*(.45+.55*Math.cos(t*Math.PI));
+    const y=oy-H2*.5+t*H2;lp.push(proj(Math.cos(angle)*r,y,Math.sin(angle)*r));rp.push(proj(Math.cos(angle+Math.PI)*r,y,Math.sin(angle+Math.PI)*r));
+  }
+  c.beginPath();c.moveTo(lp[0].px,lp[0].py);lp.forEach(p=>c.lineTo(p.px,p.py));for(let i=rp.length-1;i>=0;i--)c.lineTo(rp[i].px,rp[i].py);c.closePath();
+  const g=c.createLinearGradient(CX-topR,CY-H2*.4,CX+topR,CY+H2*.4);g.addColorStop(0,bt.accent);g.addColorStop(1,bt.color);
+  c.fillStyle=g;c.fill();c.strokeStyle=bt.color;c.lineWidth=.7;c.stroke();
+  const tip=proj(0,oy+H2*.5,0);c.beginPath();c.arc(tip.px,tip.py,zoom*3.5,0,Math.PI*2);c.fillStyle="#fff";c.fill();
+}
+
+function drawFrame(){
+  if(!ctx)return;
+  ctx.clearRect(0,0,CW,CH);
+  const b=BLADES[selB],r=RATCHETS[selR],bt=BITS[selBit];
+  let by,ry,bity;
+  if(viewMode==="explode"){by=-zoom*(26+explodeT*38);ry=zoom*2;bity=zoom*(22+explodeT*38);}
+  else{by=-zoom*26;ry=zoom*2;bity=zoom*22;}
+  const sp=proj(0,40*zoom,0);
+  ctx.beginPath();ctx.ellipse(sp.px,sp.py,zoom*58,zoom*11,0,0,Math.PI*2);ctx.fillStyle="rgba(55,138,221,0.05)";ctx.fill();
+  drawBit(bt,bity);drawRatchet(r,ry);drawBlade(b,by);
+}
+
+function mainLoop(){
+  if(spinning)angle+=0.018;
+  if(viewMode==="explode"){explodeT+=.012*explodeDir;if(explodeT>=1){explodeT=1;explodeDir=-1;}if(explodeT<=0){explodeT=0;explodeDir=1;}}
+  drawFrame();requestAnimationFrame(mainLoop);
+}
+
+function setView(v,el){viewMode=v;explodeT=0;explodeDir=1;document.querySelectorAll(".vtab").forEach(b=>b.classList.remove("active"));el.classList.add("active");}
+function toggleSpin(){spinning=!spinning;document.getElementById("spin-icon").className=spinning?"ti ti-player-pause":"ti ti-player-play";document.getElementById("spin-lbl").textContent=spinning?"自轉中":"已暫停";}
+
+/* ── 縮圖繪製 ── */
+let thumbA=0;
+function drawThumb(ctx2,part,type,size,a){
+  const cx=size/2,cy=size/2;
+  ctx2.clearRect(0,0,size,size);
+  ctx2.fillStyle="#18181f";ctx2.beginPath();ctx2.roundRect(0,0,size,size,5);ctx2.fill();
+  if(type==="blade"){
+    if(part.type==="bx02"){
+      // BX-02 縮圖：4片鐮刀 + 紅色中心
+      const n=4,OR=size*.44,IR=size*.16;
+      for(let i=0;i<n;i++){
+        const ba=a+(i/n)*Math.PI*2;
+        ctx2.beginPath();
+        const S=10;const pts=[];
+        for(let s=0;s<=S;s++){
+          const t=s/S,ca2=ba+t*.72,cr=IR+(OR-IR)*(t*t);
+          const nx=-Math.sin(ca2),nz=Math.cos(ca2);
+          const fat=size*.1*(1-Math.pow(t-.3,2)*2.2)+size*.02;
+          pts.push({x:cx+Math.cos(ca2)*cr+nx*fat*.3, y:cy+Math.sin(ca2)*cr+nz*fat*.3});
+        }
+        for(let s=S;s>=0;s--){
+          const t=s/S,ca2=ba+t*.72,cr=IR+(OR-IR)*(t*t);
+          const nx=-Math.sin(ca2),nz=Math.cos(ca2);
+          const fat=size*.1*(1-Math.pow(t-.3,2)*2.2)+size*.02;
+          pts.push({x:cx+Math.cos(ca2)*cr-nx*fat*.5, y:cy+Math.sin(ca2)*cr-nz*fat*.5});
+        }
+        ctx2.beginPath();ctx2.moveTo(pts[0].x,pts[0].y);pts.forEach(p=>ctx2.lineTo(p.x,p.y));ctx2.closePath();
+        const g=ctx2.createLinearGradient(cx-OR,cy,cx+OR,cy);g.addColorStop(0,part.accent);g.addColorStop(1,part.color);
+        ctx2.fillStyle=g;ctx2.fill();
+      }
+      // 紅色中心
+      ctx2.beginPath();ctx2.arc(cx,cy,size*.2,0,Math.PI*2);
+      const rg=ctx2.createRadialGradient(cx,cy,2,cx,cy,size*.2);rg.addColorStop(0,"#CC2222");rg.addColorStop(1,"#660000");
+      ctx2.fillStyle=rg;ctx2.fill();
+      ctx2.beginPath();ctx2.arc(cx,cy,size*.08,0,Math.PI*2);ctx2.fillStyle="#ddd";ctx2.fill();
+    } else {
+      const OR=size*.42*part.sharp,IR=size*.15,n=part.bc;
+      for(let i=0;i<n;i++){
+        const a0=a+(i/n)*Math.PI*2,a1=a0+part.sw*Math.PI*2/n,pts=[],S=10;
+        for(let s=0;s<=S;s++){const ang=a0+s*(a1-a0)/S,r=IR+(OR-IR)*(s/S);pts.push({x:cx+Math.cos(ang)*r,y:cy+Math.sin(ang)*r});}
+        for(let s=S;s>=0;s--){const ang=a0+s*(a1-a0)/S,r=(IR+(OR-IR)*(s/S))*.5;pts.push({x:cx+Math.cos(ang)*r,y:cy+Math.sin(ang)*r});}
+        ctx2.beginPath();ctx2.moveTo(pts[0].x,pts[0].y);pts.forEach(p=>ctx2.lineTo(p.x,p.y));ctx2.closePath();
+        const g=ctx2.createLinearGradient(cx-OR,cy-OR,cx+OR,cy+OR);g.addColorStop(0,part.accent);g.addColorStop(1,part.color);ctx2.fillStyle=g;ctx2.fill();
+      }
+      ctx2.beginPath();ctx2.arc(cx,cy,size*.1,0,Math.PI*2);ctx2.fillStyle="#fff";ctx2.fill();
+    }
+  } else if(type==="ratchet"){
+    const n=part.teeth,OR=size*.42,IR=size*.27;
+    ctx2.beginPath();for(let i=0;i<n*2;i++){const ang=a+(i/(n*2))*Math.PI*2,r=(i%2===0)?OR:IR;if(i===0)ctx2.moveTo(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r);else ctx2.lineTo(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r);}
+    ctx2.closePath();const g=ctx2.createRadialGradient(cx,cy,IR*.3,cx,cy,OR);g.addColorStop(0,part.accent);g.addColorStop(1,part.color);ctx2.fillStyle=g;ctx2.fill();
+    ctx2.beginPath();ctx2.arc(cx,cy,size*.12,0,Math.PI*2);ctx2.fillStyle=part.color;ctx2.fill();
+  } else {
+    const sh=part.shape,topR=size*.22,pts=[],S=12;
+    for(let i=0;i<=S;i++){const t=i/S;let r;if(sh==="point")r=topR*(1-t*.88);else if(sh==="flat")r=topR*(1-t*.15);else if(sh==="ball")r=topR*Math.sin(t*Math.PI*.85+.1);else if(sh==="rush")r=topR*(1-t*.82);else r=topR*(.45+.55*Math.cos(t*Math.PI));pts.push({x:cx+r,y:cy-size*.35+t*size*.7,r});}
+    ctx2.beginPath();ctx2.moveTo(pts[0].x,pts[0].y);pts.forEach(p=>ctx2.lineTo(p.x,p.y));for(let i=pts.length-1;i>=0;i--)ctx2.lineTo(cx-pts[i].r,pts[i].y);ctx2.closePath();
+    const g=ctx2.createLinearGradient(cx-topR,0,cx+topR,size);g.addColorStop(0,part.accent);g.addColorStop(1,part.color);ctx2.fillStyle=g;ctx2.fill();
+    ctx2.beginPath();ctx2.arc(cx,cy+size*.3,size*.05,0,Math.PI*2);ctx2.fillStyle="#fff";ctx2.fill();
+  }
+}
+function startThumbAnim(){
+  cancelAnimationFrame(startThumbAnim._id);
+  function tick(){thumbA+=0.025;thumbAnims.forEach(({c2,p,t,s})=>drawThumb(c2,p,t,s,thumbA));startThumbAnim._id=requestAnimationFrame(tick);}
+  tick();
+}
+function makeThumb(part,type,size){
+  const c=document.createElement("canvas");c.width=c.height=size;
+  thumbAnims.push({c2:c.getContext("2d"),p:part,t:type,s:size});return c;
+}
+
+/* ── 下拉選單 ── */
+function buildDD(cid,parts,type,sel,onSel){
+  thumbAnims=thumbAnims.filter(t=>t._cid!==cid);
+  const wrap=document.getElementById(cid);
+  const trig=document.createElement("div");trig.className="sel-trigger";
+  const ic=makeThumb(parts[sel],type,32);const iw=document.createElement("div");iw.className="sel-icon";iw.appendChild(ic);
+  const tx=document.createElement("div");tx.className="sel-text";
+  tx.innerHTML=`<div class="sel-name">${parts[sel].name}</div><div class="sel-sub">${parts[sel].sub}</div>`;
+  const arr=document.createElement("i");arr.className="ti ti-chevron-down sel-arrow";arr.setAttribute("aria-hidden","true");
+  trig.appendChild(iw);trig.appendChild(tx);trig.appendChild(arr);
+  const dd=document.createElement("div");dd.className="dropdown";
+  parts.forEach((p,i)=>{
+    const opt=document.createElement("div");opt.className="dopt"+(i===sel?" active":"");
+    const dic=makeThumb(p,type,36);const diw=document.createElement("div");diw.className="dopt-icon";diw.appendChild(dic);
+    const dt=document.createElement("div");dt.className="dopt-text";dt.innerHTML=`<div class="dopt-name">${p.name}</div><div class="dopt-sub">${p.sub}</div>`;
+    opt.appendChild(diw);opt.appendChild(dt);
+    if(p.hot){const hb=document.createElement("span");hb.className="hot-badge";hb.textContent="熱門";opt.appendChild(hb);}
+    const wb=document.createElement("span");wb.className="wt-lbl";wb.textContent=p.weight+"g";opt.appendChild(wb);
+    opt.addEventListener("click",()=>{dd.classList.remove("open");arr.classList.remove("open");onSel(i);});
+    dd.appendChild(opt);
+  });
+  trig.addEventListener("click",e=>{e.stopPropagation();const op=dd.classList.contains("open");document.querySelectorAll(".dropdown.open").forEach(d=>d.classList.remove("open"));document.querySelectorAll(".sel-arrow.open").forEach(a=>a.classList.remove("open"));if(!op){dd.classList.add("open");arr.classList.add("open");}});
+  wrap.innerHTML="";wrap.appendChild(trig);wrap.appendChild(dd);
+}
+document.addEventListener("click",()=>{document.querySelectorAll(".dropdown.open").forEach(d=>d.classList.remove("open"));document.querySelectorAll(".sel-arrow.open").forEach(a=>a.classList.remove("open"));});
+
+/* ── 屬性計算 ── */
+function updateStats(){
+  const b=BLADES[selB],r=RATCHETS[selR],bt=BITS[selBit];
+  const atk=Math.min(100,b.atk+r.atk+bt.atk);
+  const def=Math.min(100,b.def+r.def+bt.def);
+  const dur=Math.min(100,b.dur+r.dur+bt.dur);
+  const hgt=Math.min(100,b.hgt+r.hgt+bt.hgt);
+  const spd=Math.min(100,b.spd+r.spd+bt.spd);
+  const end=Math.min(100,b.end+r.end+bt.end);
+  const w=(b.weight+r.weight+bt.weight).toFixed(1);
+  const score=Math.round((atk*.2+def*.2+dur*.2+hgt*.1+spd*.15+end*.15)*.9+5);
+  const vals={atk,def,dur,hgt,spd,end};
+  Object.keys(vals).forEach(k=>{
+    document.getElementById("v-"+k).textContent=vals[k];
+    document.getElementById("b-"+k).style.width=vals[k]+"%";
+    document.getElementById("bn-"+k).textContent=vals[k];
+  });
+  document.getElementById("combo-name").textContent=b.name+" / "+r.name+" / "+bt.name;
+  const max=Math.max(atk,def,dur);let type="平衡型",tc="#BA7517";
+  if(max===atk&&atk-def>15){type="攻擊型";tc="#D85A30";}
+  else if(max===def&&def-atk>15){type="防禦型";tc="#378ADD";}
+  else if(max===dur&&dur-atk>15){type="持久型";tc="#1D9E75";}
+  const sb=document.getElementById("score-badge");sb.textContent=score+" 分・"+type;sb.style.color=tc;sb.style.borderColor=tc+"44";
+  const totalP=b.price+r.price+bt.price;
+  document.getElementById("meta-row").innerHTML=`<span class="mpill">⚖ ${w}g</span><span class="mpill">NT$ ${totalP.toLocaleString()}</span>`;
+}
+
+function rebuild(){
+  thumbAnims=[];
+  buildDD("cs-blade",BLADES,"blade",selB,i=>{selB=i;rebuild();});
+  buildDD("cs-ratchet",RATCHETS,"ratchet",selR,i=>{selR=i;rebuild();});
+  buildDD("cs-bit",BITS,"bit",selBit,i=>{selBit=i;rebuild();});
+  updateStats();
+  startThumbAnim();
+}
+
+initCanvas();
+rebuild();
+</script>
