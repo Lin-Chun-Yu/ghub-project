@@ -1,0 +1,28 @@
+要將你的網站代碼推送到 GitHub，請在你的電腦終端機（Terminal）中，進入你的專案資料夾，依序執行以下指令：
+
+### 1. 初始化與設定遠端連結
+
+如果你是第一次上傳專案：
+
+* **初始化本地倉庫**：
+`git init`
+* **連結到你的 GitHub 倉庫**（請將 `[連結]` 換成你在 GitHub 上建立的倉庫網址）：
+`git remote add origin [連結]`
+
+### 2. 提交檔案的指令
+
+每次更新網站內容後，執行這三行即可上傳：
+
+* **加入所有更動的檔案**：
+`git add .`
+* **記錄這次更新的內容（描述建議寫簡單的摘要）**：
+`git commit -m "update: footer info and legal pages"`
+* **推送到 GitHub**：
+`git push -u origin main` (或 `master`，視你的分支名稱而定)
+
+---
+
+### 小提醒
+
+* **部署到 Vercel**：由於你之前提到已部署在 Vercel，只要你執行 `git push` 後，Vercel 通常會自動偵測並重新部署。你可以登入 Vercel 後台觀察部署進度。
+* **隱私保護**：如果你有包含敏感資訊（例如密碼或私鑰），記得先檢查 `.gitignore` 檔案，確保那些檔案不會被推送到 GitHub 上。

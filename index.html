@@ -19,9 +19,13 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .mob-menu{display:none;flex-direction:column;gap:2px;background:var(--bg2);border-bottom:0.5px solid var(--bd2);padding:8px 12px 12px}
 .mob-menu.open{display:flex}
 .mob-menu .nav-item{width:100%;padding:10px 12px;justify-content:flex-start}
-.content{flex:1;overflow:hidden}
-.page{display:none;height:100%}
-.page.active{display:flex;flex-direction:column;height:100%}
+
+/* 中間內容區：flex column 讓頁尾可以 push 到底 */
+.content{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.page{display:none;flex-direction:column;flex:1;overflow:hidden}
+.page.active{display:flex}
+
+/* HOME */
 .home-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);flex:1;overflow:hidden}
 .map-col{display:flex;flex-direction:column;border-right:0.5px solid var(--bd)}
 .map-hdr{padding:11px 14px 9px;border-bottom:0.5px solid var(--bd);flex-shrink:0}
@@ -50,6 +54,8 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .emeta{display:flex;gap:10px;font-size:10px;color:var(--t3)}
 .emeta span{display:flex;align-items:center;gap:3px}
 .emeta i{font-size:11px}
+
+/* BEY */
 .bey-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .bey-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);flex:1;overflow:hidden}
 .col-radar{background:var(--bg3);border-right:0.5px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;gap:10px;overflow:hidden}
@@ -60,40 +66,56 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .colr::-webkit-scrollbar{width:3px}
 .colr::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
 .sec-lbl{font-size:10px;font-weight:500;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.sets-block{background:var(--bg3);border-radius:12px;border:0.5px solid var(--bd);padding:11px;margin-bottom:8px}
+.sets-head{font-size:12px;color:var(--t2);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.sets-head i{font-size:14px;color:var(--blue)}
+.sets-scroll{display:flex;gap:7px;overflow-x:auto;padding-bottom:3px}
+.sets-scroll::-webkit-scrollbar{height:3px}
+.sets-scroll::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+.set-card{flex-shrink:0;width:96px;background:var(--bg4);border:0.5px solid var(--bd2);border-radius:9px;padding:9px 8px;cursor:pointer;transition:all .18s;display:flex;flex-direction:column;gap:3px}
+.set-card:hover{border-color:var(--blue3);background:rgba(55,138,221,0.07)}
+.set-card.active{border-color:var(--blue);background:rgba(55,138,221,0.1)}
+.set-id{font-size:9px;color:var(--blue2);font-weight:500;letter-spacing:.04em}
+.set-name{font-size:11px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.set-type{font-size:9px;color:var(--t3);margin-top:1px}
+.set-type-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:3px;vertical-align:middle}
+.set-parts{font-size:9px;color:var(--t3);margin-top:3px;line-height:1.5;border-top:0.5px solid var(--bd);padding-top:4px}
 .pblock{background:var(--bg3);border-radius:12px;border:0.5px solid var(--bd);padding:11px;margin-bottom:8px}
 .phead{font-size:12px;color:var(--t2);margin-bottom:7px;display:flex;align-items:center;gap:5px}
 .phead i{font-size:14px;color:var(--blue)}
-.sel-wrap{position:relative}
-.sel-trig{display:flex;align-items:center;gap:9px;padding:7px 9px;background:var(--bg4);border:0.5px solid var(--bd2);border-radius:8px;cursor:pointer;transition:border-color .15s;user-select:none}
-.sel-trig:hover{border-color:var(--blue3)}
-.sel-icon{width:30px;height:30px;border-radius:6px;flex-shrink:0;overflow:hidden}
-.sel-text{flex:1;min-width:0}
-.sel-name{font-size:12px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sel-sub{font-size:10px;color:var(--t3)}
-.sel-arr{color:var(--t3);font-size:13px;transition:transform .2s;flex-shrink:0}
-.sel-arr.open{transform:rotate(180deg)}
-.dd{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:200;background:var(--bg3);border:0.5px solid var(--bd2);border-radius:10px;overflow:hidden;display:none;box-shadow:0 8px 28px rgba(0,0,0,.65)}
-.dd.open{display:block}
-.dopt{display:flex;align-items:center;gap:9px;padding:7px 9px;cursor:pointer;border-bottom:0.5px solid var(--bd);transition:background .1s}
-.dopt:last-child{border-bottom:none}
-.dopt:hover,.dopt.active{background:rgba(55,138,221,0.08)}
-.dopt-icon{width:34px;height:34px;border-radius:6px;flex-shrink:0;overflow:hidden}
-.dopt-text{flex:1;min-width:0}
-.dopt-name{font-size:12px;font-weight:500;color:var(--t1)}
-.dopt-sub{font-size:10px;color:var(--t3)}
-.hot-b{font-size:10px;padding:2px 6px;border-radius:20px;background:rgba(163,45,45,0.2);color:#F09595;border:0.5px solid rgba(163,45,45,0.3);flex-shrink:0}
-.wt-b{font-size:10px;color:var(--t3);flex-shrink:0}
+.part-select-wrap{position:relative}
+.part-select-trigger{display:flex;align-items:center;justify-content:space-between;padding:8px 11px;background:var(--bg4);border:0.5px solid var(--bd2);border-radius:8px;cursor:pointer;transition:border-color .15s;user-select:none}
+.part-select-trigger:hover,.part-select-trigger.open{border-color:var(--blue3)}
+.pst-left{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pst-name{font-size:12px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pst-meta{font-size:10px;color:var(--t3)}
+.pst-arrow{color:var(--t3);font-size:13px;transition:transform .2s;flex-shrink:0;margin-left:8px}
+.pst-arrow.open{transform:rotate(180deg)}
+.part-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:200;background:var(--bg3);border:0.5px solid var(--bd2);border-radius:10px;overflow:hidden;display:none;box-shadow:0 8px 28px rgba(0,0,0,.65)}
+.part-dropdown.open{display:block}
+.pd-item{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;cursor:pointer;border-bottom:0.5px solid var(--bd);transition:background .1s;gap:8px}
+.pd-item:last-child{border-bottom:none}
+.pd-item:hover{background:rgba(55,138,221,0.07)}
+.pd-item.active{background:rgba(55,138,221,0.1)}
+.pd-left{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.pd-id{font-size:10px;color:var(--blue2);font-weight:500;letter-spacing:.03em}
+.pd-name{font-size:12px;font-weight:500;color:var(--t1)}
+.pd-type{font-size:10px;color:var(--t3)}
+.pd-check{font-size:13px;color:var(--blue);display:none;flex-shrink:0}
+.pd-item.active .pd-check{display:block}
 .stats-bottom{background:var(--bg3);border-radius:12px;border:0.5px solid var(--bd);padding:11px}
 .sg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-bottom:8px}
 .sb{background:var(--bg4);border-radius:7px;border:0.5px solid var(--bd);padding:.5rem;text-align:center}
 .sl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
 .sv{font-size:16px;font-weight:500}
 .divid{height:0.5px;background:var(--bd);margin:6px 0}
-.brow{display:flex;align-items:center;justify-content:space-between}
+.brow{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .cname{font-size:11px;font-weight:500;color:var(--t1);line-height:1.4}
 .mrow{display:flex;gap:4px;margin-top:3px;flex-wrap:wrap}
 .mp{font-size:9px;padding:2px 7px;border-radius:20px;background:var(--bg4);color:var(--t2);border:0.5px solid var(--bd)}
-.sbadge{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--bg4);border:0.5px solid var(--bd2);flex-shrink:0}
+.sbadge{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--bg4);border:0.5px solid var(--bd2);flex-shrink:0;white-space:nowrap}
+
+/* CHANGELOG */
 .cl-wrap{flex:1;overflow-y:auto;padding:16px}
 .cl-wrap::-webkit-scrollbar{width:3px}
 .cl-wrap::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
@@ -109,9 +131,8 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .fb-title{font-size:13px;font-weight:500;color:var(--t1);margin-bottom:4px;display:flex;align-items:center;gap:7px}
 .fb-title i{font-size:15px;color:#5DCAA5}
 .fb-subtitle{font-size:10px;color:var(--t3);margin-bottom:10px;display:flex;align-items:center;gap:4px}
-.fb-subtitle i{font-size:11px;color:#1D9E75}
 .rating-row{display:flex;gap:6px;margin-bottom:10px}
-.rating-btn{flex:1;padding:6px 4px;border-radius:8px;border:0.5px solid var(--bd2);background:var(--bg4);color:var(--t2);font-size:14px;cursor:pointer;transition:all .15s;text-align:center}
+.rating-btn{flex:1;padding:6px 4px;border-radius:8px;border:0.5px solid var(--bd2);background:var(--bg4);font-size:14px;cursor:pointer;transition:all .15s;text-align:center}
 .rating-btn:hover{background:var(--bg3);transform:scale(1.08)}
 .rating-btn.selected{border-color:currentColor;background:transparent}
 .cat-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
@@ -134,6 +155,93 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 .fb-history-meta{font-size:9px;color:var(--t3);margin-top:3px;display:flex;gap:8px}
 .btn-cf{padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer;background:rgba(186,117,23,0.15);color:#FAC775;border:0.5px solid rgba(186,117,23,0.3);display:flex;align-items:center;gap:4px}
 .sdiv{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;padding:5px 0 7px;margin-top:3px}
+
+/* ══ 頁尾 ══ */
+.site-footer{
+  background:var(--bg2);
+  border-top:0.5px solid var(--bd2);
+  flex-shrink:0;
+  font-size:11px;
+  color:var(--t3);
+}
+/* 收合按鈕列 */
+.footer-toggle{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 20px;cursor:pointer;user-select:none;
+  transition:background .15s;
+}
+.footer-toggle:hover{background:var(--bg3)}
+.footer-toggle-left{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--t3)}
+.footer-toggle-left i{font-size:13px;color:var(--t3)}
+.footer-toggle-right{display:flex;align-items:center;gap:12px}
+.footer-links-inline{display:flex;gap:14px}
+.footer-link-btn{
+  font-size:10px;color:var(--t3);background:transparent;border:none;
+  cursor:pointer;padding:0;transition:color .15s;
+}
+.footer-link-btn:hover{color:var(--blue2)}
+.footer-chevron{font-size:14px;color:var(--t3);transition:transform .2s}
+.footer-chevron.open{transform:rotate(180deg)}
+
+/* 展開內容 */
+.footer-body{
+  display:none;border-top:0.5px solid var(--bd);
+  padding:16px 20px 14px;
+}
+.footer-body.open{display:block}
+.footer-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:16px 24px;
+  margin-bottom:14px;
+}
+.footer-col-title{
+  font-size:10px;font-weight:500;color:var(--t2);
+  text-transform:uppercase;letter-spacing:.07em;
+  margin-bottom:7px;display:flex;align-items:center;gap:5px;
+}
+.footer-col-title i{font-size:12px;color:var(--blue)}
+.footer-col p,.footer-col li{
+  font-size:10px;color:var(--t3);line-height:1.7;
+}
+.footer-col ul{list-style:none;padding:0}
+.footer-link{color:var(--blue2);text-decoration:none;transition:opacity .15s}
+.footer-link:hover{opacity:.75}
+.footer-divider{height:0.5px;background:var(--bd);margin:10px 0}
+.footer-bottom{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  font-size:9px;color:var(--t3);
+}
+.footer-modal-trigger{
+  font-size:10px;color:var(--t3);background:transparent;border:none;
+  cursor:pointer;padding:0;transition:color .15s;text-decoration:underline;
+  text-underline-offset:2px;
+}
+.footer-modal-trigger:hover{color:var(--blue2)}
+
+/* 彈出視窗 */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;
+  display:none;align-items:center;justify-content:center;padding:16px;
+}
+.modal-overlay.open{display:flex}
+.modal-box{
+  background:var(--bg3);border:0.5px solid var(--bd2);border-radius:14px;
+  width:100%;max-width:480px;max-height:80vh;overflow-y:auto;
+  padding:20px;box-shadow:0 16px 48px rgba(0,0,0,.6);
+}
+.modal-box::-webkit-scrollbar{width:3px}
+.modal-box::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.modal-title{font-size:14px;font-weight:500;color:var(--t1);display:flex;align-items:center;gap:7px}
+.modal-title i{font-size:16px;color:var(--blue)}
+.modal-close{background:transparent;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:0;line-height:1;transition:color .15s}
+.modal-close:hover{color:var(--t1)}
+.modal-section{margin-bottom:14px}
+.modal-section-title{font-size:11px;font-weight:500;color:var(--t2);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.modal-section-title i{font-size:13px;color:var(--blue2)}
+.modal-section p{font-size:11px;color:var(--t3);line-height:1.7}
+
 .leaflet-container{background:#0d0d14!important}
 .leaflet-tile-pane{filter:brightness(.55) saturate(.6) hue-rotate(180deg)}
 .leaflet-control-zoom a{background:var(--bg3)!important;color:var(--t1)!important;border-color:var(--bd2)!important}
@@ -146,12 +254,15 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
   .nav-links{display:none}.hamburger{display:block}
   .home-layout,.bey-layout{grid-template-columns:1fr}
   .map-col{border-right:none;border-bottom:0.5px solid var(--bd)}
-  #leaflet-map{height:210px;min-height:210px;flex:none}
-  .col-radar{border-right:none;border-bottom:0.5px solid var(--bd);min-height:320px}
+  #leaflet-map{height:200px;min-height:200px;flex:none}
+  .col-radar{border-right:none;border-bottom:0.5px solid var(--bd);min-height:280px}
+  .footer-links-inline{display:none}
+  .footer-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 
 <div class="shell">
+<!-- NAV -->
 <nav class="navbar">
   <div class="brand">
     <svg width="32" height="32" viewBox="0 0 34 34" fill="none" aria-hidden="true">
@@ -182,7 +293,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 
 <div class="content">
 
-<!-- 賽事中心（完全不動） -->
+<!-- 賽事中心 -->
 <div class="page active" id="page-home">
   <div class="home-layout">
     <div class="map-col">
@@ -199,7 +310,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
   </div>
 </div>
 
-<!-- 神配置計算機（完全不動） -->
+<!-- 神配置計算機 -->
 <div class="page" id="page-bey">
   <div class="bey-wrap">
     <div class="bey-layout">
@@ -208,17 +319,48 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
         <div class="radar-legend" id="radar-legend"></div>
       </div>
       <div class="colr">
-        <div class="sec-lbl">零件選擇</div>
-        <div class="pblock"><div class="phead"><i class="ti ti-sword" aria-hidden="true"></i>戰刃 Blade</div><div class="sel-wrap" id="cs-blade"></div></div>
-        <div class="pblock"><div class="phead"><i class="ti ti-circle-dashed" aria-hidden="true"></i>固鎖輪盤 Ratchet</div><div class="sel-wrap" id="cs-ratchet"></div></div>
-        <div class="pblock"><div class="phead"><i class="ti ti-point" aria-hidden="true"></i>軸心 Bit</div><div class="sel-wrap" id="cs-bit"></div></div>
+        <div class="sets-block">
+          <div class="sets-head"><i class="ti ti-package" aria-hidden="true"></i>官方套組快選</div>
+          <div class="sets-scroll" id="sets-scroll"></div>
+        </div>
+        <div class="sec-lbl">自訂零件</div>
+        <div class="pblock">
+          <div class="phead"><i class="ti ti-sword" aria-hidden="true"></i>戰刃 Blade</div>
+          <div class="part-select-wrap">
+            <div class="part-select-trigger" id="trig-blade" onclick="toggleDD('blade')">
+              <div class="pst-left"><div class="pst-name" id="disp-blade-name">—</div><div class="pst-meta" id="disp-blade-meta">—</div></div>
+              <i class="ti ti-chevron-down pst-arrow" id="arr-blade" aria-hidden="true"></i>
+            </div>
+            <div class="part-dropdown" id="dd-blade"></div>
+          </div>
+        </div>
+        <div class="pblock">
+          <div class="phead"><i class="ti ti-circle-dashed" aria-hidden="true"></i>固鎖輪盤 Ratchet</div>
+          <div class="part-select-wrap">
+            <div class="part-select-trigger" id="trig-ratchet" onclick="toggleDD('ratchet')">
+              <div class="pst-left"><div class="pst-name" id="disp-ratchet-name">—</div><div class="pst-meta" id="disp-ratchet-meta">—</div></div>
+              <i class="ti ti-chevron-down pst-arrow" id="arr-ratchet" aria-hidden="true"></i>
+            </div>
+            <div class="part-dropdown" id="dd-ratchet"></div>
+          </div>
+        </div>
+        <div class="pblock">
+          <div class="phead"><i class="ti ti-point" aria-hidden="true"></i>軸心 Bit</div>
+          <div class="part-select-wrap">
+            <div class="part-select-trigger" id="trig-bit" onclick="toggleDD('bit')">
+              <div class="pst-left"><div class="pst-name" id="disp-bit-name">—</div><div class="pst-meta" id="disp-bit-meta">—</div></div>
+              <i class="ti ti-chevron-down pst-arrow" id="arr-bit" aria-hidden="true"></i>
+            </div>
+            <div class="part-dropdown" id="dd-bit"></div>
+          </div>
+        </div>
         <div class="stats-bottom">
           <div class="sg">
             <div class="sb"><div class="sl">攻擊</div><div class="sv" style="color:#D85A30" id="v-atk">—</div></div>
             <div class="sb"><div class="sl">防禦</div><div class="sv" style="color:#378ADD" id="v-def">—</div></div>
-            <div class="sb"><div class="sl">持久</div><div class="sv" style="color:#1D9E75" id="v-dur">—</div></div>
+            <div class="sb"><div class="sl">耐力</div><div class="sv" style="color:#1D9E75" id="v-sta">—</div></div>
             <div class="sb"><div class="sl">高度</div><div class="sv" style="color:#9B6FD8" id="v-hgt">—</div></div>
-            <div class="sb"><div class="sl">加速</div><div class="sv" style="color:#D8A030" id="v-spd">—</div></div>
+            <div class="sb"><div class="sl">加速</div><div class="sv" style="color:#D8A030" id="v-accel">—</div></div>
             <div class="sb"><div class="sl">耐久度</div><div class="sv" style="color:#D85070" id="v-end">—</div></div>
           </div>
           <div class="divid"></div>
@@ -240,52 +382,48 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
         <div class="sdiv">版本記錄</div>
         <div class="cl-card">
           <div class="cl-title"><i class="ti ti-git-branch" aria-hidden="true"></i>更新日誌</div>
-          <div class="cl-item"><span class="cl-ver">v0.6</span><div class="cl-txt">回饋表單串接 Google Sheets，支援評分、分類標籤、送出紀錄</div></div>
-          <div class="cl-item"><span class="cl-ver">v0.5</span><div class="cl-txt">神配置計算機改為雷達圖呈現，移除 3D 預覽</div></div>
-          <div class="cl-item"><span class="cl-ver">v0.4</span><div class="cl-txt">整合神配置計算機至各頁面、移除價格顯示</div></div>
-          <div class="cl-item"><span class="cl-ver">v0.3</span><div class="cl-txt">新增 OpenStreetMap 地圖、G-Hub 品牌、固鎖輪盤更名、六項屬性</div></div>
+          <div class="cl-item"><span class="cl-ver">v0.8</span><div class="cl-txt">新增套組快選區，從 BEYBLADE_DATABASE.sets 自動載入</div></div>
+          <div class="cl-item"><span class="cl-ver">v0.7</span><div class="cl-txt">神配置計算機改用 BEYBLADE_DATABASE 資料驅動，純文字選單</div></div>
+          <div class="cl-item"><span class="cl-ver">v0.6</span><div class="cl-txt">回饋表單串接 Google Sheets，支援評分、分類標籤</div></div>
+          <div class="cl-item"><span class="cl-ver">v0.5</span><div class="cl-txt">神配置計算機改為雷達圖呈現</div></div>
           <div class="cl-item"><span class="cl-ver">v0.1</span><div class="cl-txt">初版：神配置計算機、屬性評分系統</div></div>
         </div>
         <div class="sdiv" style="margin-top:10px">即將推出</div>
         <div class="cl-card">
           <div class="cl-title"><i class="ti ti-rocket" aria-hidden="true"></i>開發中功能</div>
           <div style="display:flex;flex-direction:column;gap:5px">
-            <div style="display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:0.5px solid var(--bd)"><i class="ti ti-clock" style="font-size:12px;color:var(--t3)" aria-hidden="true"></i><span style="font-size:11px;color:var(--t2)">剋制關係分析（鯊魚 vs 龍王）</span></div>
+            <div style="display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:0.5px solid var(--bd)"><i class="ti ti-clock" style="font-size:12px;color:var(--t3)" aria-hidden="true"></i><span style="font-size:11px;color:var(--t2)">剋制關係分析</span></div>
             <div style="display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:0.5px solid var(--bd)"><i class="ti ti-clock" style="font-size:12px;color:var(--t3)" aria-hidden="true"></i><span style="font-size:11px;color:var(--t2)">AI 配置顧問（Claude API）</span></div>
             <div style="display:flex;align-items:center;gap:7px;padding:5px 0"><i class="ti ti-clock" style="font-size:12px;color:var(--t3)" aria-hidden="true"></i><span style="font-size:11px;color:var(--t2)">賽事報名 / 成績紀錄</span></div>
           </div>
         </div>
       </div>
-
       <div>
         <div class="sdiv">快速工具</div>
         <div class="cl-card" style="margin-bottom:10px">
           <div class="cl-title"><i class="ti ti-tornado" aria-hidden="true"></i>神配置計算機</div>
-          <p style="font-size:11px;color:var(--t2);line-height:1.6;margin-bottom:10px">選擇戰刃、固鎖輪盤、軸心，雷達圖即時呈現六項屬性評分。</p>
+          <p style="font-size:11px;color:var(--t2);line-height:1.6;margin-bottom:10px">選擇套組或自訂零件，雷達圖即時呈現六項屬性評分。</p>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:10px">
             <div class="sb"><div class="sl">攻擊</div><div class="sv" style="color:#D85A30;font-size:14px" id="cl-atk">—</div></div>
             <div class="sb"><div class="sl">防禦</div><div class="sv" style="color:#378ADD;font-size:14px" id="cl-def">—</div></div>
-            <div class="sb"><div class="sl">持久</div><div class="sv" style="color:#1D9E75;font-size:14px" id="cl-dur">—</div></div>
+            <div class="sb"><div class="sl">耐力</div><div class="sv" style="color:#1D9E75;font-size:14px" id="cl-sta">—</div></div>
           </div>
-          <button class="btn-p" style="width:100%;justify-content:center" onclick="goto('bey',document.getElementById('nb-bey'))">
-            <i class="ti ti-external-link" aria-hidden="true"></i>開啟計算機
-          </button>
+          <button class="btn-p" style="width:100%;justify-content:center" onclick="goto('bey',document.getElementById('nb-bey'))"><i class="ti ti-external-link" aria-hidden="true"></i>開啟計算機</button>
         </div>
-
         <div class="sdiv">意見回饋</div>
         <div class="fb-card">
           <div class="fb-title"><i class="ti ti-message-circle" aria-hidden="true"></i>回饋與建議</div>
           <div class="fb-subtitle"><i class="ti ti-brand-google" aria-hidden="true"></i>回饋將自動儲存至 Google Sheets</div>
           <div style="font-size:10px;color:var(--t3);margin-bottom:5px">整體滿意度</div>
-          <div class="rating-row" id="rating-row">
-            <button class="rating-btn" data-val="1" onclick="selectRating(this)" title="很差">😞</button>
-            <button class="rating-btn" data-val="2" onclick="selectRating(this)" title="普通">😐</button>
-            <button class="rating-btn" data-val="3" onclick="selectRating(this)" title="還好">🙂</button>
-            <button class="rating-btn" data-val="4" onclick="selectRating(this)" title="不錯">😊</button>
-            <button class="rating-btn" data-val="5" onclick="selectRating(this)" title="超棒">🤩</button>
+          <div class="rating-row">
+            <button class="rating-btn" data-val="1" onclick="selectRating(this)">😞</button>
+            <button class="rating-btn" data-val="2" onclick="selectRating(this)">😐</button>
+            <button class="rating-btn" data-val="3" onclick="selectRating(this)">🙂</button>
+            <button class="rating-btn" data-val="4" onclick="selectRating(this)">😊</button>
+            <button class="rating-btn" data-val="5" onclick="selectRating(this)">🤩</button>
           </div>
           <div style="font-size:10px;color:var(--t3);margin-bottom:5px">回饋類型</div>
-          <div class="cat-row" id="cat-row">
+          <div class="cat-row">
             <button class="cat-btn" onclick="selectCat(this)">🐛 Bug 回報</button>
             <button class="cat-btn" onclick="selectCat(this)">💡 功能建議</button>
             <button class="cat-btn" onclick="selectCat(this)">🎮 零件資料</button>
@@ -295,19 +433,16 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
           <textarea class="fb-in" id="fb-text" placeholder="詳細描述你的建議或遇到的問題…" maxlength="500" oninput="updateChar()"></textarea>
           <div class="char-count"><span id="char-count">0</span> / 500</div>
           <div class="submit-row">
-            <button class="btn-p" id="fb-submit-btn" onclick="submitFeedback()">
-              <i class="ti ti-send" aria-hidden="true"></i>送出回饋
-            </button>
+            <button class="btn-p" id="fb-submit-btn" onclick="submitFeedback()"><i class="ti ti-send" aria-hidden="true"></i>送出回饋</button>
             <span style="font-size:10px;color:var(--t3)">匿名發送・資料不外流</span>
           </div>
-          <div class="fb-status success" id="fb-ok"><i class="ti ti-circle-check" aria-hidden="true"></i>回饋已成功送出，已儲存至 Google Sheets！感謝你的意見 🙏</div>
-          <div class="fb-status error" id="fb-err"><i class="ti ti-alert-circle" aria-hidden="true"></i>送出失敗，請稍後再試或直接聯絡開發者。</div>
+          <div class="fb-status success" id="fb-ok"><i class="ti ti-circle-check" aria-hidden="true"></i>回饋已成功送出！感謝你的意見 🙏</div>
+          <div class="fb-status error" id="fb-err"><i class="ti ti-alert-circle" aria-hidden="true"></i>送出失敗，請稍後再試。</div>
           <div class="fb-history" id="fb-history" style="display:none">
             <div class="fb-history-title"><i class="ti ti-history" style="font-size:11px" aria-hidden="true"></i>本次已送出</div>
             <div id="fb-history-list"></div>
           </div>
         </div>
-
         <div class="sdiv" style="margin-top:10px">請開發者喝咖啡</div>
         <div class="fb-card">
           <div class="fb-title"><i class="ti ti-coffee" aria-hidden="true"></i>支持這個專案</div>
@@ -319,182 +454,272 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
   </div>
 </div>
 
+</div><!-- /content -->
+
+<!-- ══════════════ 頁尾 ══════════════ -->
+<footer class="site-footer" aria-label="網站頁尾">
+
+  <!-- 收合列（常駐） -->
+  <div class="footer-toggle" onclick="toggleFooter()" role="button" aria-expanded="false" id="footer-toggle-btn">
+    <div class="footer-toggle-left">
+      <i class="ti ti-info-circle" aria-hidden="true"></i>
+      <span>© 2026 G-Hub 數據站・玩家自主維護・非官方</span>
+    </div>
+    <div class="footer-toggle-right">
+      <div class="footer-links-inline">
+        <button class="footer-link-btn" onclick="openModal('privacy');event.stopPropagation()">隱私權政策</button>
+        <button class="footer-link-btn" onclick="openModal('terms');event.stopPropagation()">服務條款</button>
+        <button class="footer-link-btn" onclick="openModal('refund');event.stopPropagation()">退款流程</button>
+      </div>
+      <i class="ti ti-chevron-up footer-chevron" id="footer-chevron" aria-hidden="true"></i>
+    </div>
+  </div>
+
+  <!-- 展開內容 -->
+  <div class="footer-body" id="footer-body" aria-hidden="true">
+    <div class="footer-grid">
+
+      <!-- 關於我們 -->
+      <div class="footer-col">
+        <div class="footer-col-title"><i class="ti ti-building" aria-hidden="true"></i>關於我們</div>
+        <p>G-Hub 數據站為玩家提供專業的戰鬥陀螺數據查詢與配置計算服務，由玩家社群自主維護。</p>
+      </div>
+
+      <!-- 聯絡資訊 -->
+      <div class="footer-col">
+        <div class="footer-col-title"><i class="ti ti-mail" aria-hidden="true"></i>聯絡資訊</div>
+        <ul>
+          <li>客服信箱：<a class="footer-link" href="mailto:lin.chun.yu.0405@gmail.com">lin.chun.yu.0405@gmail.com</a></li>
+          <li style="margin-top:3px">客服電話：<a class="footer-link" href="tel:0925120405">0925-120-405</a></li>
+        </ul>
+      </div>
+
+      <!-- 贊助說明 -->
+      <div class="footer-col">
+        <div class="footer-col-title"><i class="ti ti-heart" aria-hidden="true"></i>贊助說明</div>
+        <p>贊助本站為自由意願，款項將全數用於維持 G-Hub 伺服器運作與軟體開發費用，感謝您的支持。</p>
+      </div>
+
+      <!-- 法律連結 -->
+      <div class="footer-col">
+        <div class="footer-col-title"><i class="ti ti-shield-check" aria-hidden="true"></i>法律資訊</div>
+        <ul style="display:flex;flex-direction:column;gap:4px">
+          <li><button class="footer-modal-trigger" onclick="openModal('privacy')">隱私權政策</button></li>
+          <li><button class="footer-modal-trigger" onclick="openModal('terms')">服務條款</button></li>
+          <li><button class="footer-modal-trigger" onclick="openModal('refund')">退換貨及退款流程</button></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <span>© 2026 G-Hub 數據站。本站為非官方玩家資源，與 TAKARA TOMY 無關。</span>
+      <span>Made with ❤ for Beyblade X players in Taiwan</span>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /shell -->
+
+<!-- ══ 彈出視窗：隱私權政策 ══ -->
+<div class="modal-overlay" id="modal-privacy" onclick="closeModalOutside(event,'modal-privacy')" aria-modal="true" role="dialog" aria-labelledby="modal-privacy-title">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-privacy-title"><i class="ti ti-lock" aria-hidden="true"></i>隱私權政策</div>
+      <button class="modal-close" onclick="closeModal('modal-privacy')" aria-label="關閉">✕</button>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title"><i class="ti ti-shield" aria-hidden="true"></i>資料收集與使用</div>
+      <p>本站承諾保護使用者的個人資料。我們僅收集處理贊助與聯繫相關之必要資訊，絕不外洩給第三方，並確保您的贊助資料安全。</p>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title"><i class="ti ti-mail" aria-hidden="true"></i>聯絡我們</div>
+      <p>如有隱私相關疑問，請聯繫：<a class="footer-link" href="mailto:lin.chun.yu.0405@gmail.com">lin.chun.yu.0405@gmail.com</a></p>
+    </div>
+  </div>
 </div>
+
+<!-- ══ 彈出視窗：服務條款 ══ -->
+<div class="modal-overlay" id="modal-terms" onclick="closeModalOutside(event,'modal-terms')" aria-modal="true" role="dialog" aria-labelledby="modal-terms-title">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-terms-title"><i class="ti ti-file-text" aria-hidden="true"></i>服務條款</div>
+      <button class="modal-close" onclick="closeModal('modal-terms')" aria-label="關閉">✕</button>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title"><i class="ti ti-info-circle" aria-hidden="true"></i>服務範圍</div>
+      <p>本站提供之數據計算與查詢服務僅供參考，開發者保留隨時修正或調整網站功能之權利。使用本服務即表示您同意本站之運作模式。</p>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title"><i class="ti ti-alert-circle" aria-hidden="true"></i>免責聲明</div>
+      <p>本站為非官方玩家資源，與 TAKARA TOMY 或任何官方機構無關。所有數據僅供參考，實際遊玩結果可能有所差異。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 彈出視窗：退款流程 ══ -->
+<div class="modal-overlay" id="modal-refund" onclick="closeModalOutside(event,'modal-refund')" aria-modal="true" role="dialog" aria-labelledby="modal-refund-title">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-refund-title"><i class="ti ti-refresh" aria-hidden="true"></i>退換貨及退款流程</div>
+      <button class="modal-close" onclick="closeModal('modal-refund')" aria-label="關閉">✕</button>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title"><i class="ti ti-package" aria-hidden="true"></i>服務性質</div>
+      <p>本站提供之服務為「無形數位數據服務」，服務即時交付。</p>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title"><i class="ti ti-rotate" aria-hidden="true"></i>退款條件</div>
+      <p>若因系統錯誤導致功能無法正常使用，請聯繫客服信箱，經確認後將為您安排退款事宜。</p>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title"><i class="ti ti-mail" aria-hidden="true"></i>聯絡客服</div>
+      <p>信箱：<a class="footer-link" href="mailto:lin.chun.yu.0405@gmail.com">lin.chun.yu.0405@gmail.com</a><br>電話：<a class="footer-link" href="tel:0925120405">0925-120-405</a></p>
+    </div>
+  </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="beyblade_data.js"></script>
 <script>
-/* ═══ Google Forms 設定（已更新） ═══ */
-const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfOET3LO_fbMNnPVmx_dNSt4IfbdxrmPtAueEJxtJ8BaFICYg/formResponse";
-const ENTRY_ID = "entry.1318000550";
-
-const handleFeedbackSubmit = async (userMessage) => {
-  const formData = new FormData();
-  formData.append(ENTRY_ID, userMessage);
-  try {
-    await fetch(FORM_URL, { method:"POST", mode:"no-cors", body:formData });
-    return true;
-  } catch(e) {
-    console.error("提交失敗：", e);
-    return false;
-  }
-};
-
-let selectedRating=0, selectedCat="", fbHistory=[];
-
-function selectRating(btn){
-  document.querySelectorAll(".rating-btn").forEach(b=>{b.classList.remove("selected");b.style.cssText="";});
-  btn.classList.add("selected");
-  const cols=["","#D85A30","#D8A030","#D8D030","#1D9E75","#5DCAA5"];
-  const v=parseInt(btn.dataset.val);
-  selectedRating=v;
-  btn.style.color=cols[v];btn.style.borderColor=cols[v]+"88";btn.style.background=cols[v]+"18";
-}
-function selectCat(btn){
-  document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("selected"));
-  btn.classList.add("selected");selectedCat=btn.textContent.trim();
-}
-function updateChar(){document.getElementById("char-count").textContent=document.getElementById("fb-text").value.length;}
-
-async function submitFeedback(){
-  const txt=document.getElementById("fb-text").value.trim();
-  if(!txt){document.getElementById("fb-text").style.borderColor="#A32D2D";setTimeout(()=>document.getElementById("fb-text").style.borderColor="",1500);return;}
-  const btn=document.getElementById("fb-submit-btn");
-  btn.disabled=true;
-  btn.innerHTML='<i class="ti ti-loader-2" aria-hidden="true"></i>送出中…';
-  const rText=selectedRating?`[滿意度: ${"⭐".repeat(selectedRating)}]`:"";
-  const cText=selectedCat?`[${selectedCat}]`:"";
-  const full=[rText,cText,txt].filter(Boolean).join(" ");
-  const ok=await handleFeedbackSubmit(full);
-  btn.disabled=false;
-  btn.innerHTML='<i class="ti ti-send" aria-hidden="true"></i>送出回饋';
-  if(ok){
-    const el=document.getElementById("fb-ok");el.style.display="flex";setTimeout(()=>el.style.display="none",4000);
-    const now=new Date();const t=`${now.getHours().toString().padStart(2,"0")}:${now.getMinutes().toString().padStart(2,"0")}`;
-    fbHistory.push({msg:txt,rating:selectedRating,cat:selectedCat,time:t});renderFbHistory();
-    document.getElementById("fb-text").value="";document.getElementById("char-count").textContent="0";
-    document.querySelectorAll(".rating-btn").forEach(b=>{b.classList.remove("selected");b.style.cssText="";});
-    document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("selected"));
-    selectedRating=0;selectedCat="";
-  } else {
-    const el=document.getElementById("fb-err");el.style.display="flex";setTimeout(()=>el.style.display="none",4000);
-  }
-}
-function renderFbHistory(){
-  if(!fbHistory.length)return;
-  document.getElementById("fb-history").style.display="block";
-  const cols=["","#D85A30","#D8A030","#D8D030","#1D9E75","#5DCAA5"];
-  document.getElementById("fb-history-list").innerHTML=fbHistory.slice(-3).reverse().map(h=>`
-    <div class="fb-history-item">
-      ${h.msg.length>60?h.msg.slice(0,60)+"…":h.msg}
-      <div class="fb-history-meta">
-        ${h.rating?`<span style="color:${cols[h.rating]}">${"⭐".repeat(h.rating)}</span>`:""}
-        ${h.cat?`<span>${h.cat}</span>`:""}
-        <span>${h.time}</span>
-      </div>
-    </div>`).join("");
+/* ══ 頁尾開合 ══ */
+let footerOpen = false;
+function toggleFooter(){
+  footerOpen = !footerOpen;
+  const body = document.getElementById("footer-body");
+  const chevron = document.getElementById("footer-chevron");
+  const btn = document.getElementById("footer-toggle-btn");
+  body.classList.toggle("open", footerOpen);
+  chevron.classList.toggle("open", footerOpen);
+  btn.setAttribute("aria-expanded", footerOpen);
+  body.setAttribute("aria-hidden", !footerOpen);
 }
 
-/* ═══ 賽事資料 ═══ */
-const EVT={
-  upcoming:[
-    {name:"2026 台北 BeyBlade X 公開賽",date:"2026/06/15",loc:"台北・中正區",lat:25.042,lng:121.517,badge:"badge-open",bt:"報名中"},
-    {name:"台中夏季個人賽",date:"2026/06/22",loc:"台中・西屯區",lat:24.173,lng:120.641,badge:"badge-soon",bt:"即將開始"},
-    {name:"北部青少年聯賽 Q2",date:"2026/07/05",loc:"台北・內湖區",lat:25.082,lng:121.584,badge:"badge-open",bt:"報名中"},
-    {name:"花蓮盃邀請賽",date:"2026/07/18",loc:"花蓮・壽豐鄉",lat:23.852,lng:121.524,badge:"badge-soon",bt:"籌備中"},
-    {name:"台南南部錦標賽",date:"2026/08/03",loc:"台南・東區",lat:22.999,lng:120.212,badge:"badge-open",bt:"報名中"},
-  ],
-  past:[
-    {name:"2026 台灣冠軍賽（春季）",date:"2026/04/20",loc:"台北・信義區",lat:25.033,lng:121.563,badge:"badge-past",bt:"已結束"},
-    {name:"高雄城市盃",date:"2026/03/30",loc:"高雄・三民區",lat:22.638,lng:120.303,badge:"badge-past",bt:"已結束"},
-    {name:"台中春季友誼賽",date:"2026/03/08",loc:"台中・北屯區",lat:24.187,lng:120.688,badge:"badge-past",bt:"已結束"},
-    {name:"全台青少年聯賽 Q1",date:"2026/02/14",loc:"台北・大安區",lat:25.026,lng:121.543,badge:"badge-past",bt:"已結束"},
-  ]
-};
-let curTab="upcoming",lmap=null,mapMarkers=[];
-function makeIcon(c){return L.divIcon({html:`<svg width="22" height="28" viewBox="0 0 22 28"><path d="M11 0C4.9 0 0 4.9 0 11c0 6.6 11 17 11 17S22 17.6 22 11C22 4.9 17.1 0 11 0z" fill="${c}"/><circle cx="11" cy="11" r="4.5" fill="white" opacity="0.9"/></svg>`,iconSize:[22,28],iconAnchor:[11,28],popupAnchor:[0,-28],className:""});}
-function renderMapMarkers(tab){mapMarkers.forEach(m=>m.remove());mapMarkers=[];EVT[tab].forEach(e=>{const col=tab==="upcoming"?"#378ADD":"#5a5a70";const m=L.marker([e.lat,e.lng],{icon:makeIcon(col)}).addTo(lmap).bindPopup(`<div class="pop-name">${e.name}</div><div class="pop-meta"><span>${e.date}</span><span>${e.loc}</span></div>`);mapMarkers.push(m);});}
-function initMap(){if(lmap)return;lmap=L.map("leaflet-map",{center:[23.8,121.0],zoom:7});L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:'© <a href="https://www.openstreetmap.org/copyright" style="color:#85B7EB">OpenStreetMap</a>',maxZoom:18}).addTo(lmap);renderMapMarkers("upcoming");}
-function renderEvents(tab){document.getElementById("elist").innerHTML=EVT[tab].map(e=>`<div class="ecard ${tab}"><div class="etop"><div class="ename">${e.name}</div><span class="ebadge ${e.badge}">${e.bt}</span></div><div class="emeta"><span><i class="ti ti-calendar" aria-hidden="true"></i>${e.date}</span><span><i class="ti ti-map-pin" aria-hidden="true"></i>${e.loc}</span></div></div>`).join("");}
-function switchTab(tab,el){curTab=tab;document.querySelectorAll(".etab").forEach(b=>b.classList.remove("active"));el.classList.add("active");renderEvents(tab);if(lmap)renderMapMarkers(tab);}
-
-/* ═══ 導覽 ═══ */
-function goto(page,el){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById("page-"+page).classList.add("active");
-  document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));
-  document.querySelectorAll("[data-m]").forEach(b=>b.classList.remove("active"));
-  const ids={home:"nb-home",bey:"nb-bey",cl:"nb-cl"};
-  if(ids[page])document.getElementById(ids[page]).classList.add("active");
-  document.querySelectorAll(`[data-m="${{home:"home",bey:"bey",cl:"cl"}[page]}"]`).forEach(b=>b.classList.add("active"));
-  if(page==="home"){setTimeout(()=>{initMap();if(lmap)lmap.invalidateSize();},80);}
-  if(page==="bey"){setTimeout(resizeRadar,50);}
+/* ══ 彈出視窗 ══ */
+function openModal(id){
+  document.getElementById("modal-"+id).classList.add("open");
+  document.body.style.overflow="hidden";
 }
-function toggleMob(){document.getElementById("mob-menu").classList.toggle("open");}
+function closeModal(id){
+  document.getElementById(id).classList.remove("open");
+  document.body.style.overflow="";
+}
+function closeModalOutside(e, id){
+  if(e.target === document.getElementById(id)) closeModal(id);
+}
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape") document.querySelectorAll(".modal-overlay.open").forEach(m=>closeModal(m.id));
+});
 
-/* ═══ 雷達圖 ═══ */
-const AXES=[
-  {key:"atk",label:"攻擊",color:"#D85A30"},
-  {key:"def",label:"防禦",color:"#378ADD"},
-  {key:"dur",label:"持久",color:"#1D9E75"},
-  {key:"hgt",label:"高度",color:"#9B6FD8"},
-  {key:"spd",label:"加速",color:"#D8A030"},
-  {key:"end",label:"耐久度",color:"#D85070"},
-];
+
+/* ══ 套組 ══ */
+let activeSetId=null;
+function buildSets(){
+  const scroll=document.getElementById("sets-scroll");scroll.innerHTML="";
+  BEYBLADE_DATABASE.sets.forEach(set=>{
+    const c=set.components,tc=TYPE_COLOR[set.type]||"#9090a8";
+    const card=document.createElement("div");card.className="set-card";card.dataset.id=set.id;
+    card.innerHTML=`<div class="set-id">${set.id}</div><div class="set-name">${set.name}</div><div class="set-type"><span class="set-type-dot" style="background:${tc}"></span>${set.type}</div><div class="set-parts">${c.blade}<br>${c.ratchet}<br>${c.bit}</div>`;
+    card.addEventListener("click",()=>applySet(set.id));scroll.appendChild(card);
+  });
+}
+function applySet(setId){
+  const set=BEYBLADE_DATABASE.sets.find(s=>s.id===setId);if(!set)return;
+  activeSetId=setId;
+  document.querySelectorAll(".set-card").forEach(c=>c.classList.toggle("active",c.dataset.id===setId));
+  selectPart("blade",set.components.blade);selectPart("ratchet",set.components.ratchet);selectPart("bit",set.components.bit);
+}
+
+/* ══ 下拉選單 ══ */
+let selBlade=null,selRatchet=null,selBit=null;
+function buildPartDropdown(type){
+  const dd=document.getElementById("dd-"+type);
+  const map={blade:"blades",ratchet:"ratchets",bit:"bits"};
+  const parts=BEYBLADE_DATABASE.parts[map[type]];dd.innerHTML="";
+  Object.entries(parts).forEach(([id,p])=>{
+    const div=document.createElement("div");div.className="pd-item";div.dataset.id=id;
+    const meta=p.height?`高度 ${p.height} mm・${p.weight}g`:`${p.type||""}・${p.weight}g`;
+    div.innerHTML=`<div class="pd-left"><div class="pd-id">${id}</div><div class="pd-name">${p.name}</div><div class="pd-type">${meta}</div></div><i class="ti ti-check pd-check" aria-hidden="true"></i>`;
+    div.addEventListener("click",()=>{activeSetId=null;document.querySelectorAll(".set-card").forEach(c=>c.classList.remove("active"));selectPart(type,id);closeAllDD();});
+    dd.appendChild(div);
+  });
+}
+function toggleDD(type){const dd=document.getElementById("dd-"+type),arr=document.getElementById("arr-"+type),trig=document.getElementById("trig-"+type),wasOpen=dd.classList.contains("open");closeAllDD();if(!wasOpen){dd.classList.add("open");arr.classList.add("open");trig.classList.add("open");}}
+function closeAllDD(){["blade","ratchet","bit"].forEach(t=>{document.getElementById("dd-"+t).classList.remove("open");document.getElementById("arr-"+t).classList.remove("open");document.getElementById("trig-"+t).classList.remove("open");});}
+document.addEventListener("click",e=>{if(!e.target.closest(".part-select-wrap"))closeAllDD();});
+function selectPart(type,id){
+  const map={blade:"blades",ratchet:"ratchets",bit:"bits"};const p=BEYBLADE_DATABASE.parts[map[type]][id];if(!p)return;
+  if(type==="blade")selBlade={id,...p};if(type==="ratchet")selRatchet={id,...p};if(type==="bit")selBit={id,...p};
+  const meta=p.height?`高度 ${p.height} mm・${p.weight}g`:`${p.type||""}・${p.weight}g`;
+  document.getElementById("disp-"+type+"-name").textContent=`${id}　${p.name}`;document.getElementById("disp-"+type+"-meta").textContent=meta;
+  document.querySelectorAll(`#dd-${type} .pd-item`).forEach(el=>el.classList.toggle("active",el.dataset.id===id));
+  updateStats();
+}
+
+/* ══ 屬性計算 ══ */
+const AXES=[{key:"atk",label:"攻擊",color:"#D85A30"},{key:"def",label:"防禦",color:"#378ADD"},{key:"sta",label:"耐力",color:"#1D9E75"},{key:"accel",label:"加速",color:"#D8A030"},{key:"endurance",label:"耐久度",color:"#D85070"},{key:"_height",label:"高度",color:"#9B6FD8"}];
 const N=6,STEPS=5;
 let rCvs=null,rCtx=null,rSize=0,rCX=0,rCY=0,rMax=0;
-let rVals={atk:0,def:0,dur:0,hgt:0,spd:0,end:0};
-let rTarget={atk:0,def:0,dur:0,hgt:0,spd:0,end:0};
-function resizeRadar(){const col=document.querySelector(".col-radar");if(!col||!rCvs)return;const legH=34,pad=24,avail=Math.min(col.offsetWidth-pad,col.offsetHeight-legH-pad-10);rSize=Math.max(180,avail);rCvs.width=rCvs.height=rSize;rCX=rSize/2;rCY=rSize/2;rMax=rSize*0.36;}
+let rVals={atk:0,def:0,sta:0,accel:0,endurance:0,_height:0};
+let rTarget={atk:0,def:0,sta:0,accel:0,endurance:0,_height:0};
+function updateStats(){
+  if(!selBlade||!selRatchet||!selBit)return;
+  const b=selBlade.stats,r=selRatchet.stats,bt=selBit.stats;
+  const atk=Math.min(100,b.atk+r.atk+bt.atk),def=Math.min(100,b.def+r.def+bt.def),sta=Math.min(100,b.sta+r.sta+bt.sta);
+  const accel=Math.min(100,(b.accel||0)+(r.accel||0)+(bt.accel||0)),endurance=Math.min(100,(b.endurance||0)+(r.endurance||0)+(bt.endurance||0));
+  const hgt=Math.min(100,Math.round((selRatchet.height||60)/80*100));
+  const w=((selBlade.weight||0)+(selRatchet.weight||0)+(selBit.weight||0)).toFixed(1);
+  const score=Math.round((atk*.2+def*.2+sta*.2+accel*.1+endurance*.15+hgt*.15)*.9+5);
+  document.getElementById("v-atk").textContent=atk;document.getElementById("v-def").textContent=def;document.getElementById("v-sta").textContent=sta;
+  document.getElementById("v-hgt").textContent=hgt;document.getElementById("v-accel").textContent=accel;document.getElementById("v-end").textContent=endurance;
+  rTarget={atk,def,sta,accel,endurance,_height:hgt};
+  let comboLabel=activeSetId?`${BEYBLADE_DATABASE.sets.find(x=>x.id===activeSetId).id} ${BEYBLADE_DATABASE.sets.find(x=>x.id===activeSetId).name}  /  ${selBlade.id}・${selRatchet.id}・${selBit.id}`:`${selBlade.id} / ${selRatchet.id} / ${selBit.id}`;
+  document.getElementById("combo-name").textContent=comboLabel;
+  const max=Math.max(atk,def,sta);let type="平衡型",tc="#BA7517";
+  if(max===atk&&atk-def>15){type="攻擊型";tc="#D85A30";}else if(max===def&&def-atk>15){type="防禦型";tc="#378ADD";}else if(max===sta&&sta-atk>15){type="耐力型";tc="#1D9E75";}
+  const sb=document.getElementById("sbadge");sb.textContent=score+" 分・"+type;sb.style.color=tc;sb.style.borderColor=tc+"44";
+  document.getElementById("mrow").innerHTML=`<span class="mp">⚖ ${w}g</span>`;
+  document.getElementById("cl-atk").textContent=atk;document.getElementById("cl-def").textContent=def;document.getElementById("cl-sta").textContent=sta;
+}
+
+/* ══ 雷達圖 ══ */
+function resizeRadar(){const col=document.querySelector(".col-radar");if(!col||!rCvs)return;const avail=Math.min(col.offsetWidth-24,col.offsetHeight-44);rSize=Math.max(180,avail);rCvs.width=rCvs.height=rSize;rCX=rSize/2;rCY=rSize/2;rMax=rSize*0.36;}
 function initRadar(){rCvs=document.getElementById("radar-canvas");rCtx=rCvs.getContext("2d");document.getElementById("radar-legend").innerHTML=AXES.map(a=>`<div class="rl-item"><div class="rl-dot" style="background:${a.color}"></div><span>${a.label}</span></div>`).join("");resizeRadar();radarLoop();}
 function radarLoop(){AXES.forEach(a=>{const d=rTarget[a.key]-rVals[a.key];rVals[a.key]+=Math.abs(d)>0.2?d*0.12:d;});if(rCtx)drawRadar();requestAnimationFrame(radarLoop);}
 function pt(idx,val){const a=(idx/N)*Math.PI*2-Math.PI/2,r=(val/100)*rMax;return{x:rCX+Math.cos(a)*r,y:rCY+Math.sin(a)*r};}
 function gpt(idx,step){const a=(idx/N)*Math.PI*2-Math.PI/2,r=(step/STEPS)*rMax;return{x:rCX+Math.cos(a)*r,y:rCY+Math.sin(a)*r};}
 function drawRadar(){const c=rCtx;c.clearRect(0,0,rSize,rSize);for(let s=1;s<=STEPS;s++){c.beginPath();for(let i=0;i<N;i++){const p=gpt(i,s);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}c.closePath();if(s<STEPS){c.fillStyle="rgba(24,24,31,0.6)";c.fill();}c.strokeStyle=s===STEPS?"#363648aa":"#2a2a3866";c.lineWidth=s===STEPS?1:.6;c.stroke();}for(let i=0;i<N;i++){const o=gpt(i,STEPS);c.beginPath();c.moveTo(rCX,rCY);c.lineTo(o.x,o.y);c.strokeStyle="#2a2a3888";c.lineWidth=.7;c.stroke();}c.beginPath();for(let i=0;i<N;i++){const p=pt(i,rVals[AXES[i].key]);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}c.closePath();const g=c.createRadialGradient(rCX,rCY,0,rCX,rCY,rMax);g.addColorStop(0,"rgba(55,138,221,0.42)");g.addColorStop(1,"rgba(55,138,221,0.08)");c.fillStyle=g;c.fill();c.strokeStyle="rgba(133,183,235,0.75)";c.lineWidth=1.8;c.stroke();const lo=rMax+26,vo=rMax+42;for(let i=0;i<N;i++){const ax=AXES[i],val=rVals[ax.key],p=pt(i,val),a=(i/N)*Math.PI*2-Math.PI/2,lx=rCX+Math.cos(a)*lo,ly=rCY+Math.sin(a)*lo,vx=rCX+Math.cos(a)*vo,vy=rCY+Math.sin(a)*vo;c.beginPath();c.arc(p.x,p.y,5,0,Math.PI*2);c.fillStyle=ax.color;c.fill();c.strokeStyle="#0a0a0f88";c.lineWidth=1.5;c.stroke();c.save();c.font="11px sans-serif";c.fillStyle="#9090a8";c.textAlign="center";c.textBaseline="middle";c.fillText(ax.label,lx,ly);c.font="bold 14px sans-serif";c.fillStyle=ax.color;c.fillText(Math.round(val),vx,vy);c.restore();}}
 
-/* ═══ 縮圖 ═══ */
-let thumbAnims=[],thumbA=0;
-function drawThumb(c2,part,type,size,a){const cx=size/2,cy=size/2;c2.clearRect(0,0,size,size);c2.fillStyle="#18181f";c2.beginPath();c2.roundRect(0,0,size,size,5);c2.fill();if(type==="blade"){if(part.type==="bx02"){const n=4,OR=size*.44,IR=size*.16;for(let i=0;i<n;i++){const ba=a+(i/n)*Math.PI*2;const pts=[];const S=10;for(let s=0;s<=S;s++){const t=s/S,ca2=ba+t*.72,cr=IR+(OR-IR)*(t*t);const nx=-Math.sin(ca2),nz=Math.cos(ca2);const fat=size*.1*(1-Math.pow(t-.3,2)*2.2)+size*.02;pts.push({x:cx+Math.cos(ca2)*cr+nx*fat*.3,y:cy+Math.sin(ca2)*cr+nz*fat*.3});}for(let s=S;s>=0;s--){const t=s/S,ca2=ba+t*.72,cr=IR+(OR-IR)*(t*t);const nx=-Math.sin(ca2),nz=Math.cos(ca2);const fat=size*.1*(1-Math.pow(t-.3,2)*2.2)+size*.02;pts.push({x:cx+Math.cos(ca2)*cr-nx*fat*.5,y:cy+Math.sin(ca2)*cr-nz*fat*.5});}c2.beginPath();c2.moveTo(pts[0].x,pts[0].y);pts.forEach(p=>c2.lineTo(p.x,p.y));c2.closePath();const g=c2.createLinearGradient(cx-OR,cy,cx+OR,cy);g.addColorStop(0,part.accent);g.addColorStop(1,part.color);c2.fillStyle=g;c2.fill();}c2.beginPath();c2.arc(cx,cy,size*.2,0,Math.PI*2);const rg=c2.createRadialGradient(cx,cy,2,cx,cy,size*.2);rg.addColorStop(0,"#CC2222");rg.addColorStop(1,"#660000");c2.fillStyle=rg;c2.fill();c2.beginPath();c2.arc(cx,cy,size*.08,0,Math.PI*2);c2.fillStyle="#ddd";c2.fill();}else{const OR=size*.42*(part.sharp||1),IR=size*.15,n=part.bc||4;for(let i=0;i<n;i++){const a0=a+(i/n)*Math.PI*2,a1=a0+(part.sw||.3)*Math.PI*2/n,pts=[],S=10;for(let s=0;s<=S;s++){const ang=a0+s*(a1-a0)/S,r=IR+(OR-IR)*(s/S);pts.push({x:cx+Math.cos(ang)*r,y:cy+Math.sin(ang)*r});}for(let s=S;s>=0;s--){const ang=a0+s*(a1-a0)/S,r=(IR+(OR-IR)*(s/S))*.5;pts.push({x:cx+Math.cos(ang)*r,y:cy+Math.sin(ang)*r});}c2.beginPath();c2.moveTo(pts[0].x,pts[0].y);pts.forEach(p=>c2.lineTo(p.x,p.y));c2.closePath();const g=c2.createLinearGradient(cx-OR,cy-OR,cx+OR,cy+OR);g.addColorStop(0,part.accent);g.addColorStop(1,part.color);c2.fillStyle=g;c2.fill();}c2.beginPath();c2.arc(cx,cy,size*.1,0,Math.PI*2);c2.fillStyle="#fff";c2.fill();}}else if(type==="ratchet"){const n=part.teeth,OR=size*.42,IR=size*.27;c2.beginPath();for(let i=0;i<n*2;i++){const ang=a+(i/(n*2))*Math.PI*2,r=(i%2===0)?OR:IR;if(i===0)c2.moveTo(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r);else c2.lineTo(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r);}c2.closePath();const g=c2.createRadialGradient(cx,cy,IR*.3,cx,cy,OR);g.addColorStop(0,part.accent);g.addColorStop(1,part.color);c2.fillStyle=g;c2.fill();c2.beginPath();c2.arc(cx,cy,size*.12,0,Math.PI*2);c2.fillStyle=part.color;c2.fill();}else{const sh=part.shape,topR=size*.22,pts=[],S=12;for(let i=0;i<=S;i++){const t=i/S;let r;if(sh==="point")r=topR*(1-t*.88);else if(sh==="flat")r=topR*(1-t*.15);else if(sh==="ball")r=topR*Math.sin(t*Math.PI*.85+.1);else if(sh==="rush")r=topR*(1-t*.82);else r=topR*(.45+.55*Math.cos(t*Math.PI));pts.push({x:cx+r,y:cy-size*.35+t*size*.7,r});}c2.beginPath();c2.moveTo(pts[0].x,pts[0].y);pts.forEach(p=>c2.lineTo(p.x,p.y));for(let i=pts.length-1;i>=0;i--)c2.lineTo(cx-pts[i].r,pts[i].y);c2.closePath();const g=c2.createLinearGradient(cx-topR,0,cx+topR,size);g.addColorStop(0,part.accent);g.addColorStop(1,part.color);c2.fillStyle=g;c2.fill();c2.beginPath();c2.arc(cx,cy+size*.3,size*.05,0,Math.PI*2);c2.fillStyle="#fff";c2.fill();}}
-function startThumbAnim(){cancelAnimationFrame(startThumbAnim._id);function tick(){thumbA+=0.025;thumbAnims.forEach(({c2,p,t,s})=>drawThumb(c2,p,t,s,thumbA));startThumbAnim._id=requestAnimationFrame(tick);}tick();}
-function makeThumb(part,type,size){const c=document.createElement("canvas");c.width=c.height=size;thumbAnims.push({c2:c.getContext("2d"),p:part,t:type,s:size});return c;}
+/* ══ 回饋 ══ */
+const FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLSfOET3LO_fbMNnPVmx_dNSt4IfbdxrmPtAueEJxtJ8BaFICYg/formResponse";
+const ENTRY_ID="entry.1318000550";
+const handleFeedbackSubmit=async(msg)=>{const fd=new FormData();fd.append(ENTRY_ID,msg);try{await fetch(FORM_URL,{method:"POST",mode:"no-cors",body:fd});return true;}catch(e){return false;}};
+let selectedRating=0,selectedCat="",fbHistory=[];
+function selectRating(btn){document.querySelectorAll(".rating-btn").forEach(b=>{b.classList.remove("selected");b.style.cssText="";});btn.classList.add("selected");const c=["","#D85A30","#D8A030","#D8D030","#1D9E75","#5DCAA5"];const v=parseInt(btn.dataset.val);selectedRating=v;btn.style.color=c[v];btn.style.borderColor=c[v]+"88";btn.style.background=c[v]+"18";}
+function selectCat(btn){document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("selected"));btn.classList.add("selected");selectedCat=btn.textContent.trim();}
+function updateChar(){document.getElementById("char-count").textContent=document.getElementById("fb-text").value.length;}
+async function submitFeedback(){const txt=document.getElementById("fb-text").value.trim();if(!txt){document.getElementById("fb-text").style.borderColor="#A32D2D";setTimeout(()=>document.getElementById("fb-text").style.borderColor="",1500);return;}const btn=document.getElementById("fb-submit-btn");btn.disabled=true;btn.innerHTML='<i class="ti ti-loader-2" aria-hidden="true"></i>送出中…';const r=selectedRating?`[滿意度: ${"⭐".repeat(selectedRating)}]`:"";const ct=selectedCat?`[${selectedCat}]`:"";const ok=await handleFeedbackSubmit([r,ct,txt].filter(Boolean).join(" "));btn.disabled=false;btn.innerHTML='<i class="ti ti-send" aria-hidden="true"></i>送出回饋';if(ok){const el=document.getElementById("fb-ok");el.style.display="flex";setTimeout(()=>el.style.display="none",4000);const now=new Date();fbHistory.push({msg:txt,rating:selectedRating,cat:selectedCat,time:`${now.getHours().toString().padStart(2,"0")}:${now.getMinutes().toString().padStart(2,"0")}`});renderFbHistory();document.getElementById("fb-text").value="";document.getElementById("char-count").textContent="0";document.querySelectorAll(".rating-btn").forEach(b=>{b.classList.remove("selected");b.style.cssText="";});document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("selected"));selectedRating=0;selectedCat="";}else{const el=document.getElementById("fb-err");el.style.display="flex";setTimeout(()=>el.style.display="none",4000);}}
+function renderFbHistory(){if(!fbHistory.length)return;document.getElementById("fb-history").style.display="block";const c=["","#D85A30","#D8A030","#D8D030","#1D9E75","#5DCAA5"];document.getElementById("fb-history-list").innerHTML=fbHistory.slice(-3).reverse().map(h=>`<div class="fb-history-item">${h.msg.length>60?h.msg.slice(0,60)+"…":h.msg}<div class="fb-history-meta">${h.rating?`<span style="color:${c[h.rating]}">${"⭐".repeat(h.rating)}</span>`:""}${h.cat?`<span>${h.cat}</span>`:""}<span>${h.time}</span></div></div>`).join("");}
 
-/* ═══ 零件資料 ═══ */
-const BLADES=[
-  {id:"hellsScythe",name:"BX-02 惡魔紅鐮",sub:"平衡型・右迴旋",color:"#A32D2D",accent:"#F09595",darkColor:"#6B1A1A",type:"bx02",bc:4,sharp:1.3,sw:0.42,weight:38.1,atk:30,def:35,dur:35,hgt:45,spd:40,end:38,hot:true},
-  {id:"dranSword",name:"BX-01 蒼龍神劍",sub:"攻擊型・右迴旋",color:"#378ADD",accent:"#B5D4F4",darkColor:"#1A4A7A",type:"dragon",bc:5,sharp:1.2,sw:0.28,weight:35.2,atk:85,def:40,dur:55,hgt:30,spd:70,end:50,hot:true},
-  {id:"wizardArrow",name:"BX-03 魔導幻箭",sub:"持久型・右迴旋",color:"#534AB7",accent:"#CECBF6",darkColor:"#2E2880",type:"arrow",bc:4,sharp:1.1,sw:0.25,weight:33.5,atk:55,def:60,dur:80,hgt:25,spd:45,end:70,hot:false},
-  {id:"cobaltDrake",name:"BX-04 鈷鐵天龍",sub:"防禦型・左迴旋",color:"#0F6E56",accent:"#9FE1CB",darkColor:"#084A3A",type:"shield",bc:6,sharp:0.95,sw:0.4,weight:37.4,atk:65,def:80,dur:65,hgt:55,spd:35,end:75,hot:true},
-  {id:"phoenixWing",name:"BX-05 鳳凰翼焰",sub:"超攻擊・右迴旋",color:"#BA7517",accent:"#FAC775",darkColor:"#7A4A08",type:"phoenix",bc:5,sharp:1.3,sw:0.45,weight:31.8,atk:90,def:35,dur:50,hgt:35,spd:85,end:45,hot:false},
-  {id:"sharkEdge",name:"BX-06 銀牙鯊刃",sub:"攻擊型・右迴旋",color:"#185FA5",accent:"#85B7EB",darkColor:"#0A3D6E",type:"shark",bc:3,sharp:1.5,sw:0.55,weight:34.7,atk:80,def:55,dur:45,hgt:40,spd:75,end:55,hot:true},
-];
-const RATCHETS=[
-  {id:"r3",name:"3-60",sub:"標準齒輪",teeth:3,color:"#888780",accent:"#D3D1C7",weight:8.3,atk:5,def:10,dur:5,hgt:0,spd:5,end:8,hot:false},
-  {id:"r4",name:"4-70",sub:"重型加防",teeth:4,color:"#3C3489",accent:"#CECBF6",weight:10.1,atk:8,def:15,dur:8,hgt:10,spd:0,end:12,hot:false},
-  {id:"r5",name:"5-80",sub:"平衡型",teeth:5,color:"#0F6E56",accent:"#9FE1CB",weight:9.5,atk:10,def:10,dur:10,hgt:5,spd:8,end:10,hot:false},
-  {id:"r9",name:"9-60",sub:"最強防禦",teeth:9,color:"#185FA5",accent:"#B5D4F4",weight:12.4,atk:5,def:25,dur:5,hgt:15,spd:0,end:18,hot:false},
-  {id:"r6",name:"6-60",sub:"攻擊加成",teeth:6,color:"#993C1D",accent:"#F5C4B3",weight:8.8,atk:15,def:5,dur:5,hgt:5,spd:12,end:5,hot:false},
-];
-const BITS=[
-  {id:"pointBit",name:"Point",sub:"尖型・萬用",color:"#888780",accent:"#D3D1C7",shape:"point",weight:5.2,atk:5,def:5,dur:10,hgt:5,spd:5,end:8,hot:false},
-  {id:"flatBit",name:"Flat",sub:"平型・攻擊",color:"#D85A30",accent:"#F5C4B3",shape:"flat",weight:5.0,atk:15,def:0,dur:5,hgt:0,spd:18,end:5,hot:false},
-  {id:"ballBit",name:"Ball",sub:"球型・防禦",color:"#185FA5",accent:"#B5D4F4",shape:"ball",weight:5.5,atk:5,def:15,dur:5,hgt:8,spd:5,end:12,hot:false},
-  {id:"rushBit",name:"Rush",sub:"衝刺・爆發",color:"#BA7517",accent:"#FAC775",shape:"rush",weight:4.8,atk:20,def:0,dur:0,hgt:0,spd:22,end:3,hot:false},
-  {id:"unitBit",name:"Unit",sub:"持久・穩定",color:"#1D9E75",accent:"#9FE1CB",shape:"unit",weight:5.1,atk:0,def:10,dur:20,hgt:10,spd:3,end:18,hot:false},
-];
-let selB=0,selR=0,selBit=0;
-function buildDD(cid,parts,type,sel,onSel){const wrap=document.getElementById(cid);const outer=document.createElement("div");outer.style.position="relative";const trig=document.createElement("div");trig.className="sel-trig";const ic=makeThumb(parts[sel],type,30);const iw=document.createElement("div");iw.className="sel-icon";iw.appendChild(ic);const tx=document.createElement("div");tx.className="sel-text";tx.innerHTML=`<div class="sel-name">${parts[sel].name}</div><div class="sel-sub">${parts[sel].sub}</div>`;const arr=document.createElement("i");arr.className="ti ti-chevron-down sel-arr";arr.setAttribute("aria-hidden","true");trig.appendChild(iw);trig.appendChild(tx);trig.appendChild(arr);const dd=document.createElement("div");dd.className="dd";parts.forEach((p,i)=>{const opt=document.createElement("div");opt.className="dopt"+(i===sel?" active":"");const dic=makeThumb(p,type,34);const diw=document.createElement("div");diw.className="dopt-icon";diw.appendChild(dic);const dt=document.createElement("div");dt.className="dopt-text";dt.innerHTML=`<div class="dopt-name">${p.name}</div><div class="dopt-sub">${p.sub}</div>`;opt.appendChild(diw);opt.appendChild(dt);if(p.hot){const hb=document.createElement("span");hb.className="hot-b";hb.textContent="熱門";opt.appendChild(hb);}const wb=document.createElement("span");wb.className="wt-b";wb.textContent=p.weight+"g";opt.appendChild(wb);opt.addEventListener("click",()=>{dd.classList.remove("open");arr.classList.remove("open");onSel(i);});dd.appendChild(opt);});trig.addEventListener("click",e=>{e.stopPropagation();const op=dd.classList.contains("open");document.querySelectorAll(".dd.open").forEach(d=>d.classList.remove("open"));document.querySelectorAll(".sel-arr.open").forEach(a=>a.classList.remove("open"));if(!op){dd.classList.add("open");arr.classList.add("open");}});wrap.innerHTML="";outer.appendChild(trig);outer.appendChild(dd);wrap.appendChild(outer);}
-document.addEventListener("click",()=>{document.querySelectorAll(".dd.open").forEach(d=>d.classList.remove("open"));document.querySelectorAll(".sel-arr.open").forEach(a=>a.classList.remove("open"));});
-function updateStats(){const b=BLADES[selB],r=RATCHETS[selR],bt=BITS[selBit];const atk=Math.min(100,b.atk+r.atk+bt.atk),def=Math.min(100,b.def+r.def+bt.def),dur=Math.min(100,b.dur+r.dur+bt.dur);const hgt=Math.min(100,b.hgt+r.hgt+bt.hgt),spd=Math.min(100,b.spd+r.spd+bt.spd),end=Math.min(100,b.end+r.end+bt.end);const w=(b.weight+r.weight+bt.weight).toFixed(1);const score=Math.round((atk*.2+def*.2+dur*.2+hgt*.1+spd*.15+end*.15)*.9+5);const vals={atk,def,dur,hgt,spd,end};Object.keys(vals).forEach(k=>{const el=document.getElementById("v-"+k);if(el)el.textContent=vals[k];});rTarget={...vals};document.getElementById("combo-name").textContent=b.name+" / "+r.name+" / "+bt.name;const max=Math.max(atk,def,dur);let type="平衡型",tc="#BA7517";if(max===atk&&atk-def>15){type="攻擊型";tc="#D85A30";}else if(max===def&&def-atk>15){type="防禦型";tc="#378ADD";}else if(max===dur&&dur-atk>15){type="持久型";tc="#1D9E75";}const sb=document.getElementById("sbadge");sb.textContent=score+" 分・"+type;sb.style.color=tc;sb.style.borderColor=tc+"44";document.getElementById("mrow").innerHTML=`<span class="mp">⚖ ${w}g</span>`;document.getElementById("cl-atk").textContent=atk;document.getElementById("cl-def").textContent=def;document.getElementById("cl-dur").textContent=dur;}
-function rebuild(){thumbAnims=[];buildDD("cs-blade",BLADES,"blade",selB,i=>{selB=i;rebuild();});buildDD("cs-ratchet",RATCHETS,"ratchet",selR,i=>{selR=i;rebuild();});buildDD("cs-bit",BITS,"bit",selBit,i=>{selBit=i;rebuild();});updateStats();startThumbAnim();}
+/* ══ 賽事 ══ */
+const EVT={upcoming:[{name:"2026 台北 BeyBlade X 公開賽",date:"2026/06/15",loc:"台北・中正區",lat:25.042,lng:121.517,badge:"badge-open",bt:"報名中"},{name:"台中夏季個人賽",date:"2026/06/22",loc:"台中・西屯區",lat:24.173,lng:120.641,badge:"badge-soon",bt:"即將開始"},{name:"北部青少年聯賽 Q2",date:"2026/07/05",loc:"台北・內湖區",lat:25.082,lng:121.584,badge:"badge-open",bt:"報名中"},{name:"花蓮盃邀請賽",date:"2026/07/18",loc:"花蓮・壽豐鄉",lat:23.852,lng:121.524,badge:"badge-soon",bt:"籌備中"},{name:"台南南部錦標賽",date:"2026/08/03",loc:"台南・東區",lat:22.999,lng:120.212,badge:"badge-open",bt:"報名中"}],past:[{name:"2026 台灣冠軍賽（春季）",date:"2026/04/20",loc:"台北・信義區",lat:25.033,lng:121.563,badge:"badge-past",bt:"已結束"},{name:"高雄城市盃",date:"2026/03/30",loc:"高雄・三民區",lat:22.638,lng:120.303,badge:"badge-past",bt:"已結束"},{name:"台中春季友誼賽",date:"2026/03/08",loc:"台中・北屯區",lat:24.187,lng:120.688,badge:"badge-past",bt:"已結束"},{name:"全台青少年聯賽 Q1",date:"2026/02/14",loc:"台北・大安區",lat:25.026,lng:121.543,badge:"badge-past",bt:"已結束"}]};
+let curTab="upcoming",lmap=null,mapMarkers=[];
+function makeIcon(c){return L.divIcon({html:`<svg width="22" height="28" viewBox="0 0 22 28"><path d="M11 0C4.9 0 0 4.9 0 11c0 6.6 11 17 11 17S22 17.6 22 11C22 4.9 17.1 0 11 0z" fill="${c}"/><circle cx="11" cy="11" r="4.5" fill="white" opacity="0.9"/></svg>`,iconSize:[22,28],iconAnchor:[11,28],popupAnchor:[0,-28],className:""});}
+function renderMapMarkers(tab){mapMarkers.forEach(m=>m.remove());mapMarkers=[];EVT[tab].forEach(e=>{const col=tab==="upcoming"?"#378ADD":"#5a5a70";const m=L.marker([e.lat,e.lng],{icon:makeIcon(col)}).addTo(lmap).bindPopup(`<div class="pop-name">${e.name}</div><div class="pop-meta"><span>${e.date}</span><span>${e.loc}</span></div>`);mapMarkers.push(m);});}
+function initMap(){if(lmap)return;lmap=L.map("leaflet-map",{center:[23.8,121.0],zoom:7});L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:'© <a href="https://www.openstreetmap.org/copyright" style="color:#85B7EB">OpenStreetMap</a>',maxZoom:18}).addTo(lmap);renderMapMarkers("upcoming");}
+function renderEvents(tab){document.getElementById("elist").innerHTML=EVT[tab].map(e=>`<div class="ecard ${tab}"><div class="etop"><div class="ename">${e.name}</div><span class="ebadge ${e.badge}">${e.bt}</span></div><div class="emeta"><span><i class="ti ti-calendar" aria-hidden="true"></i>${e.date}</span><span><i class="ti ti-map-pin" aria-hidden="true"></i>${e.loc}</span></div></div>`).join("");}
+function switchTab(tab,el){curTab=tab;document.querySelectorAll(".etab").forEach(b=>b.classList.remove("active"));el.classList.add("active");renderEvents(tab);if(lmap)renderMapMarkers(tab);}
+function goto(page,el){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("page-"+page).classList.add("active");document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));document.querySelectorAll("[data-m]").forEach(b=>b.classList.remove("active"));const ids={home:"nb-home",bey:"nb-bey",cl:"nb-cl"};if(ids[page])document.getElementById(ids[page]).classList.add("active");document.querySelectorAll(`[data-m="${{home:"home",bey:"bey",cl:"cl"}[page]}"]`).forEach(b=>b.classList.add("active"));if(page==="home"){setTimeout(()=>{initMap();if(lmap)lmap.invalidateSize();},80);}if(page==="bey"){setTimeout(resizeRadar,50);}}
+function toggleMob(){document.getElementById("mob-menu").classList.toggle("open");}
 
-/* ═══ 初始化 ═══ */
+/* ══ 初始化 ══ */
 renderEvents("upcoming");
-setTimeout(()=>{initMap();},200);
+setTimeout(()=>initMap(),200);
 initRadar();
-rebuild();
-const _b=BLADES[0],_r=RATCHETS[0],_bt=BITS[0];
-document.getElementById("cl-atk").textContent=Math.min(100,_b.atk+_r.atk+_bt.atk);
-document.getElementById("cl-def").textContent=Math.min(100,_b.def+_r.def+_bt.def);
-document.getElementById("cl-dur").textContent=Math.min(100,_b.dur+_r.dur+_bt.dur);
+buildSets();
+buildPartDropdown("blade");
+buildPartDropdown("ratchet");
+buildPartDropdown("bit");
+applySet("S-01");
 window.addEventListener("resize",()=>resizeRadar());
 </script>
