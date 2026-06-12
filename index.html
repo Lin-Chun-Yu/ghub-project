@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#0a0a0f;--bg2:#111118;--bg3:#18181f;--bg4:#1e1e28;--bd:#2a2a38;--bd2:#363648;--t1:#f0f0f8;--t2:#9090a8;--t3:#5a5a70;--blue:#378ADD;--blue2:#85B7EB;--blue3:#0C447C}
+:root{--bg:#0a0a0f;--bg2:#111118;--bg3:#18181f;--bg4:#1e1e28;--bd:#2a2a38;--bd2:#363648;--t1:#f0f0f8;--t2:#9090a8;--t3:#5a5a70;--blue:#378ADD;--blue2:#85B7EB;--blue3:#0C447C;--shopee:#EE4D2D;--shopee2:#FF6B4A;--shopee-bg:rgba(238,77,45,.1)}
 body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .shell{display:flex;flex-direction:column;height:720px}
 .navbar{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:52px;background:var(--bg2);border-bottom:.5px solid var(--bd2);flex-shrink:0}
@@ -22,7 +22,6 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .content{flex:1;overflow:hidden;display:flex;flex-direction:column}
 .page{display:none;flex-direction:column;flex:1;overflow:hidden}
 .page.active{display:flex}
-
 /* HOME */
 .home-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);flex:1;overflow:hidden}
 .map-col{display:flex;flex-direction:column;border-right:.5px solid var(--bd)}
@@ -39,8 +38,7 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .elist{flex:1;overflow-y:auto;padding:10px}
 .elist::-webkit-scrollbar{width:3px}
 .elist::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
-.ecard{background:var(--bg3);border:.5px solid var(--bd);border-radius:10px;padding:11px;margin-bottom:7px;cursor:pointer;transition:border-color .15s}
-.ecard:hover{border-color:var(--bd2)}
+.ecard{background:var(--bg3);border:.5px solid var(--bd);border-radius:10px;padding:11px;margin-bottom:7px;transition:border-color .15s}
 .ecard.upcoming{border-left:2px solid var(--blue)}
 .ecard.past{border-left:2px solid var(--t3)}
 .etop{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px}
@@ -52,81 +50,85 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .emeta{display:flex;gap:10px;font-size:10px;color:var(--t3)}
 .emeta span{display:flex;align-items:center;gap:3px}
 .emeta i{font-size:11px}
-
 /* BEY */
 .bey-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .bey-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);flex:1;overflow:hidden;min-height:0}
 .col-radar{background:var(--bg3);border-right:.5px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;gap:10px;overflow:hidden}
-.radar-legend{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 8px;width:100%;max-width:320px;flex-shrink:0;padding:0 4px}
+.radar-legend{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 8px;width:100%;max-width:300px;flex-shrink:0;padding:0 4px}
 .rl-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t2)}
 .rl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.radar-scale-badge{font-size:9px;color:var(--t3);display:flex;align-items:center;gap:4px;flex-shrink:0}
+.radar-scale-badge.overscale{color:#D8A030}
 .col-right{display:flex;flex-direction:column;overflow:hidden;min-height:0}
-.sets-panel{display:flex;flex-direction:column;border-bottom:.5px solid var(--bd);flex-shrink:0}
-.sets-panel-header{display:flex;align-items:center;justify-content:space-between;padding:9px 12px 7px;flex-shrink:0}
-.sets-panel-title{font-size:11px;font-weight:500;color:var(--t2);display:flex;align-items:center;gap:5px}
-.sets-panel-title i{font-size:13px;color:var(--blue)}
-.sets-count{font-size:9px;color:var(--t3);background:var(--bg4);border:.5px solid var(--bd);border-radius:20px;padding:1px 7px}
-.sets-scroll-area{height:180px;overflow-y:auto;padding:0 12px 10px}
-.sets-scroll-area::-webkit-scrollbar{width:3px}
-.sets-scroll-area::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
-.set-list-item{display:flex;align-items:center;justify-content:space-between;padding:9px 10px;background:var(--bg4);border:.5px solid var(--bd2);border-radius:8px;cursor:pointer;transition:all .15s;gap:8px;margin-bottom:5px}
-.set-list-item:last-child{margin-bottom:0}
-.set-list-item:hover{border-color:var(--blue3);background:rgba(55,138,221,.06)}
-.set-list-item.active{border-color:var(--blue);background:rgba(55,138,221,.1)}
-.sli-left{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
-.sli-top{display:flex;align-items:center;gap:6px}
-.sli-id{font-size:10px;color:var(--blue2);font-weight:500;letter-spacing:.03em;flex-shrink:0}
-.sli-name{font-size:12px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sli-type{font-size:10px;padding:1px 7px;border-radius:20px;flex-shrink:0}
-.sli-parts{font-size:10px;color:var(--t3);margin-top:1px}
-.sli-check{font-size:14px;color:var(--blue);display:none;flex-shrink:0}
-.set-list-item.active .sli-check{display:block}
 .parts-panel{display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0}
-.parts-panel-header{display:flex;align-items:center;justify-content:space-between;padding:9px 12px 7px;flex-shrink:0}
-.parts-panel-title{font-size:11px;font-weight:500;color:var(--t2);display:flex;align-items:center;gap:5px}
-.parts-panel-title i{font-size:13px;color:var(--blue)}
-.parts-scroll-area{flex:1;overflow-y:auto;padding:0 12px 12px;min-height:0}
-.parts-scroll-area::-webkit-scrollbar{width:3px}
-.parts-scroll-area::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
-.part-group{margin-bottom:10px}
+.part-group{margin-bottom:10px;position:relative}
 .part-group:last-child{margin-bottom:0}
 .part-group-label{font-size:9px;font-weight:500;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:5px}
 .part-group-label i{font-size:11px;color:var(--blue)}
-.part-select-wrap{position:relative}
-.part-select-trigger{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg4);border:.5px solid var(--bd2);border-radius:8px;cursor:pointer;transition:border-color .15s;user-select:none}
+.part-trigger-row{display:flex;align-items:stretch;gap:5px}
+.part-select-trigger{flex:1;display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg4);border:.5px solid var(--bd2);border-radius:8px;cursor:pointer;transition:border-color .15s;user-select:none;min-width:0}
 .part-select-trigger:hover,.part-select-trigger.open{border-color:var(--blue3)}
 .pst-left{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.pst-codes{font-size:10px;color:var(--blue2);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pst-name{font-size:12px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pst-meta{font-size:10px;color:var(--t3)}
-.pst-arrow{color:var(--t3);font-size:13px;transition:transform .2s;flex-shrink:0;margin-left:8px}
+.pst-arrow{color:var(--t3);font-size:13px;transition:transform .2s;flex-shrink:0;margin-left:6px}
 .pst-arrow.open{transform:rotate(180deg)}
-.part-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:300;background:var(--bg3);border:.5px solid var(--bd2);border-radius:10px;overflow:hidden;display:none;box-shadow:0 8px 28px rgba(0,0,0,.7)}
+.part-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:46px;z-index:300;background:var(--bg3);border:.5px solid var(--bd2);border-radius:10px;overflow:hidden;display:none;box-shadow:0 8px 28px rgba(0,0,0,.7)}
 .part-dropdown.open{display:block}
-.part-dropdown-inner{max-height:180px;overflow-y:auto}
+.part-dropdown-inner{max-height:220px;overflow-y:auto}
 .part-dropdown-inner::-webkit-scrollbar{width:3px}
 .part-dropdown-inner::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
-.pd-item{display:flex;align-items:center;justify-content:space-between;padding:8px 11px;cursor:pointer;border-bottom:.5px solid var(--bd);transition:background .1s;gap:8px}
+/* 下拉項目 */
+.pd-item{display:flex;align-items:flex-start;justify-content:space-between;padding:9px 12px;cursor:pointer;border-bottom:.5px solid var(--bd);transition:background .1s;gap:8px}
 .pd-item:last-child{border-bottom:none}
 .pd-item:hover{background:rgba(55,138,221,.07)}
 .pd-item.active{background:rgba(55,138,221,.1)}
-.pd-left{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
-.pd-id{font-size:10px;color:var(--blue2);font-weight:500;letter-spacing:.03em}
+.pd-left{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
 .pd-name{font-size:12px;font-weight:500;color:var(--t1)}
-.pd-type{font-size:10px;color:var(--t3)}
-.pd-check{font-size:13px;color:var(--blue);display:none;flex-shrink:0}
+.pd-eng{font-size:10px;color:var(--t3);font-style:italic}
+.pd-row{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.pd-type-badge{font-size:9px;padding:1px 6px;border-radius:20px;flex-shrink:0}
+.pd-weight{font-size:9px;color:var(--t3)}
+/* 版本列表（versions[]）*/
+.pd-versions{display:flex;flex-direction:column;gap:2px;margin-top:3px}
+.pd-ver-row{display:flex;align-items:center;gap:5px}
+.pd-ver-code{font-size:10px;color:var(--blue2);font-weight:500;min-width:64px}
+.pd-ver-sub{font-size:10px;color:var(--t3)}
+/* 固鎖輪盤／軸心：用舊式單行 meta */
+.pd-meta-simple{font-size:10px;color:var(--t3);margin-top:1px}
+.pd-check{font-size:13px;color:var(--blue);display:none;flex-shrink:0;margin-top:2px}
 .pd-item.active .pd-check{display:block}
-.stats-card{background:var(--bg4);border:.5px solid var(--bd);border-radius:10px;padding:10px;margin-top:10px;flex-shrink:0}
-.sg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-bottom:8px}
-.sb{background:var(--bg3);border-radius:7px;border:.5px solid var(--bd);padding:.45rem;text-align:center}
+.btn-shopee-part{display:flex;align-items:center;justify-content:center;width:36px;border-radius:8px;border:.5px solid rgba(238,77,45,.3);background:var(--shopee-bg);color:var(--shopee);cursor:pointer;transition:all .15s;flex-shrink:0;font-size:16px}
+.btn-shopee-part:hover{background:rgba(238,77,45,.2);border-color:var(--shopee);transform:scale(1.05)}
+@keyframes shopee-pulse{0%,100%{box-shadow:0 0 0 0 rgba(238,77,45,.4)}50%{box-shadow:0 0 0 4px rgba(238,77,45,0)}}
+.btn-shopee-part{animation:shopee-pulse 2.8s ease-in-out infinite}
+.parts-scroll-area{flex:1;overflow-y:auto;padding:0 12px 12px;min-height:0}
+.parts-scroll-area::-webkit-scrollbar{width:3px}
+.parts-scroll-area::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+/* 屬性卡 */
+.stats-card{background:var(--bg4);border:.5px solid var(--bd);border-radius:10px;padding:10px;margin-top:10px}
+.sg5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-bottom:8px}
+.sb{background:var(--bg3);border-radius:7px;border:.5px solid var(--bd);padding:.45rem;text-align:center;transition:border-color .3s,background .3s}
 .sl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
-.sv{font-size:15px;font-weight:500}
+.sv{font-size:15px;font-weight:500;transition:color .3s,text-shadow .3s}
+.sb.limitbreak{border-color:#FF4500aa;background:rgba(255,69,0,.08)}
+.sv.limitbreak{color:#FF4500!important;text-shadow:0 0 8px #FF4500cc,0 0 16px #FF450066}
 .divid{height:.5px;background:var(--bd);margin:6px 0}
-.brow{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.cname{font-size:10px;font-weight:500;color:var(--t1);line-height:1.4}
-.mrow{display:flex;gap:4px;margin-top:3px;flex-wrap:wrap}
+.combo-bottom{display:flex;flex-direction:column;gap:5px}
+.combo-detail-row{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.combo-name{font-size:10px;font-weight:500;color:var(--t1);line-height:1.4;flex:1;min-width:0}
+.height-tag{display:flex;align-items:center;gap:4px;font-size:10px;font-weight:500;padding:3px 8px;border-radius:20px;background:rgba(155,111,216,.12);color:#C49EF0;border:.5px solid rgba(155,111,216,.3);white-space:nowrap;flex-shrink:0}
+.height-tag i{font-size:11px}
+.combo-score-row{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.mrow{display:flex;gap:4px;flex-wrap:wrap}
 .mp{font-size:9px;padding:2px 7px;border-radius:20px;background:var(--bg3);color:var(--t2);border:.5px solid var(--bd)}
-.sbadge{font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;background:var(--bg3);border:.5px solid var(--bd2);flex-shrink:0;white-space:nowrap}
-
+.sbadge{font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;background:var(--bg3);border:.5px solid var(--bd2);white-space:nowrap;flex-shrink:0}
+.btn-shopee-full{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px 12px;border-radius:9px;border:none;cursor:pointer;background:linear-gradient(90deg,var(--shopee),var(--shopee2));color:#fff;font-size:12px;font-weight:600;transition:opacity .15s,transform .1s;margin-top:8px;position:relative;overflow:hidden;text-align:center}
+.btn-shopee-full::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transform:translateX(-100%);transition:transform .4s}
+.btn-shopee-full:hover::before{transform:translateX(100%)}
+.btn-shopee-full:hover{opacity:.9;transform:translateY(-1px)}
+.shopee-badge{font-size:9px;padding:1px 5px;border-radius:20px;background:rgba(255,255,255,.2)}
 /* CHANGELOG */
 .cl-wrap{flex:1;overflow-y:auto;padding:16px}
 .cl-wrap::-webkit-scrollbar{width:3px}
@@ -165,26 +167,14 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 .fb-history-title{font-size:10px;color:var(--t3);margin-bottom:6px;display:flex;align-items:center;gap:4px}
 .fb-history-item{background:var(--bg4);border:.5px solid var(--bd);border-radius:7px;padding:7px 9px;margin-bottom:5px;font-size:11px;color:var(--t2);line-height:1.5}
 .fb-history-meta{font-size:9px;color:var(--t3);margin-top:3px;display:flex;gap:8px}
-
-/* Ko-fi 按鈕 */
-.btn-kofi{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  width:100%;padding:10px;border-radius:10px;border:none;cursor:pointer;
-  background:#FF5E5B;color:#fff;font-size:13px;font-weight:500;
-  transition:opacity .15s,transform .1s;text-decoration:none;
-}
+.btn-kofi{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:10px;border-radius:10px;border:none;cursor:pointer;background:#FF5E5B;color:#fff;font-size:13px;font-weight:500;transition:opacity .15s,transform .1s;text-decoration:none}
 .btn-kofi:hover{opacity:.88;transform:translateY(-1px)}
-.btn-kofi:active{transform:translateY(0)}
-.btn-kofi-icon{font-size:18px;line-height:1}
 .kofi-desc{font-size:10px;color:var(--t3);line-height:1.6;margin-bottom:10px}
 .kofi-meta{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .kofi-pill{font-size:9px;padding:2px 8px;border-radius:20px;background:var(--bg4);color:var(--t3);border:.5px solid var(--bd)}
-
-.btn-cf{padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer;background:rgba(186,117,23,.15);color:#FAC775;border:.5px solid rgba(186,117,23,.3);display:flex;align-items:center;gap:4px}
 .sdiv{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;padding:5px 0 7px;margin-top:3px}
-
 /* 頁尾 */
-.site-footer{background:var(--bg2);border-top:.5px solid var(--bd2);flex-shrink:0;font-size:11px;color:var(--t3)}
+.site-footer{background:var(--bg2);border-top:.5px solid var(--bd2);flex-shrink:0}
 .footer-toggle{display:flex;align-items:center;justify-content:space-between;padding:8px 20px;cursor:pointer;user-select:none;transition:background .15s}
 .footer-toggle:hover{background:var(--bg3)}
 .footer-toggle-left{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--t3)}
@@ -195,28 +185,28 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 .footer-link-btn:hover{color:var(--blue2)}
 .footer-chevron{font-size:14px;color:var(--t3);transition:transform .2s}
 .footer-chevron.open{transform:rotate(180deg)}
-.footer-body{display:none;border-top:.5px solid var(--bd);padding:16px 20px 14px}
+.footer-body{display:none;border-top:.5px solid var(--bd);padding:14px 20px 12px}
 .footer-body.open{display:block}
-.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px 24px;margin-bottom:14px}
-.footer-col-title{font-size:10px;font-weight:500;color:var(--t2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;display:flex;align-items:center;gap:5px}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px 24px;margin-bottom:12px}
+.footer-col-title{font-size:10px;font-weight:500;color:var(--t2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;display:flex;align-items:center;gap:5px}
 .footer-col-title i{font-size:12px;color:var(--blue)}
 .footer-col p,.footer-col li{font-size:10px;color:var(--t3);line-height:1.7}
 .footer-col ul{list-style:none;padding:0}
-.footer-link{color:var(--blue2);text-decoration:none;transition:opacity .15s}
-.footer-link:hover{opacity:.75}
+.footer-link{color:var(--blue2);text-decoration:none}
 .footer-divider{height:.5px;background:var(--bd);margin:10px 0}
-.footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:9px;color:var(--t3)}
-.footer-modal-trigger{font-size:10px;color:var(--t3);background:transparent;border:none;cursor:pointer;padding:0;transition:color .15s;text-decoration:underline;text-underline-offset:2px}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:9px;color:var(--t3)}
+.copyright-bar{background:rgba(55,138,221,.05);border:.5px solid rgba(55,138,221,.12);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:10px;color:var(--t3);line-height:1.7}
+.copyright-bar strong{color:var(--t2)}
+.footer-modal-trigger{font-size:10px;color:var(--t3);background:transparent;border:none;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px}
 .footer-modal-trigger:hover{color:var(--blue2)}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-overlay.open{display:flex}
 .modal-box{background:var(--bg3);border:.5px solid var(--bd2);border-radius:14px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto;padding:20px;box-shadow:0 16px 48px rgba(0,0,0,.6)}
 .modal-box::-webkit-scrollbar{width:3px}
-.modal-box::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
 .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .modal-title{font-size:14px;font-weight:500;color:var(--t1);display:flex;align-items:center;gap:7px}
 .modal-title i{font-size:16px;color:var(--blue)}
-.modal-close{background:transparent;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:0;line-height:1;transition:color .15s}
+.modal-close{background:transparent;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:0;line-height:1}
 .modal-close:hover{color:var(--t1)}
 .modal-section{margin-bottom:14px}
 .modal-section-title{font-size:11px;font-weight:500;color:var(--t2);margin-bottom:5px;display:flex;align-items:center;gap:5px}
@@ -237,8 +227,6 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
   #leaflet-map{height:200px;min-height:200px;flex:none}
   .col-radar{border-right:none;border-bottom:.5px solid var(--bd);min-height:260px}
   .footer-links-inline{display:none}
-  .footer-grid{grid-template-columns:1fr 1fr}
-  .sets-scroll-area{height:150px}
 }
 </style>
 
@@ -273,7 +261,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 
 <div class="content">
 
-<!-- 賽事中心（完全不動） -->
+<!-- 賽事中心（不動） -->
 <div class="page active" id="page-home">
   <div class="home-layout">
     <div class="map-col">
@@ -297,64 +285,106 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
       <div class="col-radar">
         <canvas id="radar-canvas"></canvas>
         <div class="radar-legend" id="radar-legend"></div>
+        <div class="radar-scale-badge" id="radar-scale-badge">
+          <i class="ti ti-chart-radar" aria-hidden="true"></i>
+          <span id="radar-scale-label">刻度上限：100</span>
+        </div>
       </div>
       <div class="col-right">
-        <div class="sets-panel">
-          <div class="sets-panel-header">
-            <div class="sets-panel-title"><i class="ti ti-package" aria-hidden="true"></i>官方套組</div>
-            <span class="sets-count" id="sets-count">0 組</span>
-          </div>
-          <div class="sets-scroll-area" id="sets-list"></div>
-        </div>
         <div class="parts-panel">
-          <div class="parts-panel-header">
-            <div class="parts-panel-title"><i class="ti ti-adjustments" aria-hidden="true"></i>自訂零件</div>
-          </div>
           <div class="parts-scroll-area">
-            <div class="part-group">
+
+            <!-- 官方套組 -->
+            <div class="part-group" id="pg-sets">
+              <div class="part-group-label"><i class="ti ti-package" aria-hidden="true"></i>官方套組</div>
+              <div class="part-trigger-row">
+                <div class="part-select-trigger" id="trig-sets" onclick="toggleDD('sets')">
+                  <div class="pst-left">
+                    <div class="pst-codes" id="disp-sets-id">—</div>
+                    <div class="pst-name" id="disp-sets-name">請選擇套組</div>
+                    <div class="pst-meta" id="disp-sets-meta">—</div>
+                  </div>
+                  <i class="ti ti-chevron-down pst-arrow" id="arr-sets" aria-hidden="true"></i>
+                </div>
+                <button class="btn-shopee-part" onclick="shopeeSearchSet()" title="蝦皮搜尋此套組">🛒</button>
+              </div>
+              <div class="part-dropdown" id="dd-sets"><div class="part-dropdown-inner" id="ddi-sets"></div></div>
+            </div>
+
+            <!-- 戰刃 -->
+            <div class="part-group" id="pg-blade">
               <div class="part-group-label"><i class="ti ti-sword" aria-hidden="true"></i>戰刃 Blade</div>
-              <div class="part-select-wrap">
+              <div class="part-trigger-row">
                 <div class="part-select-trigger" id="trig-blade" onclick="toggleDD('blade')">
-                  <div class="pst-left"><div class="pst-name" id="disp-blade-name">—</div><div class="pst-meta" id="disp-blade-meta">—</div></div>
+                  <div class="pst-left">
+                    <div class="pst-codes" id="disp-blade-codes">—</div>
+                    <div class="pst-name" id="disp-blade-name">—</div>
+                    <div class="pst-meta" id="disp-blade-meta">—</div>
+                  </div>
                   <i class="ti ti-chevron-down pst-arrow" id="arr-blade" aria-hidden="true"></i>
                 </div>
-                <div class="part-dropdown" id="dd-blade"><div class="part-dropdown-inner" id="ddi-blade"></div></div>
+                <button class="btn-shopee-part" onclick="shopeeSearch('blade')" title="蝦皮搜尋此零件">🛒</button>
               </div>
+              <div class="part-dropdown" id="dd-blade"><div class="part-dropdown-inner" id="ddi-blade"></div></div>
             </div>
-            <div class="part-group">
+
+            <!-- 固鎖輪盤 -->
+            <div class="part-group" id="pg-ratchet">
               <div class="part-group-label"><i class="ti ti-circle-dashed" aria-hidden="true"></i>固鎖輪盤 Ratchet</div>
-              <div class="part-select-wrap">
+              <div class="part-trigger-row">
                 <div class="part-select-trigger" id="trig-ratchet" onclick="toggleDD('ratchet')">
-                  <div class="pst-left"><div class="pst-name" id="disp-ratchet-name">—</div><div class="pst-meta" id="disp-ratchet-meta">—</div></div>
+                  <div class="pst-left">
+                    <div class="pst-codes" id="disp-ratchet-codes">—</div>
+                    <div class="pst-name" id="disp-ratchet-name">—</div>
+                    <div class="pst-meta" id="disp-ratchet-meta">—</div>
+                  </div>
                   <i class="ti ti-chevron-down pst-arrow" id="arr-ratchet" aria-hidden="true"></i>
                 </div>
-                <div class="part-dropdown" id="dd-ratchet"><div class="part-dropdown-inner" id="ddi-ratchet"></div></div>
+                <button class="btn-shopee-part" onclick="shopeeSearch('ratchet')" title="蝦皮搜尋此零件">🛒</button>
               </div>
+              <div class="part-dropdown" id="dd-ratchet"><div class="part-dropdown-inner" id="ddi-ratchet"></div></div>
             </div>
-            <div class="part-group">
+
+            <!-- 軸心 -->
+            <div class="part-group" id="pg-bit">
               <div class="part-group-label"><i class="ti ti-point" aria-hidden="true"></i>軸心 Bit</div>
-              <div class="part-select-wrap">
+              <div class="part-trigger-row">
                 <div class="part-select-trigger" id="trig-bit" onclick="toggleDD('bit')">
-                  <div class="pst-left"><div class="pst-name" id="disp-bit-name">—</div><div class="pst-meta" id="disp-bit-meta">—</div></div>
+                  <div class="pst-left">
+                    <div class="pst-codes" id="disp-bit-codes">—</div>
+                    <div class="pst-name" id="disp-bit-name">—</div>
+                    <div class="pst-meta" id="disp-bit-meta">—</div>
+                  </div>
                   <i class="ti ti-chevron-down pst-arrow" id="arr-bit" aria-hidden="true"></i>
                 </div>
-                <div class="part-dropdown" id="dd-bit"><div class="part-dropdown-inner" id="ddi-bit"></div></div>
+                <button class="btn-shopee-part" onclick="shopeeSearch('bit')" title="蝦皮搜尋此零件">🛒</button>
               </div>
+              <div class="part-dropdown" id="dd-bit"><div class="part-dropdown-inner" id="ddi-bit"></div></div>
             </div>
+
+            <!-- 屬性卡 -->
             <div class="stats-card">
-              <div class="sg">
-                <!-- 順序對齊右欄：攻擊、防禦、耐力、高度、加速、耐久度 -->
-                <div class="sb"><div class="sl">攻擊</div><div class="sv" style="color:#D85A30" id="v-atk">—</div></div>
-                <div class="sb"><div class="sl">防禦</div><div class="sv" style="color:#378ADD" id="v-def">—</div></div>
-                <div class="sb"><div class="sl">耐力</div><div class="sv" style="color:#1D9E75" id="v-sta">—</div></div>
-                <div class="sb"><div class="sl">高度</div><div class="sv" style="color:#9B6FD8" id="v-hgt">—</div></div>
-                <div class="sb"><div class="sl">加速</div><div class="sv" style="color:#D8A030" id="v-accel">—</div></div>
-                <div class="sb"><div class="sl">耐久度</div><div class="sv" style="color:#D85070" id="v-end">—</div></div>
+              <div class="sg5">
+                <div class="sb" id="sb-atk"><div class="sl">攻擊</div><div class="sv" id="v-atk">—</div></div>
+                <div class="sb" id="sb-def"><div class="sl">防禦</div><div class="sv" id="v-def">—</div></div>
+                <div class="sb" id="sb-sta"><div class="sl">耐力</div><div class="sv" id="v-sta">—</div></div>
+                <div class="sb" id="sb-accel"><div class="sl">加速</div><div class="sv" id="v-accel">—</div></div>
+                <div class="sb" id="sb-end"><div class="sl">耐久度</div><div class="sv" id="v-end">—</div></div>
               </div>
               <div class="divid"></div>
-              <div class="brow">
-                <div><div class="cname" id="combo-name">—</div><div class="mrow" id="mrow"></div></div>
-                <div class="sbadge" id="sbadge">—</div>
+              <div class="combo-bottom">
+                <div class="combo-detail-row">
+                  <div class="combo-name" id="combo-name">—</div>
+                  <div class="height-tag"><i class="ti ti-ruler" aria-hidden="true"></i><span id="height-val">— mm</span></div>
+                </div>
+                <div class="combo-score-row">
+                  <div class="mrow" id="mrow"></div>
+                  <div class="sbadge" id="sbadge">—</div>
+                </div>
+                <button class="btn-shopee-full" onclick="shopeeSearchFull()">
+                  🛒&nbsp;一鍵到蝦皮購買此配置
+                  <span class="shopee-badge">整套搜尋</span>
+                </button>
               </div>
             </div>
           </div>
@@ -364,7 +394,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
   </div>
 </div>
 
-<!-- 更新日誌 -->
+<!-- 更新日誌（不動） -->
 <div class="page" id="page-cl">
   <div class="cl-wrap">
     <div class="cl-grid">
@@ -372,12 +402,11 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
         <div class="sdiv">版本記錄</div>
         <div class="cl-card">
           <div class="cl-title"><i class="ti ti-git-branch" aria-hidden="true"></i>更新日誌</div>
-          <div class="cl-item"><span class="cl-ver">v0.9</span><div class="cl-txt">套組與零件各自獨立捲動，雷達圖屬性順序修正，Ko-fi 贊助整合</div></div>
-          <div class="cl-item"><span class="cl-ver">v0.8</span><div class="cl-txt">新增套組快選區，從 BEYBLADE_DATABASE.sets 自動載入</div></div>
-          <div class="cl-item"><span class="cl-ver">v0.7</span><div class="cl-txt">神配置計算機改用 BEYBLADE_DATABASE 資料驅動</div></div>
-          <div class="cl-item"><span class="cl-ver">v0.6</span><div class="cl-txt">回饋表單串接 Google Sheets</div></div>
-          <div class="cl-item"><span class="cl-ver">v0.5</span><div class="cl-txt">神配置計算機改為雷達圖呈現</div></div>
-          <div class="cl-item"><span class="cl-ver">v0.1</span><div class="cl-txt">初版：神配置計算機、屬性評分系統</div></div>
+          <div class="cl-item"><span class="cl-ver">v1.5</span><div class="cl-txt">BEYBLADE_DATABASE 新增 versions[] 陣列，下拉清單完整展示所有官方版本代碼與副名稱</div></div>
+          <div class="cl-item"><span class="cl-ver">v1.4</span><div class="cl-txt">DB 改版：唯一 key、officialCodes[]、engName、version 欄位</div></div>
+          <div class="cl-item"><span class="cl-ver">v1.3</span><div class="cl-txt">套組改為與零件相同的下拉風格、加入版權免責聲明</div></div>
+          <div class="cl-item"><span class="cl-ver">v1.1</span><div class="cl-txt">新增蝦皮購買連結：套組一鍵購買、各零件搜尋按鈕</div></div>
+          <div class="cl-item"><span class="cl-ver">v1.0</span><div class="cl-txt">雷達圖改為五角形、動態刻度、極限突破特效</div></div>
         </div>
         <div class="sdiv" style="margin-top:10px">即將推出</div>
         <div class="cl-card">
@@ -393,7 +422,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
         <div class="sdiv">快速工具</div>
         <div class="cl-card" style="margin-bottom:10px">
           <div class="cl-title"><i class="ti ti-tornado" aria-hidden="true"></i>神配置計算機</div>
-          <p style="font-size:11px;color:var(--t2);line-height:1.6;margin-bottom:10px">選擇套組或自訂零件，雷達圖即時呈現六項屬性評分。</p>
+          <p style="font-size:11px;color:var(--t2);line-height:1.6;margin-bottom:10px">選擇套組或自訂零件，五角雷達圖即時呈現屬性，還可直接連結蝦皮購買。</p>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:10px">
             <div class="sb"><div class="sl">攻擊</div><div class="sv" style="color:#D85A30;font-size:14px" id="cl-atk">—</div></div>
             <div class="sb"><div class="sl">防禦</div><div class="sv" style="color:#378ADD;font-size:14px" id="cl-def">—</div></div>
@@ -401,7 +430,6 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
           </div>
           <button class="btn-p" style="width:100%;justify-content:center" onclick="goto('bey',document.getElementById('nb-bey'))"><i class="ti ti-external-link" aria-hidden="true"></i>開啟計算機</button>
         </div>
-
         <div class="sdiv">意見回饋</div>
         <div class="fb-card">
           <div class="fb-title"><i class="ti ti-message-circle" aria-hidden="true"></i>回饋與建議</div>
@@ -435,15 +463,12 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
             <div id="fb-history-list"></div>
           </div>
         </div>
-
-        <!-- ★ Ko-fi 請開發者喝咖啡（已更新連結） -->
         <div class="sdiv" style="margin-top:10px">請開發者喝咖啡</div>
         <div class="fb-card">
           <div class="fb-title"><i class="ti ti-coffee" aria-hidden="true"></i>支持這個專案</div>
           <p class="kofi-desc">G-Hub 是由玩家自主維護的免費工具。你的每一杯咖啡都是開發繼續下去的動力，感謝你的支持！</p>
           <a class="btn-kofi" href="https://ko-fi.com/miranda45" target="_blank" rel="noopener noreferrer">
-            <span class="btn-kofi-icon">☕</span>
-            Buy me a coffee on Ko-fi
+            <span style="font-size:18px">☕</span>Buy me a coffee on Ko-fi
           </a>
           <div class="kofi-meta">
             <span class="kofi-pill">🔒 安全付款</span>
@@ -456,11 +481,11 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
   </div>
 </div>
 
-</div><!-- /content -->
+</div>
 
 <!-- 頁尾 -->
 <footer class="site-footer">
-  <div class="footer-toggle" onclick="toggleFooter()" id="footer-toggle-btn">
+  <div class="footer-toggle" onclick="toggleFooter()">
     <div class="footer-toggle-left"><i class="ti ti-info-circle" aria-hidden="true"></i><span>© 2026 G-Hub 數據站・玩家自主維護・非官方</span></div>
     <div class="footer-toggle-right">
       <div class="footer-links-inline">
@@ -472,209 +497,237 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
     </div>
   </div>
   <div class="footer-body" id="footer-body">
+    <div class="copyright-bar">
+      <strong>⚠ 非官方免責聲明</strong><br>
+      G-Hub 為非官方玩家粉絲網站，與 TAKARA TOMY 或任何官方機構無關聯。本站所有陀螺相關圖片、名稱、商標之著作權歸原廠商所有，僅供玩家交流參考使用，不作任何商業用途。如有侵權疑慮，請聯繫我們，我們將立即處理。
+    </div>
     <div class="footer-grid">
       <div class="footer-col"><div class="footer-col-title"><i class="ti ti-building" aria-hidden="true"></i>關於我們</div><p>G-Hub 數據站為玩家提供專業的戰鬥陀螺數據查詢與配置計算服務，由玩家社群自主維護。</p></div>
-      <div class="footer-col"><div class="footer-col-title"><i class="ti ti-mail" aria-hidden="true"></i>聯絡資訊</div><ul><li>客服信箱：<a class="footer-link" href="mailto:lin.chun.yu.0405@gmail.com">lin.chun.yu.0405@gmail.com</a></li><li style="margin-top:3px">客服電話：<a class="footer-link" href="tel:0925120405">0925-120-405</a></li></ul></div>
-      <div class="footer-col"><div class="footer-col-title"><i class="ti ti-heart" aria-hidden="true"></i>贊助說明</div><p>贊助本站為自由意願，款項將全數用於維持 G-Hub 伺服器運作與軟體開發費用，感謝您的支持。</p></div>
+      <div class="footer-col"><div class="footer-col-title"><i class="ti ti-heart" aria-hidden="true"></i>贊助說明</div><p>贊助本站為自由意願，款項將全數用於維持 G-Hub 伺服器運作與軟體開發費用。</p></div>
       <div class="footer-col"><div class="footer-col-title"><i class="ti ti-shield-check" aria-hidden="true"></i>法律資訊</div><ul style="display:flex;flex-direction:column;gap:4px"><li><button class="footer-modal-trigger" onclick="openModal('privacy')">隱私權政策</button></li><li><button class="footer-modal-trigger" onclick="openModal('terms')">服務條款</button></li><li><button class="footer-modal-trigger" onclick="openModal('refund')">退換貨及退款流程</button></li></ul></div>
     </div>
     <div class="footer-divider"></div>
-    <div class="footer-bottom"><span>© 2026 G-Hub 數據站。本站為非官方玩家資源，與 TAKARA TOMY 無關。</span><span>Made with ❤ for Beyblade X players in Taiwan</span></div>
+    <div class="footer-bottom">
+      <span>© 2026 G-Hub 數據站 ── 非官方粉絲站，圖片版權歸 TAKARA TOMY 所有，僅供交流使用。</span>
+      <span>Made with ❤ for Beyblade X players in Taiwan</span>
+    </div>
   </div>
 </footer>
-</div><!-- /shell -->
+</div>
 
-<!-- 彈出視窗 -->
-<div class="modal-overlay" id="modal-privacy" onclick="closeModalOutside(event,'modal-privacy')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-lock" aria-hidden="true"></i>隱私權政策</div><button class="modal-close" onclick="closeModal('modal-privacy')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-shield" aria-hidden="true"></i>資料收集與使用</div><p>本站承諾保護使用者的個人資料。我們僅收集處理贊助與聯繫相關之必要資訊，絕不外洩給第三方，並確保您的贊助資料安全。</p></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-mail" aria-hidden="true"></i>聯絡我們</div><p>如有隱私相關疑問，請聯繫：<a class="footer-link" href="mailto:lin.chun.yu.0405@gmail.com">lin.chun.yu.0405@gmail.com</a></p></div></div></div>
-<div class="modal-overlay" id="modal-terms" onclick="closeModalOutside(event,'modal-terms')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-file-text" aria-hidden="true"></i>服務條款</div><button class="modal-close" onclick="closeModal('modal-terms')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-info-circle" aria-hidden="true"></i>服務範圍</div><p>本站提供之數據計算與查詢服務僅供參考，開發者保留隨時修正或調整網站功能之權利。使用本服務即表示您同意本站之運作模式。</p></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-alert-circle" aria-hidden="true"></i>免責聲明</div><p>本站為非官方玩家資源，與 TAKARA TOMY 或任何官方機構無關。所有數據僅供參考。</p></div></div></div>
-<div class="modal-overlay" id="modal-refund" onclick="closeModalOutside(event,'modal-refund')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-refresh" aria-hidden="true"></i>退換貨及退款流程</div><button class="modal-close" onclick="closeModal('modal-refund')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-package" aria-hidden="true"></i>服務性質</div><p>本站提供之服務為「無形數位數據服務」，服務即時交付。</p></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-rotate" aria-hidden="true"></i>退款條件</div><p>若因系統錯誤導致功能無法正常使用，請聯繫客服信箱，經確認後將為您安排退款事宜。</p></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-mail" aria-hidden="true"></i>聯絡客服</div><p>信箱：<a class="footer-link" href="mailto:lin.chun.yu.0405@gmail.com">lin.chun.yu.0405@gmail.com</a><br>電話：<a class="footer-link" href="tel:0925120405">0925-120-405</a></p></div></div></div>
+<div class="modal-overlay" id="modal-privacy" onclick="closeModalOutside(event,'modal-privacy')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-lock" aria-hidden="true"></i>隱私權政策</div><button class="modal-close" onclick="closeModal('modal-privacy')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-shield" aria-hidden="true"></i>資料收集與使用</div><p>本站承諾保護使用者的個人資料。我們僅收集處理贊助與聯繫相關之必要資訊，絕不外洩給第三方。</p></div></div></div>
+<div class="modal-overlay" id="modal-terms" onclick="closeModalOutside(event,'modal-terms')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-file-text" aria-hidden="true"></i>服務條款</div><button class="modal-close" onclick="closeModal('modal-terms')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-info-circle" aria-hidden="true"></i>服務範圍</div><p>本站提供之數據計算與查詢服務僅供參考，開發者保留隨時修正或調整網站功能之權利。本站為非官方玩家資源，與 TAKARA TOMY 無關。</p></div></div></div>
+<div class="modal-overlay" id="modal-refund" onclick="closeModalOutside(event,'modal-refund')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-refresh" aria-hidden="true"></i>退換貨及退款流程</div><button class="modal-close" onclick="closeModal('modal-refund')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-package" aria-hidden="true"></i>服務性質</div><p>本站提供之服務為「無形數位數據服務」，服務即時交付。若因系統錯誤導致功能無法正常使用，請聯繫我們，經確認後將為您安排退款事宜。</p></div></div></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="beyblade_data.js"></script>
 <script>
 
-/* ══ 雷達圖軸順序
-   ★ 對齊右側數值卡順序：攻擊 → 防禦 → 耐力 → 高度 → 加速 → 耐久度
-   ★ 六角形頂點（從正上方順時針）：
-       0=攻擊(頂)  1=防禦(右上)  2=耐力(右下)
-       3=高度(底)  4=加速(左下)  5=耐久度(左上)
-   ★ 耐久度(idx5) 與 加速(idx4) 已交換位置
-══ */
-const AXES=[
-  {key:"atk",       label:"攻擊",   color:"#D85A30"},  // 0 頂
-  {key:"def",       label:"防禦",   color:"#378ADD"},  // 1 右上
-  {key:"sta",       label:"耐力",   color:"#1D9E75"},  // 2 右下
-  {key:"hgt",       label:"高度",   color:"#9B6FD8"},  // 3 底
-  {key:"endurance", label:"耐久度", color:"#D85070"},  // 4 左下 ← 交換後
-  {key:"accel",     label:"加速",   color:"#D8A030"},  // 5 左上 ← 交換後
-];
-const N=6,STEPS=5;
-let rCvs=null,rCtx=null,rSize=0,rCX=0,rCY=0,rMax=0;
-let rVals={atk:0,def:0,sta:0,accel:0,endurance:0,hgt:0};
-let rTarget={atk:0,def:0,sta:0,accel:0,endurance:0,hgt:0};
-
-function resizeRadar(){
-  const col=document.querySelector(".col-radar");
-  if(!col||!rCvs)return;
-  const avail=Math.min(col.offsetWidth-24,col.offsetHeight-44);
-  rSize=Math.max(160,avail);rCvs.width=rCvs.height=rSize;rCX=rSize/2;rCY=rSize/2;rMax=rSize*0.35;
+/* ── 輔助：取得 versions[] 第一個 code，或 key，作為觸發器顯示 ── */
+function getFirstCode(p, key){
+  if(p.versions && p.versions.length>0) return p.versions[0].code;
+  return p.engName || key;
 }
-function initRadar(){
-  rCvs=document.getElementById("radar-canvas");
-  rCtx=rCvs.getContext("2d");
-  /* 圖例順序對齊右側：攻擊、防禦、耐力、高度、加速、耐久度 */
-  const LEGEND_ORDER=[
-    {label:"攻擊",  color:"#D85A30"},
-    {label:"防禦",  color:"#378ADD"},
-    {label:"耐力",  color:"#1D9E75"},
-    {label:"高度",  color:"#9B6FD8"},
-    {label:"加速",  color:"#D8A030"},
-    {label:"耐久度",color:"#D85070"},
-  ];
-  document.getElementById("radar-legend").innerHTML=
-    LEGEND_ORDER.map(a=>`<div class="rl-item"><div class="rl-dot" style="background:${a.color}"></div><span>${a.label}</span></div>`).join("");
-  resizeRadar();
-  radarLoop();
-}
-function radarLoop(){
-  AXES.forEach(a=>{const d=rTarget[a.key]-rVals[a.key];rVals[a.key]+=Math.abs(d)>0.2?d*0.12:d;});
-  if(rCtx)drawRadar();
-  requestAnimationFrame(radarLoop);
-}
-function pt(idx,val){const a=(idx/N)*Math.PI*2-Math.PI/2,r=(val/100)*rMax;return{x:rCX+Math.cos(a)*r,y:rCY+Math.sin(a)*r};}
-function gpt(idx,step){const a=(idx/N)*Math.PI*2-Math.PI/2,r=(step/STEPS)*rMax;return{x:rCX+Math.cos(a)*r,y:rCY+Math.sin(a)*r};}
-function drawRadar(){
-  const c=rCtx;c.clearRect(0,0,rSize,rSize);
-  // 網格
-  for(let s=1;s<=STEPS;s++){
-    c.beginPath();
-    for(let i=0;i<N;i++){const p=gpt(i,s);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}
-    c.closePath();
-    if(s<STEPS){c.fillStyle="rgba(24,24,31,0.6)";c.fill();}
-    c.strokeStyle=s===STEPS?"#363648aa":"#2a2a3866";c.lineWidth=s===STEPS?1:.6;c.stroke();
+/* ── 取得所有代碼的短標籤（觸發器顯示，最多顯示 3 個） ── */
+function getCodesShort(p, key){
+  if(p.versions && p.versions.length>0){
+    const codes = p.versions.map(v=>v.code);
+    if(codes.length<=3) return codes.join(" / ");
+    return codes.slice(0,3).join(" / ")+" …";
   }
-  // 軸線
-  for(let i=0;i<N;i++){const o=gpt(i,STEPS);c.beginPath();c.moveTo(rCX,rCY);c.lineTo(o.x,o.y);c.strokeStyle="#2a2a3888";c.lineWidth=.7;c.stroke();}
-  // 資料面
-  c.beginPath();
-  for(let i=0;i<N;i++){const p=pt(i,rVals[AXES[i].key]);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}
-  c.closePath();
-  const g=c.createRadialGradient(rCX,rCY,0,rCX,rCY,rMax);
-  g.addColorStop(0,"rgba(55,138,221,0.42)");g.addColorStop(1,"rgba(55,138,221,0.08)");
-  c.fillStyle=g;c.fill();c.strokeStyle="rgba(133,183,235,0.75)";c.lineWidth=1.8;c.stroke();
-  // 標籤 + 數值 + 圓點
-  const lo=rMax+24,vo=rMax+38;
-  for(let i=0;i<N;i++){
-    const ax=AXES[i],val=rVals[ax.key],p=pt(i,val);
-    const a=(i/N)*Math.PI*2-Math.PI/2;
-    const lx=rCX+Math.cos(a)*lo,ly=rCY+Math.sin(a)*lo;
-    const vx=rCX+Math.cos(a)*vo,vy=rCY+Math.sin(a)*vo;
-    c.beginPath();c.arc(p.x,p.y,4.5,0,Math.PI*2);c.fillStyle=ax.color;c.fill();
-    c.strokeStyle="#0a0a0f88";c.lineWidth=1.5;c.stroke();
-    c.save();
-    c.font="10px sans-serif";c.fillStyle="#9090a8";c.textAlign="center";c.textBaseline="middle";
-    c.fillText(ax.label,lx,ly);
-    c.font="bold 13px sans-serif";c.fillStyle=ax.color;
-    c.fillText(Math.round(val),vx,vy);
-    c.restore();
-  }
+  return p.engName || key;
 }
 
-/* ══ 套組 ══ */
-let activeSetId=null;
-function buildSets(){
-  const list=document.getElementById("sets-list");list.innerHTML="";
-  const sets=BEYBLADE_DATABASE.sets;
-  document.getElementById("sets-count").textContent=sets.length+" 組";
-  sets.forEach(set=>{
-    const c=set.components,tc=TYPE_COLOR[set.type]||"#9090a8";
-    const item=document.createElement("div");item.className="set-list-item";item.dataset.id=set.id;
-    item.innerHTML=`<div class="sli-left"><div class="sli-top"><span class="sli-id">${set.id}</span><span class="sli-name">${set.name}</span><span class="sli-type" style="color:${tc};background:${tc}18;border:.5px solid ${tc}44">${set.type}</span></div><div class="sli-parts">${c.blade} ・ ${c.ratchet} ・ ${c.bit}</div></div><i class="ti ti-check sli-check" aria-hidden="true"></i>`;
-    item.addEventListener("click",()=>applySet(set.id));list.appendChild(item);
-  });
+/* ══ 蝦皮 ══ */
+const SHOPEE_BASE="https://shopee.tw/search?keyword=";
+function buildShopeeUrl(kw){return SHOPEE_BASE+encodeURIComponent("戰鬥陀螺X "+kw);}
+const SHOPEE_PART_TYPE={blade:"戰刃",ratchet:"固鎖輪盤",bit:"軸心"};
+function shopeeSearch(type){
+  const partMap={blade:selBlade,ratchet:selRatchet,bit:selBit};
+  const p=partMap[type];if(!p){window.open(buildShopeeUrl("戰鬥陀螺X"),"_blank");return;}
+  const code=getFirstCode(p,p._key);
+  window.open(buildShopeeUrl(`${code} ${p.name} ${p.engName||""} ${SHOPEE_PART_TYPE[type]||""}`),"_blank");
 }
-function applySet(setId){
-  const set=BEYBLADE_DATABASE.sets.find(s=>s.id===setId);if(!set)return;
-  activeSetId=setId;
-  document.querySelectorAll(".set-list-item").forEach(c=>c.classList.toggle("active",c.dataset.id===setId));
-  selectPart("blade",set.components.blade);
-  selectPart("ratchet",set.components.ratchet);
-  selectPart("bit",set.components.bit);
+function shopeeSearchSet(){
+  if(!selSet){window.open(buildShopeeUrl("戰鬥陀螺X"),"_blank");return;}
+  const bl=BEYBLADE_DATABASE.parts.blades[selSet.components.blade];
+  const code=bl?getFirstCode(bl,selSet.components.blade):"";
+  window.open(buildShopeeUrl(`${selSet.id} ${selSet.name} ${code} 陀螺`),"_blank");
+}
+function shopeeSearchFull(){
+  if(!selBlade||!selRatchet||!selBit){window.open(buildShopeeUrl("戰鬥陀螺X"),"_blank");return;}
+  const bc=getFirstCode(selBlade,selBlade._key);
+  window.open(buildShopeeUrl(`${bc} ${selBlade.name} ${selBlade.engName||""} ${selRatchet.engName||selRatchet.name} ${selBit.engName||selBit.name}`),"_blank");
 }
 
-/* ══ 下拉選單 ══ */
-let selBlade=null,selRatchet=null,selBit=null;
-function buildPartDropdown(type){
-  const map={blade:"blades",ratchet:"ratchets",bit:"bits"};
-  const parts=BEYBLADE_DATABASE.parts[map[type]];
-  const inner=document.getElementById("ddi-"+type);inner.innerHTML="";
-  Object.entries(parts).forEach(([id,p])=>{
-    const div=document.createElement("div");div.className="pd-item";div.dataset.id=id;
-    const meta=p.height?`高度 ${p.height} mm・${p.weight}g`:`${p.type||""}・${p.weight}g`;
-    div.innerHTML=`<div class="pd-left"><div class="pd-id">${id}</div><div class="pd-name">${p.name}</div><div class="pd-type">${meta}</div></div><i class="ti ti-check pd-check" aria-hidden="true"></i>`;
-    div.addEventListener("click",()=>{
-      activeSetId=null;
-      document.querySelectorAll(".set-list-item").forEach(c=>c.classList.remove("active"));
-      selectPart(type,id);closeAllDD();
-    });
-    inner.appendChild(div);
-  });
-}
+/* ══ 下拉統一開關 ══ */
+const ALL_DD_TYPES=["sets","blade","ratchet","bit"];
 function toggleDD(type){
   const dd=document.getElementById("dd-"+type),arr=document.getElementById("arr-"+type),trig=document.getElementById("trig-"+type);
   const wasOpen=dd.classList.contains("open");closeAllDD();
   if(!wasOpen){dd.classList.add("open");arr.classList.add("open");trig.classList.add("open");}
 }
-function closeAllDD(){["blade","ratchet","bit"].forEach(t=>{document.getElementById("dd-"+t).classList.remove("open");document.getElementById("arr-"+t).classList.remove("open");document.getElementById("trig-"+t).classList.remove("open");});}
-document.addEventListener("click",e=>{if(!e.target.closest(".part-select-wrap"))closeAllDD();});
-function selectPart(type,id){
+function closeAllDD(){ALL_DD_TYPES.forEach(t=>{const dd=document.getElementById("dd-"+t),arr=document.getElementById("arr-"+t),trig=document.getElementById("trig-"+t);if(dd)dd.classList.remove("open");if(arr)arr.classList.remove("open");if(trig)trig.classList.remove("open");});}
+document.addEventListener("click",e=>{if(!e.target.closest(".part-group"))closeAllDD();});
+
+/* ══ 套組下拉 ══ */
+let selSet=null;
+function buildSetsDropdown(){
+  const inner=document.getElementById("ddi-sets");inner.innerHTML="";
+  BEYBLADE_DATABASE.sets.forEach(set=>{
+    const tc=TYPE_COLOR[set.type]||"#9090a8";
+    const bl=BEYBLADE_DATABASE.parts.blades[set.components.blade];
+    const blCode=bl?getFirstCode(bl,set.components.blade):"";
+    const div=document.createElement("div");div.className="pd-item";div.dataset.id=set.id;
+    div.innerHTML=`
+      <div class="pd-left">
+        <div class="pd-name">${set.id}　${set.name}</div>
+        <div class="pd-row">
+          <span class="pd-type-badge" style="color:${tc};background:${tc}18;border:.5px solid ${tc}44">${set.type}</span>
+          <span class="pd-weight" style="color:var(--t3)">${blCode} ・ ${set.components.ratchet} ・ ${set.components.bit}</span>
+        </div>
+      </div>
+      <i class="ti ti-check pd-check" aria-hidden="true"></i>`;
+    div.addEventListener("click",()=>{applySet(set.id);closeAllDD();});
+    inner.appendChild(div);
+  });
+}
+function applySet(setId){
+  const set=BEYBLADE_DATABASE.sets.find(s=>s.id===setId);if(!set)return;
+  selSet=set;
+  const tc=TYPE_COLOR[set.type]||"#9090a8";
+  const bl=BEYBLADE_DATABASE.parts.blades[set.components.blade];
+  const blCode=bl?getFirstCode(bl,set.components.blade):"";
+  document.getElementById("disp-sets-id").textContent=set.id;
+  document.getElementById("disp-sets-name").textContent=set.name;
+  document.getElementById("disp-sets-meta").innerHTML=`<span style="color:${tc}">${set.type}</span>　${blCode} ・ ${set.components.ratchet} ・ ${set.components.bit}`;
+  document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.toggle("active",el.dataset.id===setId));
+  selectPart("blade",set.components.blade,true);
+  selectPart("ratchet",set.components.ratchet,true);
+  selectPart("bit",set.components.bit,true);
+}
+
+/* ══ 零件下拉建構 ══ */
+let selBlade=null,selRatchet=null,selBit=null;
+
+function buildPartDropdown(type){
   const map={blade:"blades",ratchet:"ratchets",bit:"bits"};
-  const p=BEYBLADE_DATABASE.parts[map[type]][id];if(!p)return;
-  if(type==="blade")  selBlade  ={id,...p};
-  if(type==="ratchet")selRatchet={id,...p};
-  if(type==="bit")    selBit    ={id,...p};
-  const meta=p.height?`高度 ${p.height} mm・${p.weight}g`:`${p.type||""}・${p.weight}g`;
-  document.getElementById("disp-"+type+"-name").textContent=`${id}　${p.name}`;
-  document.getElementById("disp-"+type+"-meta").textContent=meta;
-  document.querySelectorAll(`#ddi-${type} .pd-item`).forEach(el=>el.classList.toggle("active",el.dataset.id===id));
+  const parts=BEYBLADE_DATABASE.parts[map[type]];
+  const inner=document.getElementById("ddi-"+type);inner.innerHTML="";
+  const isBladeType=(type==="blade");
+  Object.entries(parts).forEach(([key,p])=>{
+    const tc=TYPE_COLOR[p.type]||"";
+    const div=document.createElement("div");div.className="pd-item";div.dataset.key=key;
+    if(isBladeType && p.versions && p.versions.length>0){
+      /* 戰刃：完整展示 versions[] */
+      const versHtml=p.versions.map(v=>
+        `<div class="pd-ver-row"><span class="pd-ver-code">${v.code}</span><span class="pd-ver-sub">${v.subName}</span></div>`
+      ).join("");
+      div.innerHTML=`
+        <div class="pd-left">
+          <div class="pd-name">${p.name}</div>
+          <div class="pd-eng">${p.engName}</div>
+          <div class="pd-row">
+            ${p.type?`<span class="pd-type-badge" style="color:${tc||"var(--t2)"};background:${tc?tc+"18":"transparent"};border:.5px solid ${tc?tc+"44":"var(--bd)"}">${p.type}</span>`:""}
+            <span class="pd-weight">${p.weight}g</span>
+          </div>
+          <div class="pd-versions">${versHtml}</div>
+        </div>
+        <i class="ti ti-check pd-check" aria-hidden="true"></i>`;
+    } else {
+      /* 固鎖輪盤 / 軸心：單行 meta */
+      let metaLine="";
+      if(p.height) metaLine+=`高度 ${p.height} mm ・ `;
+      if(p.type)   metaLine+=`${p.type} ・ `;
+      metaLine+=`${p.weight}g`;
+      div.innerHTML=`
+        <div class="pd-left">
+          <div class="pd-name">${p.name||p.engName||key}</div>
+          ${p.engName&&p.engName!==(p.name||key)?`<div class="pd-eng">${p.engName}</div>`:""}
+          <div class="pd-meta-simple">${metaLine}</div>
+        </div>
+        <i class="ti ti-check pd-check" aria-hidden="true"></i>`;
+    }
+    div.addEventListener("click",()=>{
+      selSet=null;
+      ["sets"].forEach(t=>{const el=document.getElementById("ddi-"+t);if(el)el.querySelectorAll(".pd-item").forEach(i=>i.classList.remove("active"));});
+      document.getElementById("disp-sets-id").textContent="—";
+      document.getElementById("disp-sets-name").textContent="請選擇套組";
+      document.getElementById("disp-sets-meta").textContent="—";
+      selectPart(type,key,false);closeAllDD();
+    });
+    inner.appendChild(div);
+  });
+}
+
+function selectPart(type,key,fromSet){
+  const map={blade:"blades",ratchet:"ratchets",bit:"bits"};
+  const p=BEYBLADE_DATABASE.parts[map[type]][key];if(!p)return;
+  const obj={_key:key,...p};
+  if(type==="blade")  selBlade  =obj;
+  if(type==="ratchet")selRatchet=obj;
+  if(type==="bit")    selBit    =obj;
+  /* 觸發器：codes 行顯示所有版本代碼（縮短） */
+  document.getElementById("disp-"+type+"-codes").textContent=getCodesShort(p,key);
+  /* name 行 */
+  document.getElementById("disp-"+type+"-name").textContent=p.name||(p.engName||key);
+  /* meta 行 */
+  const metaParts=[];
+  if(p.height)  metaParts.push(`高度 ${p.height} mm`);
+  if(p.type)    metaParts.push(p.type);
+  metaParts.push(`${p.weight}g`);
+  document.getElementById("disp-"+type+"-meta").textContent=metaParts.join("　");
+  /* active */
+  document.querySelectorAll(`#ddi-${type} .pd-item`).forEach(el=>el.classList.toggle("active",el.dataset.key===key));
   updateStats();
 }
+
+/* ══ 雷達圖 ══ */
+const AXES=[
+  {key:"atk",       label:"攻擊",   color:"#D85A30"},
+  {key:"def",       label:"防禦",   color:"#378ADD"},
+  {key:"endurance", label:"耐久度", color:"#D85070"},
+  {key:"accel",     label:"加速",   color:"#D8A030"},
+  {key:"sta",       label:"耐力",   color:"#1D9E75"},
+];
+const N=5,STEPS=5;
+let rCvs=null,rCtx=null,rSize=0,rCX=0,rCY=0,rMax=0;
+let rVals={atk:0,def:0,sta:0,accel:0,endurance:0};
+let rTarget={atk:0,def:0,sta:0,accel:0,endurance:0};
+let rScale=100,rScaleTarget=100;
+function calcScale(v){const m=Math.max(...Object.values(v));return m<=100?100:Math.ceil(m/20)*20;}
+function resizeRadar(){const col=document.querySelector(".col-radar");if(!col||!rCvs)return;const a=Math.min(col.offsetWidth-24,col.offsetHeight-78);rSize=Math.max(150,a);rCvs.width=rCvs.height=rSize;rCX=rSize/2;rCY=rSize/2;rMax=rSize*0.33;}
+function initRadar(){rCvs=document.getElementById("radar-canvas");rCtx=rCvs.getContext("2d");document.getElementById("radar-legend").innerHTML=[{label:"攻擊",color:"#D85A30"},{label:"防禦",color:"#378ADD"},{label:"耐力",color:"#1D9E75"},{label:"加速",color:"#D8A030"},{label:"耐久度",color:"#D85070"}].map(a=>`<div class="rl-item"><div class="rl-dot" style="background:${a.color}"></div><span>${a.label}</span></div>`).join("");resizeRadar();radarLoop();}
+function radarLoop(){AXES.forEach(a=>{const d=rTarget[a.key]-rVals[a.key];rVals[a.key]+=Math.abs(d)>0.15?d*0.12:d;});const sd=rScaleTarget-rScale;rScale+=Math.abs(sd)>0.15?sd*0.12:sd;if(rCtx)drawRadar();requestAnimationFrame(radarLoop);}
+function pt(idx,val){const a=(idx/N)*Math.PI*2-Math.PI/2,r=(val/rScale)*rMax;return{x:rCX+Math.cos(a)*r,y:rCY+Math.sin(a)*r};}
+function gpt(idx,step){const a=(idx/N)*Math.PI*2-Math.PI/2,r=(step/STEPS)*rMax;return{x:rCX+Math.cos(a)*r,y:rCY+Math.sin(a)*r};}
+function drawRadar(){const c=rCtx;c.clearRect(0,0,rSize,rSize);const isOver=rScaleTarget>100;for(let s=1;s<=STEPS;s++){c.beginPath();for(let i=0;i<N;i++){const p=gpt(i,s);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}c.closePath();if(s<STEPS){c.fillStyle="rgba(24,24,31,0.55)";c.fill();}if(s===STEPS&&isOver){c.strokeStyle="#FF450066";c.lineWidth=1.2;c.setLineDash([4,3]);c.stroke();c.setLineDash([]);}else{c.strokeStyle=s===STEPS?"#363648aa":"#2a2a3866";c.lineWidth=s===STEPS?1:.6;c.stroke();}}c.save();c.font="9px sans-serif";c.fillStyle=isOver?"#D8A030":"#5a5a70";c.textAlign="center";c.textBaseline="middle";const tp=gpt(0,STEPS);c.fillText(Math.round(rScale),tp.x,tp.y-10);c.restore();for(let i=0;i<N;i++){const o=gpt(i,STEPS);c.beginPath();c.moveTo(rCX,rCY);c.lineTo(o.x,o.y);c.strokeStyle="#2a2a3888";c.lineWidth=.7;c.stroke();}c.beginPath();for(let i=0;i<N;i++){const p=pt(i,rVals[AXES[i].key]);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}c.closePath();if(isOver){const g=c.createRadialGradient(rCX,rCY,0,rCX,rCY,rMax);g.addColorStop(0,"rgba(255,69,0,0.35)");g.addColorStop(.5,"rgba(138,43,226,0.2)");g.addColorStop(1,"rgba(138,43,226,0.05)");c.fillStyle=g;c.fill();c.strokeStyle="rgba(255,100,50,0.85)";c.lineWidth=2;c.stroke();}else{const g=c.createRadialGradient(rCX,rCY,0,rCX,rCY,rMax);g.addColorStop(0,"rgba(55,138,221,0.42)");g.addColorStop(1,"rgba(55,138,221,0.08)");c.fillStyle=g;c.fill();c.strokeStyle="rgba(133,183,235,0.75)";c.lineWidth=1.8;c.stroke();}const lo=rMax+24,vo=rMax+37;for(let i=0;i<N;i++){const ax=AXES[i],dv=rVals[ax.key],rv=Math.round(rTarget[ax.key]),p=pt(i,dv);const a=(i/N)*Math.PI*2-Math.PI/2;const lx=rCX+Math.cos(a)*lo,ly=rCY+Math.sin(a)*lo,vx=rCX+Math.cos(a)*vo,vy=rCY+Math.sin(a)*vo;c.beginPath();c.arc(p.x,p.y,4.5,0,Math.PI*2);c.fillStyle=rv>100?"#FF4500":ax.color;c.fill();c.strokeStyle="#0a0a0f88";c.lineWidth=1.5;c.stroke();if(rv>100){c.beginPath();c.arc(p.x,p.y,7,0,Math.PI*2);c.strokeStyle="#FF450055";c.lineWidth=2;c.stroke();}c.save();c.font="10px sans-serif";c.fillStyle="#9090a8";c.textAlign="center";c.textBaseline="middle";c.fillText(ax.label,lx,ly);c.font="bold 13px sans-serif";c.fillStyle=rv>100?"#FF4500":ax.color;if(rv>100){c.shadowColor="#FF4500";c.shadowBlur=8;}c.fillText(rv,vx,vy);c.shadowBlur=0;c.restore();}}
 
 /* ══ 屬性計算 ══ */
 function updateStats(){
   if(!selBlade||!selRatchet||!selBit)return;
   const b=selBlade.stats,r=selRatchet.stats,bt=selBit.stats;
-  const atk=Math.min(100,b.atk+r.atk+bt.atk);
-  const def=Math.min(100,b.def+r.def+bt.def);
-  const sta=Math.min(100,b.sta+r.sta+bt.sta);
-  const accel=Math.min(100,(b.accel||0)+(r.accel||0)+(bt.accel||0));
-  const endurance=Math.min(100,(b.endurance||0)+(r.endurance||0)+(bt.endurance||0));
-  const hgt=Math.min(100,Math.round((selRatchet.height||60)/80*100));
-  const w=((selBlade.weight||0)+(selRatchet.weight||0)+(selBit.weight||0)).toFixed(1);
-  const score=Math.round((atk*.2+def*.2+sta*.2+accel*.1+endurance*.15+hgt*.15)*.9+5);
-  // 更新數值卡（順序：攻擊、防禦、耐力、高度、加速、耐久度）
-  document.getElementById("v-atk").textContent=atk;
-  document.getElementById("v-def").textContent=def;
-  document.getElementById("v-sta").textContent=sta;
-  document.getElementById("v-hgt").textContent=hgt;
-  document.getElementById("v-accel").textContent=accel;
-  document.getElementById("v-end").textContent=endurance;
-  // 更新雷達圖目標
-  rTarget={atk,def,sta,accel,endurance,hgt};
-  // 組合名稱
-  const setData=activeSetId?BEYBLADE_DATABASE.sets.find(x=>x.id===activeSetId):null;
-  document.getElementById("combo-name").textContent=setData
-    ?`${setData.id} ${setData.name}  /  ${selBlade.id}・${selRatchet.id}・${selBit.id}`
-    :`${selBlade.id} / ${selRatchet.id} / ${selBit.id}`;
+  const atk=b.atk+r.atk+bt.atk,def=b.def+r.def+bt.def,sta=b.sta+r.sta+bt.sta;
+  const accel=(b.accel||0)+(r.accel||0)+(bt.accel||0),endurance=(b.endurance||0)+(r.endurance||0)+(bt.endurance||0);
+  const height=selRatchet.height||60,w=((selBlade.weight||0)+(selRatchet.weight||0)+(selBit.weight||0)).toFixed(2);
+  const vals={atk,def,sta,accel,endurance};const ns=calcScale(vals);
+  rScaleTarget=ns;rTarget={...vals};
+  const isOver=ns>100;
+  document.getElementById("radar-scale-label").textContent=isOver?`極限突破！刻度上限：${ns}`:`刻度上限：100`;
+  document.getElementById("radar-scale-badge").classList.toggle("overscale",isOver);
+  const cm={atk:{sb:"sb-atk",sv:"v-atk",c:"#D85A30"},def:{sb:"sb-def",sv:"v-def",c:"#378ADD"},sta:{sb:"sb-sta",sv:"v-sta",c:"#1D9E75"},accel:{sb:"sb-accel",sv:"v-accel",c:"#D8A030"},endurance:{sb:"sb-end",sv:"v-end",c:"#D85070"}};
+  Object.entries(vals).forEach(([k,v])=>{const m=cm[k];const sbE=document.getElementById(m.sb),svE=document.getElementById(m.sv);svE.textContent=v;const lb=v>100;sbE.classList.toggle("limitbreak",lb);svE.classList.toggle("limitbreak",lb);if(!lb)svE.style.color=m.c;});
+  document.getElementById("height-val").textContent=height+" mm";
+  const score=Math.round((Math.min(atk,100)*.25+Math.min(def,100)*.25+Math.min(sta,100)*.2+Math.min(accel,100)*.15+Math.min(endurance,100)*.15)*.9+5);
+  const blCode=getCodesShort(selBlade,selBlade._key).split(" /")[0];
+  document.getElementById("combo-name").textContent=selSet
+    ?`${selSet.id} ${selSet.name}  /  ${blCode}・${selRatchet.engName||selRatchet.name}・${selBit.engName||selBit.name}`
+    :`${blCode} / ${selRatchet.engName||selRatchet.name} / ${selBit.engName||selBit.name}`;
   const max=Math.max(atk,def,sta);let type="平衡型",tc="#BA7517";
-  if(max===atk&&atk-def>15){type="攻擊型";tc="#D85A30";}
-  else if(max===def&&def-atk>15){type="防禦型";tc="#378ADD";}
-  else if(max===sta&&sta-atk>15){type="耐力型";tc="#1D9E75";}
+  if(max===atk&&atk-def>15){type="攻擊型";tc="#D85A30";}else if(max===def&&def-atk>15){type="防禦型";tc="#378ADD";}else if(max===sta&&sta-atk>15){type="耐力型";tc="#1D9E75";}
   const sb=document.getElementById("sbadge");sb.textContent=score+" 分・"+type;sb.style.color=tc;sb.style.borderColor=tc+"44";
   document.getElementById("mrow").innerHTML=`<span class="mp">⚖ ${w}g</span>`;
-  document.getElementById("cl-atk").textContent=atk;
-  document.getElementById("cl-def").textContent=def;
-  document.getElementById("cl-sta").textContent=sta;
+  document.getElementById("cl-atk").textContent=atk;document.getElementById("cl-def").textContent=def;document.getElementById("cl-sta").textContent=sta;
 }
 
 /* ══ 頁尾 ══ */
@@ -711,7 +764,7 @@ function toggleMob(){document.getElementById("mob-menu").classList.toggle("open"
 renderEvents("upcoming");
 setTimeout(()=>initMap(),200);
 initRadar();
-buildSets();
+buildSetsDropdown();
 buildPartDropdown("blade");
 buildPartDropdown("ratchet");
 buildPartDropdown("bit");
