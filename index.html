@@ -1,3 +1,6 @@
+<!-- 加入我的分頁logo! -->
+<link rel="icon" type="image/png" href="assets/logo.png" sizes="512x512">
+<link rel="apple-touch-icon" href="assets/logo.png" sizes="512x512">
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
@@ -38,7 +41,7 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .elist{flex:1;overflow-y:auto;padding:10px}
 .elist::-webkit-scrollbar{width:3px}
 .elist::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
-.ecard{background:var(--bg3);border:.5px solid var(--bd);border-radius:10px;padding:11px;margin-bottom:7px;transition:border-color .15s}
+.ecard{background:var(--bg3);border:.5px solid var(--bd);border-radius:10px;padding:11px;margin-bottom:7px}
 .ecard.upcoming{border-left:2px solid var(--blue)}
 .ecard.past{border-left:2px solid var(--t3)}
 .etop{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px}
@@ -50,7 +53,8 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .emeta{display:flex;gap:10px;font-size:10px;color:var(--t3)}
 .emeta span{display:flex;align-items:center;gap:3px}
 .emeta i{font-size:11px}
-/* BEY */
+
+/* ═══ BEY ═══ */
 .bey-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .bey-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);flex:1;overflow:hidden;min-height:0}
 .col-radar{background:var(--bg3);border-right:.5px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;gap:10px;overflow:hidden}
@@ -61,51 +65,61 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .radar-scale-badge.overscale{color:#D8A030}
 .col-right{display:flex;flex-direction:column;overflow:hidden;min-height:0}
 .parts-panel{display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0}
+.parts-scroll-area{flex:1;overflow-y:auto;padding:0 12px 12px;min-height:0}
+.parts-scroll-area::-webkit-scrollbar{width:3px}
+.parts-scroll-area::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
 .part-group{margin-bottom:10px;position:relative}
 .part-group:last-child{margin-bottom:0}
 .part-group-label{font-size:9px;font-weight:500;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:5px}
 .part-group-label i{font-size:11px;color:var(--blue)}
 .part-trigger-row{display:flex;align-items:stretch;gap:5px}
-.part-select-trigger{flex:1;display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg4);border:.5px solid var(--bd2);border-radius:8px;cursor:pointer;transition:border-color .15s;user-select:none;min-width:0}
+.part-select-trigger{flex:1;display:flex;align-items:center;padding:8px 10px;background:var(--bg4);border:.5px solid var(--bd2);border-radius:8px;cursor:pointer;transition:border-color .15s;user-select:none;min-width:0;gap:8px}
 .part-select-trigger:hover,.part-select-trigger.open{border-color:var(--blue3)}
-.pst-left{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
-.pst-codes{font-size:10px;color:var(--blue2);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pst-main{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+
+/* ── 新版 trigger 頂列：name + type badge ── */
+.pst-toprow{display:flex;align-items:center;gap:5px;min-width:0}
 .pst-name{font-size:12px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pst-type{font-size:9px;padding:1px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+/* ── 第二列：versions / meta ── */
+.pst-ver{font-size:9px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pst-meta{font-size:10px;color:var(--t3)}
-.pst-arrow{color:var(--t3);font-size:13px;transition:transform .2s;flex-shrink:0;margin-left:6px}
+
+/* ── 右側重量數字 ── */
+.pst-weight{font-size:12px;font-weight:700;color:#B8C8DC;flex-shrink:0;white-space:nowrap}
+
+.pst-arrow{color:var(--t3);font-size:13px;transition:transform .2s;flex-shrink:0}
 .pst-arrow.open{transform:rotate(180deg)}
+
 .part-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:46px;z-index:300;background:var(--bg3);border:.5px solid var(--bd2);border-radius:10px;overflow:hidden;display:none;box-shadow:0 8px 28px rgba(0,0,0,.7)}
 .part-dropdown.open{display:block}
-.part-dropdown-inner{max-height:220px;overflow-y:auto}
+.part-dropdown-inner{max-height:230px;overflow-y:auto}
 .part-dropdown-inner::-webkit-scrollbar{width:3px}
 .part-dropdown-inner::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
-/* 下拉項目 */
-.pd-item{display:flex;align-items:flex-start;justify-content:space-between;padding:9px 12px;cursor:pointer;border-bottom:.5px solid var(--bd);transition:background .1s;gap:8px}
+
+/* ── 下拉項目通用 ── */
+.pd-item{display:flex;align-items:center;padding:9px 12px;cursor:pointer;border-bottom:.5px solid var(--bd);transition:background .1s;gap:8px}
 .pd-item:last-child{border-bottom:none}
 .pd-item:hover{background:rgba(55,138,221,.07)}
 .pd-item.active{background:rgba(55,138,221,.1)}
-.pd-left{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.pd-main{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+/* 下拉頂列：name + type */
+.pd-toprow{display:flex;align-items:center;gap:5px;min-width:0}
 .pd-name{font-size:12px;font-weight:500;color:var(--t1)}
-.pd-eng{font-size:10px;color:var(--t3);font-style:italic}
-.pd-row{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
-.pd-type-badge{font-size:9px;padding:1px 6px;border-radius:20px;flex-shrink:0}
-.pd-weight{font-size:9px;color:var(--t3)}
-/* 版本列表（versions[]）*/
-.pd-versions{display:flex;flex-direction:column;gap:2px;margin-top:3px}
-.pd-ver-row{display:flex;align-items:center;gap:5px}
-.pd-ver-code{font-size:10px;color:var(--blue2);font-weight:500;min-width:64px}
-.pd-ver-sub{font-size:10px;color:var(--t3)}
-/* 固鎖輪盤／軸心：用舊式單行 meta */
-.pd-meta-simple{font-size:10px;color:var(--t3);margin-top:1px}
-.pd-check{font-size:13px;color:var(--blue);display:none;flex-shrink:0;margin-top:2px}
+.pd-type{font-size:9px;padding:1px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+/* 下拉第二列：versions */
+.pd-ver{font-size:9px;color:var(--t3)}
+/* 下拉右側：重量 */
+.pd-weight{font-size:11px;font-weight:700;color:#B8C8DC;flex-shrink:0;white-space:nowrap;margin-right:4px}
+.pd-check{font-size:13px;color:var(--blue);display:none;flex-shrink:0}
 .pd-item.active .pd-check{display:block}
+
+/* 蝦皮按鈕 */
 .btn-shopee-part{display:flex;align-items:center;justify-content:center;width:36px;border-radius:8px;border:.5px solid rgba(238,77,45,.3);background:var(--shopee-bg);color:var(--shopee);cursor:pointer;transition:all .15s;flex-shrink:0;font-size:16px}
 .btn-shopee-part:hover{background:rgba(238,77,45,.2);border-color:var(--shopee);transform:scale(1.05)}
 @keyframes shopee-pulse{0%,100%{box-shadow:0 0 0 0 rgba(238,77,45,.4)}50%{box-shadow:0 0 0 4px rgba(238,77,45,0)}}
 .btn-shopee-part{animation:shopee-pulse 2.8s ease-in-out infinite}
-.parts-scroll-area{flex:1;overflow-y:auto;padding:0 12px 12px;min-height:0}
-.parts-scroll-area::-webkit-scrollbar{width:3px}
-.parts-scroll-area::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+
 /* 屬性卡 */
 .stats-card{background:var(--bg4);border:.5px solid var(--bd);border-radius:10px;padding:10px;margin-top:10px}
 .sg5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-bottom:8px}
@@ -124,11 +138,13 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .mrow{display:flex;gap:4px;flex-wrap:wrap}
 .mp{font-size:9px;padding:2px 7px;border-radius:20px;background:var(--bg3);color:var(--t2);border:.5px solid var(--bd)}
 .sbadge{font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;background:var(--bg3);border:.5px solid var(--bd2);white-space:nowrap;flex-shrink:0}
-.btn-shopee-full{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px 12px;border-radius:9px;border:none;cursor:pointer;background:linear-gradient(90deg,var(--shopee),var(--shopee2));color:#fff;font-size:12px;font-weight:600;transition:opacity .15s,transform .1s;margin-top:8px;position:relative;overflow:hidden;text-align:center}
+.sbadge.limitbreak-score{border-color:#FF4500aa!important;text-shadow:0 0 6px #FF450099}
+.btn-shopee-full{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px 12px;border-radius:9px;border:none;cursor:pointer;background:linear-gradient(90deg,var(--shopee),var(--shopee2));color:#fff;font-size:12px;font-weight:600;transition:opacity .15s,transform .1s;margin-top:8px;position:relative;overflow:hidden}
 .btn-shopee-full::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transform:translateX(-100%);transition:transform .4s}
 .btn-shopee-full:hover::before{transform:translateX(100%)}
 .btn-shopee-full:hover{opacity:.9;transform:translateY(-1px)}
 .shopee-badge{font-size:9px;padding:1px 5px;border-radius:20px;background:rgba(255,255,255,.2)}
+
 /* CHANGELOG */
 .cl-wrap{flex:1;overflow-y:auto;padding:16px}
 .cl-wrap::-webkit-scrollbar{width:3px}
@@ -220,14 +236,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 .leaflet-popup-content{margin:9px 13px;font-size:12px;font-family:var(--font-sans)}
 .pop-name{font-weight:500;font-size:13px;margin-bottom:3px}
 .pop-meta{font-size:10px;color:var(--t2);display:flex;flex-direction:column;gap:2px}
-@media(max-width:540px){
-  .nav-links{display:none}.hamburger{display:block}
-  .home-layout,.bey-layout{grid-template-columns:1fr}
-  .map-col{border-right:none;border-bottom:.5px solid var(--bd)}
-  #leaflet-map{height:200px;min-height:200px;flex:none}
-  .col-radar{border-right:none;border-bottom:.5px solid var(--bd);min-height:260px}
-  .footer-links-inline{display:none}
-}
+@media(max-width:540px){.nav-links{display:none}.hamburger{display:block}.home-layout,.bey-layout{grid-template-columns:1fr}.map-col{border-right:none;border-bottom:.5px solid var(--bd)}#leaflet-map{height:200px;min-height:200px;flex:none}.col-radar{border-right:none;border-bottom:.5px solid var(--bd);min-height:260px}.footer-links-inline{display:none}}
 </style>
 
 <div class="shell">
@@ -299,14 +308,16 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
               <div class="part-group-label"><i class="ti ti-package" aria-hidden="true"></i>官方套組</div>
               <div class="part-trigger-row">
                 <div class="part-select-trigger" id="trig-sets" onclick="toggleDD('sets')">
-                  <div class="pst-left">
-                    <div class="pst-codes" id="disp-sets-id">—</div>
-                    <div class="pst-name" id="disp-sets-name">請選擇套組</div>
-                    <div class="pst-meta" id="disp-sets-meta">—</div>
+                  <div class="pst-main">
+                    <div class="pst-toprow">
+                      <span class="pst-name" id="disp-sets-name">請選擇套組</span>
+                      <span class="pst-type" id="disp-sets-type" style="display:none"></span>
+                    </div>
+                    <div class="pst-ver" id="disp-sets-ver" style="color:var(--t3)">—</div>
                   </div>
                   <i class="ti ti-chevron-down pst-arrow" id="arr-sets" aria-hidden="true"></i>
                 </div>
-                <button class="btn-shopee-part" onclick="shopeeSearchSet()" title="蝦皮搜尋此套組">🛒</button>
+                <button class="btn-shopee-part" onclick="shopeeOpenSet()" title="蝦皮購買此套組">🛒</button>
               </div>
               <div class="part-dropdown" id="dd-sets"><div class="part-dropdown-inner" id="ddi-sets"></div></div>
             </div>
@@ -316,14 +327,17 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
               <div class="part-group-label"><i class="ti ti-sword" aria-hidden="true"></i>戰刃 Blade</div>
               <div class="part-trigger-row">
                 <div class="part-select-trigger" id="trig-blade" onclick="toggleDD('blade')">
-                  <div class="pst-left">
-                    <div class="pst-codes" id="disp-blade-codes">—</div>
-                    <div class="pst-name" id="disp-blade-name">—</div>
-                    <div class="pst-meta" id="disp-blade-meta">—</div>
+                  <div class="pst-main">
+                    <div class="pst-toprow">
+                      <span class="pst-name" id="disp-blade-name">—</span>
+                      <span class="pst-type" id="disp-blade-type" style="display:none"></span>
+                    </div>
+                    <div class="pst-ver" id="disp-blade-ver">—</div>
                   </div>
+                  <span class="pst-weight" id="disp-blade-weight"></span>
                   <i class="ti ti-chevron-down pst-arrow" id="arr-blade" aria-hidden="true"></i>
                 </div>
-                <button class="btn-shopee-part" onclick="shopeeSearch('blade')" title="蝦皮搜尋此零件">🛒</button>
+                <button class="btn-shopee-part" onclick="shopeeOpenPart('blade')" title="蝦皮購買此零件">🛒</button>
               </div>
               <div class="part-dropdown" id="dd-blade"><div class="part-dropdown-inner" id="ddi-blade"></div></div>
             </div>
@@ -333,14 +347,16 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
               <div class="part-group-label"><i class="ti ti-circle-dashed" aria-hidden="true"></i>固鎖輪盤 Ratchet</div>
               <div class="part-trigger-row">
                 <div class="part-select-trigger" id="trig-ratchet" onclick="toggleDD('ratchet')">
-                  <div class="pst-left">
-                    <div class="pst-codes" id="disp-ratchet-codes">—</div>
-                    <div class="pst-name" id="disp-ratchet-name">—</div>
+                  <div class="pst-main">
+                    <div class="pst-toprow">
+                      <span class="pst-name" id="disp-ratchet-name">—</span>
+                    </div>
                     <div class="pst-meta" id="disp-ratchet-meta">—</div>
                   </div>
+                  <span class="pst-weight" id="disp-ratchet-weight"></span>
                   <i class="ti ti-chevron-down pst-arrow" id="arr-ratchet" aria-hidden="true"></i>
                 </div>
-                <button class="btn-shopee-part" onclick="shopeeSearch('ratchet')" title="蝦皮搜尋此零件">🛒</button>
+                <button class="btn-shopee-part" onclick="shopeeOpenPart('ratchet')" title="蝦皮購買此零件">🛒</button>
               </div>
               <div class="part-dropdown" id="dd-ratchet"><div class="part-dropdown-inner" id="ddi-ratchet"></div></div>
             </div>
@@ -350,14 +366,16 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
               <div class="part-group-label"><i class="ti ti-point" aria-hidden="true"></i>軸心 Bit</div>
               <div class="part-trigger-row">
                 <div class="part-select-trigger" id="trig-bit" onclick="toggleDD('bit')">
-                  <div class="pst-left">
-                    <div class="pst-codes" id="disp-bit-codes">—</div>
-                    <div class="pst-name" id="disp-bit-name">—</div>
-                    <div class="pst-meta" id="disp-bit-meta">—</div>
+                  <div class="pst-main">
+                    <div class="pst-toprow">
+                      <span class="pst-name" id="disp-bit-name">—</span>
+                      <span class="pst-type" id="disp-bit-type" style="display:none"></span>
+                    </div>
                   </div>
+                  <span class="pst-weight" id="disp-bit-weight"></span>
                   <i class="ti ti-chevron-down pst-arrow" id="arr-bit" aria-hidden="true"></i>
                 </div>
-                <button class="btn-shopee-part" onclick="shopeeSearch('bit')" title="蝦皮搜尋此零件">🛒</button>
+                <button class="btn-shopee-part" onclick="shopeeOpenPart('bit')" title="蝦皮購買此零件">🛒</button>
               </div>
               <div class="part-dropdown" id="dd-bit"><div class="part-dropdown-inner" id="ddi-bit"></div></div>
             </div>
@@ -381,7 +399,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
                   <div class="mrow" id="mrow"></div>
                   <div class="sbadge" id="sbadge">—</div>
                 </div>
-                <button class="btn-shopee-full" onclick="shopeeSearchFull()">
+                <button class="btn-shopee-full" onclick="shopeeOpenFull()">
                   🛒&nbsp;一鍵到蝦皮購買此配置
                   <span class="shopee-badge">整套搜尋</span>
                 </button>
@@ -402,11 +420,11 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
         <div class="sdiv">版本記錄</div>
         <div class="cl-card">
           <div class="cl-title"><i class="ti ti-git-branch" aria-hidden="true"></i>更新日誌</div>
-          <div class="cl-item"><span class="cl-ver">v1.5</span><div class="cl-txt">BEYBLADE_DATABASE 新增 versions[] 陣列，下拉清單完整展示所有官方版本代碼與副名稱</div></div>
-          <div class="cl-item"><span class="cl-ver">v1.4</span><div class="cl-txt">DB 改版：唯一 key、officialCodes[]、engName、version 欄位</div></div>
-          <div class="cl-item"><span class="cl-ver">v1.3</span><div class="cl-txt">套組改為與零件相同的下拉風格、加入版權免責聲明</div></div>
-          <div class="cl-item"><span class="cl-ver">v1.1</span><div class="cl-txt">新增蝦皮購買連結：套組一鍵購買、各零件搜尋按鈕</div></div>
-          <div class="cl-item"><span class="cl-ver">v1.0</span><div class="cl-txt">雷達圖改為五角形、動態刻度、極限突破特效</div></div>
+          <div class="cl-item"><span class="cl-ver">v1.8</span><div class="cl-txt">套組顯示 versions 標籤；戰刃/固鎖輪盤/軸心重量移至右側加粗；type badge 帶屬性顏色；移除 engName 展示</div></div>
+          <div class="cl-item"><span class="cl-ver">v1.7</span><div class="cl-txt">畫面完全不顯示 key 值；🛒直接連結 shopeeUrl</div></div>
+          <div class="cl-item"><span class="cl-ver">v1.6</span><div class="cl-txt">評分公式升級：動態型態權重、重量加分、極限突破</div></div>
+          <div class="cl-item"><span class="cl-ver">v1.5</span><div class="cl-txt">BEYBLADE_DATABASE 新增 versions[] 陣列</div></div>
+          <div class="cl-item"><span class="cl-ver">v1.0</span><div class="cl-txt">雷達圖五角形、動態刻度、極限突破特效</div></div>
         </div>
         <div class="sdiv" style="margin-top:10px">即將推出</div>
         <div class="cl-card">
@@ -466,15 +484,9 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
         <div class="sdiv" style="margin-top:10px">請開發者喝咖啡</div>
         <div class="fb-card">
           <div class="fb-title"><i class="ti ti-coffee" aria-hidden="true"></i>支持這個專案</div>
-          <p class="kofi-desc">G-Hub 是由玩家自主維護的免費工具。你的每一杯咖啡都是開發繼續下去的動力，感謝你的支持！</p>
-          <a class="btn-kofi" href="https://ko-fi.com/miranda45" target="_blank" rel="noopener noreferrer">
-            <span style="font-size:18px">☕</span>Buy me a coffee on Ko-fi
-          </a>
-          <div class="kofi-meta">
-            <span class="kofi-pill">🔒 安全付款</span>
-            <span class="kofi-pill">💝 完全自由意願</span>
-            <span class="kofi-pill">🚀 維持伺服器運作</span>
-          </div>
+          <p class="kofi-desc">G-Hub 是由玩家自主維護的免費工具，感謝你的支持！</p>
+          <a class="btn-kofi" href="https://ko-fi.com/miranda45" target="_blank" rel="noopener noreferrer"><span style="font-size:18px">☕</span>Buy me a coffee on Ko-fi</a>
+          <div class="kofi-meta"><span class="kofi-pill">🔒 安全付款</span><span class="kofi-pill">💝 完全自由意願</span><span class="kofi-pill">🚀 維持伺服器運作</span></div>
         </div>
       </div>
     </div>
@@ -483,7 +495,6 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 
 </div>
 
-<!-- 頁尾 -->
 <footer class="site-footer">
   <div class="footer-toggle" onclick="toggleFooter()">
     <div class="footer-toggle-left"><i class="ti ti-info-circle" aria-hidden="true"></i><span>© 2026 G-Hub 數據站・玩家自主維護・非官方</span></div>
@@ -497,76 +508,61 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
     </div>
   </div>
   <div class="footer-body" id="footer-body">
-    <div class="copyright-bar">
-      <strong>⚠ 非官方免責聲明</strong><br>
-      G-Hub 為非官方玩家粉絲網站，與 TAKARA TOMY 或任何官方機構無關聯。本站所有陀螺相關圖片、名稱、商標之著作權歸原廠商所有，僅供玩家交流參考使用，不作任何商業用途。如有侵權疑慮，請聯繫我們，我們將立即處理。
-    </div>
+    <div class="copyright-bar"><strong>⚠ 非官方免責聲明</strong><br>G-Hub 為非官方玩家粉絲網站，與 TAKARA TOMY 或任何官方機構無關聯。本站所有陀螺相關圖片、名稱、商標之著作權歸原廠商所有，僅供玩家交流參考使用，不作任何商業用途。</div>
     <div class="footer-grid">
       <div class="footer-col"><div class="footer-col-title"><i class="ti ti-building" aria-hidden="true"></i>關於我們</div><p>G-Hub 數據站為玩家提供專業的戰鬥陀螺數據查詢與配置計算服務，由玩家社群自主維護。</p></div>
       <div class="footer-col"><div class="footer-col-title"><i class="ti ti-heart" aria-hidden="true"></i>贊助說明</div><p>贊助本站為自由意願，款項將全數用於維持 G-Hub 伺服器運作與軟體開發費用。</p></div>
       <div class="footer-col"><div class="footer-col-title"><i class="ti ti-shield-check" aria-hidden="true"></i>法律資訊</div><ul style="display:flex;flex-direction:column;gap:4px"><li><button class="footer-modal-trigger" onclick="openModal('privacy')">隱私權政策</button></li><li><button class="footer-modal-trigger" onclick="openModal('terms')">服務條款</button></li><li><button class="footer-modal-trigger" onclick="openModal('refund')">退換貨及退款流程</button></li></ul></div>
     </div>
     <div class="footer-divider"></div>
-    <div class="footer-bottom">
-      <span>© 2026 G-Hub 數據站 ── 非官方粉絲站，圖片版權歸 TAKARA TOMY 所有，僅供交流使用。</span>
-      <span>Made with ❤ for Beyblade X players in Taiwan</span>
-    </div>
+    <div class="footer-bottom"><span>© 2026 G-Hub 數據站 ── 非官方粉絲站，圖片版權歸 TAKARA TOMY 所有，僅供交流使用。</span><span>Made with ❤ for Beyblade X players in Taiwan</span></div>
   </div>
 </footer>
 </div>
 
 <div class="modal-overlay" id="modal-privacy" onclick="closeModalOutside(event,'modal-privacy')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-lock" aria-hidden="true"></i>隱私權政策</div><button class="modal-close" onclick="closeModal('modal-privacy')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-shield" aria-hidden="true"></i>資料收集與使用</div><p>本站承諾保護使用者的個人資料。我們僅收集處理贊助與聯繫相關之必要資訊，絕不外洩給第三方。</p></div></div></div>
-<div class="modal-overlay" id="modal-terms" onclick="closeModalOutside(event,'modal-terms')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-file-text" aria-hidden="true"></i>服務條款</div><button class="modal-close" onclick="closeModal('modal-terms')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-info-circle" aria-hidden="true"></i>服務範圍</div><p>本站提供之數據計算與查詢服務僅供參考，開發者保留隨時修正或調整網站功能之權利。本站為非官方玩家資源，與 TAKARA TOMY 無關。</p></div></div></div>
+<div class="modal-overlay" id="modal-terms" onclick="closeModalOutside(event,'modal-terms')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-file-text" aria-hidden="true"></i>服務條款</div><button class="modal-close" onclick="closeModal('modal-terms')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-info-circle" aria-hidden="true"></i>服務範圍</div><p>本站提供之數據計算與查詢服務僅供參考。本站為非官方玩家資源，與 TAKARA TOMY 無關。</p></div></div></div>
 <div class="modal-overlay" id="modal-refund" onclick="closeModalOutside(event,'modal-refund')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-refresh" aria-hidden="true"></i>退換貨及退款流程</div><button class="modal-close" onclick="closeModal('modal-refund')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-package" aria-hidden="true"></i>服務性質</div><p>本站提供之服務為「無形數位數據服務」，服務即時交付。若因系統錯誤導致功能無法正常使用，請聯繫我們，經確認後將為您安排退款事宜。</p></div></div></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="beyblade_data.js"></script>
 <script>
+/* ══════════════════════════════════════════════════════
+   BEYBLADE_DATABASE  v1.8
+   versions 格式改為純字串陣列 ["BX-01", "BX-07" ...]
+   ══════════════════════════════════════════════════════ */
 
-/* ── 輔助：取得 versions[] 第一個 code，或 key，作為觸發器顯示 ── */
-function getFirstCode(p, key){
-  if(p.versions && p.versions.length>0) return p.versions[0].code;
-  return p.engName || key;
+/* ── 輔助：type badge HTML ── */
+function typeBadgeHtml(type,size=9){
+  const tc=TYPE_COLOR[type]||"#9090a8";
+  return type?`<span style="font-size:${size}px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44;white-space:nowrap;flex-shrink:0">${type}</span>`:"";
 }
-/* ── 取得所有代碼的短標籤（觸發器顯示，最多顯示 3 個） ── */
-function getCodesShort(p, key){
-  if(p.versions && p.versions.length>0){
-    const codes = p.versions.map(v=>v.code);
-    if(codes.length<=3) return codes.join(" / ");
-    return codes.slice(0,3).join(" / ")+" …";
-  }
-  return p.engName || key;
+/* ── versions 字串（最多顯示 4 個）── */
+function versStr(arr){
+  if(!arr||arr.length===0) return "";
+  return arr.length<=5? arr.join("　"):arr.slice(0,4).join("　")+" …";
 }
 
-/* ══ 蝦皮 ══ */
-const SHOPEE_BASE="https://shopee.tw/search?keyword=";
-function buildShopeeUrl(kw){return SHOPEE_BASE+encodeURIComponent("戰鬥陀螺X "+kw);}
-const SHOPEE_PART_TYPE={blade:"戰刃",ratchet:"固鎖輪盤",bit:"軸心"};
-function shopeeSearch(type){
-  const partMap={blade:selBlade,ratchet:selRatchet,bit:selBit};
-  const p=partMap[type];if(!p){window.open(buildShopeeUrl("戰鬥陀螺X"),"_blank");return;}
-  const code=getFirstCode(p,p._key);
-  window.open(buildShopeeUrl(`${code} ${p.name} ${p.engName||""} ${SHOPEE_PART_TYPE[type]||""}`),"_blank");
+/* ══ 評分公式 v1.6 ══ */
+const TYPE_WEIGHTS={"攻擊型":{atk:0.35,def:0.10,sta:0.15,accel:0.25,endurance:0.15},"防禦型":{atk:0.10,def:0.35,sta:0.15,accel:0.10,endurance:0.30},"耐力型":{atk:0.10,def:0.15,sta:0.35,accel:0.10,endurance:0.30},"平衡型":{atk:0.22,def:0.22,sta:0.22,accel:0.17,endurance:0.17}};
+function calcScore(atk,def,sta,accel,endurance,w,type){
+  const wt=TYPE_WEIGHTS[type]||TYPE_WEIGHTS["平衡型"];
+  const v={atk,def,sta,accel,endurance};
+  let raw=0,lb=0;
+  for(const k of Object.keys(wt)){raw+=Math.min(v[k],100)*wt[k];if(v[k]>100)lb+=Math.min((v[k]-100)*0.10,3);}
+  const wBonus=Math.min(Math.max(w-40,0)*0.3,6);
+  return Math.min(Math.round((raw/100)*87+lb+wBonus+3),100);
 }
-function shopeeSearchSet(){
-  if(!selSet){window.open(buildShopeeUrl("戰鬥陀螺X"),"_blank");return;}
-  const bl=BEYBLADE_DATABASE.parts.blades[selSet.components.blade];
-  const code=bl?getFirstCode(bl,selSet.components.blade):"";
-  window.open(buildShopeeUrl(`${selSet.id} ${selSet.name} ${code} 陀螺`),"_blank");
-}
-function shopeeSearchFull(){
-  if(!selBlade||!selRatchet||!selBit){window.open(buildShopeeUrl("戰鬥陀螺X"),"_blank");return;}
-  const bc=getFirstCode(selBlade,selBlade._key);
-  window.open(buildShopeeUrl(`${bc} ${selBlade.name} ${selBlade.engName||""} ${selRatchet.engName||selRatchet.name} ${selBit.engName||selBit.name}`),"_blank");
-}
+
+/* ══ 蝦皮直連 ══ */
+function shopeeOpen(url){window.open((url&&url!=="")?url:"https://shopee.tw/search?keyword=戰鬥陀螺X","_blank");}
+function shopeeOpenPart(type){const pm={blade:selBlade,ratchet:selRatchet,bit:selBit};const p=pm[type];shopeeOpen(p?p.shopeeUrl:"");}
+function shopeeOpenSet(){shopeeOpen(selSet?selSet.shopeeUrl:"");}
+function shopeeOpenFull(){if(selSet&&selSet.shopeeUrl)shopeeOpen(selSet.shopeeUrl);else if(selBlade)shopeeOpen(selBlade.shopeeUrl);else shopeeOpen("");}
 
 /* ══ 下拉統一開關 ══ */
 const ALL_DD_TYPES=["sets","blade","ratchet","bit"];
-function toggleDD(type){
-  const dd=document.getElementById("dd-"+type),arr=document.getElementById("arr-"+type),trig=document.getElementById("trig-"+type);
-  const wasOpen=dd.classList.contains("open");closeAllDD();
-  if(!wasOpen){dd.classList.add("open");arr.classList.add("open");trig.classList.add("open");}
-}
+function toggleDD(type){const dd=document.getElementById("dd-"+type),arr=document.getElementById("arr-"+type),trig=document.getElementById("trig-"+type);const wo=dd.classList.contains("open");closeAllDD();if(!wo){dd.classList.add("open");arr.classList.add("open");trig.classList.add("open");}}
 function closeAllDD(){ALL_DD_TYPES.forEach(t=>{const dd=document.getElementById("dd-"+t),arr=document.getElementById("arr-"+t),trig=document.getElementById("trig-"+t);if(dd)dd.classList.remove("open");if(arr)arr.classList.remove("open");if(trig)trig.classList.remove("open");});}
 document.addEventListener("click",e=>{if(!e.target.closest(".part-group"))closeAllDD();});
 
@@ -574,86 +570,84 @@ document.addEventListener("click",e=>{if(!e.target.closest(".part-group"))closeA
 let selSet=null;
 function buildSetsDropdown(){
   const inner=document.getElementById("ddi-sets");inner.innerHTML="";
-  BEYBLADE_DATABASE.sets.forEach(set=>{
+  BEYBLADE_DATABASE.sets.forEach((set,idx)=>{
     const tc=TYPE_COLOR[set.type]||"#9090a8";
-    const bl=BEYBLADE_DATABASE.parts.blades[set.components.blade];
-    const blCode=bl?getFirstCode(bl,set.components.blade):"";
-    const div=document.createElement("div");div.className="pd-item";div.dataset.id=set.id;
+    const div=document.createElement("div");div.className="pd-item";div.dataset.idx=idx;
     div.innerHTML=`
-      <div class="pd-left">
-        <div class="pd-name">${set.id}　${set.name}</div>
-        <div class="pd-row">
-          <span class="pd-type-badge" style="color:${tc};background:${tc}18;border:.5px solid ${tc}44">${set.type}</span>
-          <span class="pd-weight" style="color:var(--t3)">${blCode} ・ ${set.components.ratchet} ・ ${set.components.bit}</span>
+      <div class="pd-main">
+        <div class="pd-toprow">
+          <span class="pd-name">${set.name}</span>
+          ${typeBadgeHtml(set.type)}
         </div>
+        ${set.versions&&set.versions.length>0?`<div class="pd-ver">${versStr(set.versions)}</div>`:""}
       </div>
       <i class="ti ti-check pd-check" aria-hidden="true"></i>`;
-    div.addEventListener("click",()=>{applySet(set.id);closeAllDD();});
+    div.addEventListener("click",()=>{applySet(idx);closeAllDD();});
     inner.appendChild(div);
   });
 }
-function applySet(setId){
-  const set=BEYBLADE_DATABASE.sets.find(s=>s.id===setId);if(!set)return;
-  selSet=set;
+function applySet(idx){
+  const set=BEYBLADE_DATABASE.sets[idx];if(!set)return;selSet=set;
   const tc=TYPE_COLOR[set.type]||"#9090a8";
-  const bl=BEYBLADE_DATABASE.parts.blades[set.components.blade];
-  const blCode=bl?getFirstCode(bl,set.components.blade):"";
-  document.getElementById("disp-sets-id").textContent=set.id;
+  /* 觸發器 */
   document.getElementById("disp-sets-name").textContent=set.name;
-  document.getElementById("disp-sets-meta").innerHTML=`<span style="color:${tc}">${set.type}</span>　${blCode} ・ ${set.components.ratchet} ・ ${set.components.bit}`;
-  document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.toggle("active",el.dataset.id===setId));
+  const typeEl=document.getElementById("disp-sets-type");
+  typeEl.textContent=set.type;typeEl.style.display="";
+  typeEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;
+  const verEl=document.getElementById("disp-sets-ver");
+  verEl.textContent=set.versions&&set.versions.length>0?versStr(set.versions):"";
+  /* active */
+  document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.toggle("active",parseInt(el.dataset.idx)===idx));
   selectPart("blade",set.components.blade,true);
   selectPart("ratchet",set.components.ratchet,true);
   selectPart("bit",set.components.bit,true);
 }
 
-/* ══ 零件下拉建構 ══ */
+/* ══ 零件下拉 ══ */
 let selBlade=null,selRatchet=null,selBit=null;
-
 function buildPartDropdown(type){
   const map={blade:"blades",ratchet:"ratchets",bit:"bits"};
   const parts=BEYBLADE_DATABASE.parts[map[type]];
   const inner=document.getElementById("ddi-"+type);inner.innerHTML="";
-  const isBladeType=(type==="blade");
   Object.entries(parts).forEach(([key,p])=>{
-    const tc=TYPE_COLOR[p.type]||"";
     const div=document.createElement("div");div.className="pd-item";div.dataset.key=key;
-    if(isBladeType && p.versions && p.versions.length>0){
-      /* 戰刃：完整展示 versions[] */
-      const versHtml=p.versions.map(v=>
-        `<div class="pd-ver-row"><span class="pd-ver-code">${v.code}</span><span class="pd-ver-sub">${v.subName}</span></div>`
-      ).join("");
+    /* 根據零件類型決定顯示結構 */
+    if(type==="blade"){
       div.innerHTML=`
-        <div class="pd-left">
-          <div class="pd-name">${p.name}</div>
-          <div class="pd-eng">${p.engName}</div>
-          <div class="pd-row">
-            ${p.type?`<span class="pd-type-badge" style="color:${tc||"var(--t2)"};background:${tc?tc+"18":"transparent"};border:.5px solid ${tc?tc+"44":"var(--bd)"}">${p.type}</span>`:""}
-            <span class="pd-weight">${p.weight}g</span>
+        <div class="pd-main">
+          <div class="pd-toprow">
+            <span class="pd-name">${p.name}</span>
+            ${typeBadgeHtml(p.type)}
           </div>
-          <div class="pd-versions">${versHtml}</div>
+          ${p.versions&&p.versions.length>0?`<div class="pd-ver">${versStr(p.versions)}</div>`:""}
         </div>
+        <span class="pd-weight">${p.weight}g</span>
         <i class="ti ti-check pd-check" aria-hidden="true"></i>`;
-    } else {
-      /* 固鎖輪盤 / 軸心：單行 meta */
-      let metaLine="";
-      if(p.height) metaLine+=`高度 ${p.height} mm ・ `;
-      if(p.type)   metaLine+=`${p.type} ・ `;
-      metaLine+=`${p.weight}g`;
+    } else if(type==="ratchet"){
       div.innerHTML=`
-        <div class="pd-left">
-          <div class="pd-name">${p.name||p.engName||key}</div>
-          ${p.engName&&p.engName!==(p.name||key)?`<div class="pd-eng">${p.engName}</div>`:""}
-          <div class="pd-meta-simple">${metaLine}</div>
+        <div class="pd-main">
+          <div class="pd-toprow"><span class="pd-name">${p.name}</span></div>
+          <div class="pd-ver" style="color:var(--t3)">高度 ${p.height} mm</div>
         </div>
+        <span class="pd-weight">${p.weight}g</span>
+        <i class="ti ti-check pd-check" aria-hidden="true"></i>`;
+    } else { /* bit */
+      div.innerHTML=`
+        <div class="pd-main">
+          <div class="pd-toprow">
+            <span class="pd-name">${p.name}</span>
+            ${typeBadgeHtml(p.type)}
+          </div>
+        </div>
+        <span class="pd-weight">${p.weight}g</span>
         <i class="ti ti-check pd-check" aria-hidden="true"></i>`;
     }
     div.addEventListener("click",()=>{
       selSet=null;
-      ["sets"].forEach(t=>{const el=document.getElementById("ddi-"+t);if(el)el.querySelectorAll(".pd-item").forEach(i=>i.classList.remove("active"));});
-      document.getElementById("disp-sets-id").textContent="—";
+      document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.remove("active"));
       document.getElementById("disp-sets-name").textContent="請選擇套組";
-      document.getElementById("disp-sets-meta").textContent="—";
+      document.getElementById("disp-sets-type").style.display="none";
+      document.getElementById("disp-sets-ver").textContent="—";
       selectPart(type,key,false);closeAllDD();
     });
     inner.appendChild(div);
@@ -667,34 +661,34 @@ function selectPart(type,key,fromSet){
   if(type==="blade")  selBlade  =obj;
   if(type==="ratchet")selRatchet=obj;
   if(type==="bit")    selBit    =obj;
-  /* 觸發器：codes 行顯示所有版本代碼（縮短） */
-  document.getElementById("disp-"+type+"-codes").textContent=getCodesShort(p,key);
-  /* name 行 */
-  document.getElementById("disp-"+type+"-name").textContent=p.name||(p.engName||key);
-  /* meta 行 */
-  const metaParts=[];
-  if(p.height)  metaParts.push(`高度 ${p.height} mm`);
-  if(p.type)    metaParts.push(p.type);
-  metaParts.push(`${p.weight}g`);
-  document.getElementById("disp-"+type+"-meta").textContent=metaParts.join("　");
-  /* active */
+  /* 觸發器更新 */
+  const tc=TYPE_COLOR[p.type]||"";
+  if(type==="blade"){
+    document.getElementById("disp-blade-name").textContent=p.name;
+    const tEl=document.getElementById("disp-blade-type");
+    if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}
+    else tEl.style.display="none";
+    document.getElementById("disp-blade-ver").textContent=versStr(p.versions)||"";
+    document.getElementById("disp-blade-weight").textContent=p.weight+"g";
+  } else if(type==="ratchet"){
+    document.getElementById("disp-ratchet-name").textContent=p.name;
+    document.getElementById("disp-ratchet-meta").textContent=`高度 ${p.height} mm`;
+    document.getElementById("disp-ratchet-weight").textContent=p.weight+"g";
+  } else {
+    document.getElementById("disp-bit-name").textContent=p.name;
+    const tEl=document.getElementById("disp-bit-type");
+    if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}
+    else tEl.style.display="none";
+    document.getElementById("disp-bit-weight").textContent=p.weight+"g";
+  }
   document.querySelectorAll(`#ddi-${type} .pd-item`).forEach(el=>el.classList.toggle("active",el.dataset.key===key));
   updateStats();
 }
 
 /* ══ 雷達圖 ══ */
-const AXES=[
-  {key:"atk",       label:"攻擊",   color:"#D85A30"},
-  {key:"def",       label:"防禦",   color:"#378ADD"},
-  {key:"endurance", label:"耐久度", color:"#D85070"},
-  {key:"accel",     label:"加速",   color:"#D8A030"},
-  {key:"sta",       label:"耐力",   color:"#1D9E75"},
-];
-const N=5,STEPS=5;
-let rCvs=null,rCtx=null,rSize=0,rCX=0,rCY=0,rMax=0;
-let rVals={atk:0,def:0,sta:0,accel:0,endurance:0};
-let rTarget={atk:0,def:0,sta:0,accel:0,endurance:0};
-let rScale=100,rScaleTarget=100;
+const AXES=[{key:"atk",label:"攻擊",color:"#D85A30"},{key:"def",label:"防禦",color:"#378ADD"},{key:"endurance",label:"耐久度",color:"#D85070"},{key:"accel",label:"加速",color:"#D8A030"},{key:"sta",label:"耐力",color:"#1D9E75"}];
+const N=5,STEPS=5;let rCvs=null,rCtx=null,rSize=0,rCX=0,rCY=0,rMax=0;
+let rVals={atk:0,def:0,sta:0,accel:0,endurance:0};let rTarget={atk:0,def:0,sta:0,accel:0,endurance:0};let rScale=100,rScaleTarget=100;
 function calcScale(v){const m=Math.max(...Object.values(v));return m<=100?100:Math.ceil(m/20)*20;}
 function resizeRadar(){const col=document.querySelector(".col-radar");if(!col||!rCvs)return;const a=Math.min(col.offsetWidth-24,col.offsetHeight-78);rSize=Math.max(150,a);rCvs.width=rCvs.height=rSize;rCX=rSize/2;rCY=rSize/2;rMax=rSize*0.33;}
 function initRadar(){rCvs=document.getElementById("radar-canvas");rCtx=rCvs.getContext("2d");document.getElementById("radar-legend").innerHTML=[{label:"攻擊",color:"#D85A30"},{label:"防禦",color:"#378ADD"},{label:"耐力",color:"#1D9E75"},{label:"加速",color:"#D8A030"},{label:"耐久度",color:"#D85070"}].map(a=>`<div class="rl-item"><div class="rl-dot" style="background:${a.color}"></div><span>${a.label}</span></div>`).join("");resizeRadar();radarLoop();}
@@ -709,24 +703,26 @@ function updateStats(){
   const b=selBlade.stats,r=selRatchet.stats,bt=selBit.stats;
   const atk=b.atk+r.atk+bt.atk,def=b.def+r.def+bt.def,sta=b.sta+r.sta+bt.sta;
   const accel=(b.accel||0)+(r.accel||0)+(bt.accel||0),endurance=(b.endurance||0)+(r.endurance||0)+(bt.endurance||0);
-  const height=selRatchet.height||60,w=((selBlade.weight||0)+(selRatchet.weight||0)+(selBit.weight||0)).toFixed(2);
-  const vals={atk,def,sta,accel,endurance};const ns=calcScale(vals);
-  rScaleTarget=ns;rTarget={...vals};
+  const height=selRatchet.height||60;
+  const totalWeight=parseFloat(((selBlade.weight||0)+(selRatchet.weight||0)+(selBit.weight||0)).toFixed(2));
+  const vals={atk,def,sta,accel,endurance};const ns=calcScale(vals);rScaleTarget=ns;rTarget={...vals};
   const isOver=ns>100;
   document.getElementById("radar-scale-label").textContent=isOver?`極限突破！刻度上限：${ns}`:`刻度上限：100`;
   document.getElementById("radar-scale-badge").classList.toggle("overscale",isOver);
   const cm={atk:{sb:"sb-atk",sv:"v-atk",c:"#D85A30"},def:{sb:"sb-def",sv:"v-def",c:"#378ADD"},sta:{sb:"sb-sta",sv:"v-sta",c:"#1D9E75"},accel:{sb:"sb-accel",sv:"v-accel",c:"#D8A030"},endurance:{sb:"sb-end",sv:"v-end",c:"#D85070"}};
   Object.entries(vals).forEach(([k,v])=>{const m=cm[k];const sbE=document.getElementById(m.sb),svE=document.getElementById(m.sv);svE.textContent=v;const lb=v>100;sbE.classList.toggle("limitbreak",lb);svE.classList.toggle("limitbreak",lb);if(!lb)svE.style.color=m.c;});
   document.getElementById("height-val").textContent=height+" mm";
-  const score=Math.round((Math.min(atk,100)*.25+Math.min(def,100)*.25+Math.min(sta,100)*.2+Math.min(accel,100)*.15+Math.min(endurance,100)*.15)*.9+5);
-  const blCode=getCodesShort(selBlade,selBlade._key).split(" /")[0];
-  document.getElementById("combo-name").textContent=selSet
-    ?`${selSet.id} ${selSet.name}  /  ${blCode}・${selRatchet.engName||selRatchet.name}・${selBit.engName||selBit.name}`
-    :`${blCode} / ${selRatchet.engName||selRatchet.name} / ${selBit.engName||selBit.name}`;
   const max=Math.max(atk,def,sta);let type="平衡型",tc="#BA7517";
-  if(max===atk&&atk-def>15){type="攻擊型";tc="#D85A30";}else if(max===def&&def-atk>15){type="防禦型";tc="#378ADD";}else if(max===sta&&sta-atk>15){type="耐力型";tc="#1D9E75";}
-  const sb=document.getElementById("sbadge");sb.textContent=score+" 分・"+type;sb.style.color=tc;sb.style.borderColor=tc+"44";
-  document.getElementById("mrow").innerHTML=`<span class="mp">⚖ ${w}g</span>`;
+  if(max===atk&&atk-def>15&&atk-sta>15){type="攻擊型";tc="#D85A30";}
+  else if(max===def&&def-atk>15&&def-sta>15){type="防禦型";tc="#378ADD";}
+  else if(max===sta&&sta-atk>15&&sta-def>15){type="耐力型";tc="#1D9E75";}
+  const score=calcScore(atk,def,sta,accel,endurance,totalWeight,type);
+  document.getElementById("combo-name").textContent=selSet
+    ?`${selSet.name}  /  ${selBlade.name} ・ ${selRatchet.name} ・ ${selBit.name}`
+    :`${selBlade.name} / ${selRatchet.name} / ${selBit.name}`;
+  const sb=document.getElementById("sbadge");sb.textContent=`${score} 分・${type}`;sb.style.color=tc;sb.style.borderColor=tc+"44";
+  sb.classList.toggle("limitbreak-score",isOver);
+  document.getElementById("mrow").innerHTML=`<span class="mp">⚖ ${totalWeight}g</span>`;
   document.getElementById("cl-atk").textContent=atk;document.getElementById("cl-def").textContent=def;document.getElementById("cl-sta").textContent=sta;
 }
 
@@ -768,6 +764,6 @@ buildSetsDropdown();
 buildPartDropdown("blade");
 buildPartDropdown("ratchet");
 buildPartDropdown("bit");
-applySet("S-01");
+applySet(0);
 window.addEventListener("resize",()=>resizeRadar());
 </script>

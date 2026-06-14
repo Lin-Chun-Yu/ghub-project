@@ -1,101 +1,68 @@
 const BEYBLADE_DATABASE = {
     parts: {
         blades: {
-            "dran_sword_v1": {// 第一種屬性：ATK 55 / DEF 25 / STA 20
+            "Dran_Sword_v1": {// 第一種屬性:ATK 55 / DEF 25 / STA 20
                 name: "蒼龍神劍",
-                engName: "Dran Sword",
                 type: "攻擊型",
                 weight: 35.1,
+                imgUrl: "",
+                shopeeUrl: "",
                 stats: { atk: 55, def: 25, sta: 20, accel: 0, endurance: 0 },
-                versions: [// 把所有符合這個數值的官方版本都收納在這邊
-                    { code: "BX-01", subName: "原色版" },
-                    { code: "BX-07", subName: "特別版" },
-                    { code: "BX-14-03", subName: "抽抽包版" },
-                    { code: "BX-17-01", subName: "火紅版" },
-                    { code: "BX-22", subName: "鋼鐵戰刃版" }// 假設 BX-22 是這款特殊數值                 
-                ]
+                versions: ["BX-01", "BX-07", "BX-14-03", "BX-17-01", "BX-22"]
             },
-            "dran_sword_v2": {// 第二種屬性：ATK 60 / DEF 25 / STA 30
+            "Dran_Sword_v2": {// 第二種屬性:ATK 60 / DEF 25 / STA 30
                 name: "蒼龍神劍 (強化型)",
-                engName: "Dran Sword (Special)",
                 type: "攻擊型",
                 weight: 35.1, // 如果重量有變可以自行調整
+                imgUrl: "",
+                shopeeUrl: "",
                 stats: { atk: 60, def: 30, sta: 25, accel: 0, endurance: 0 },
-                versions: [
-                    { code: "BXC-00-01", subName: "金屬塗層:燦金" },
-                    { code: "BXC-00-02", subName: "金屬塗層:白銀" },
-                    { code: "BXC-00-03", subName: "金屬塗層:黃銅" },
-                    { code: "BXC-04", subName: "鋼鐵戰刃 金屬塗層:藍" },
-                    { code: "BXG-25-01", subName: "金屬塗層:珍珠白" },
-                    { code: "BXG-12-04", subName: "閃耀貼紙版" },
-                    { code: "BXG-52", subName: "金屬塗層:闇黑" }                
-                ]
+                versions: ["BXC-00-01", "BXC-00-02", "BXC-00-03", "BXC-04", "BXG-25-01", "BXG-12-04", "BXG-18", "BXG-52"]
             },        
-            "hells_scythe_v1": {
+            "Hells_Scythe_v1": {
                 name: "惡魔紅鐮",
-                engName: "Hells Scythe",
                 type: "平衡型",
                 weight: 33.7,
+                imgUrl: "",
+                shopeeUrl: "",
                 stats: { atk: 30, def: 35, sta: 35, accel: 0, endurance: 0 }, // 假設這是第一種數值
-                versions: [
-                    { code: "BX-02", subName: "紅色版" },
-                    { code: "BX-08-01", subName: "橘色板" }
-                ]
+                versions: ["BX-02",  "BX-08-01"]
             },
-            "hells_scythe_v2": {
-                name: "惡魔紅鐮 (強化型)",
-                engName: "Hells Scythe (Special)",
+            "Hells_Scythe_v2": {
+                name: "惡魔紅鐮 (特別版)",
                 type: "平衡型",
                 weight: 33.7,
+                imgUrl: "",
+                shopeeUrl: "",
                 stats: { atk: 35, def: 40, sta: 40, accel: 0, endurance: 0 }, // 假設這是另一種數值
-                versions: [
-                    { code: "BXG-03", subName: "金屬塗層:燦金" },
-                    { code: "BX-14-04", subName: "綠色版" },
-                    { code: "BX-48-04", subName: "金屬塗層:燦金版" }
-                ]
+                versions: ["BXG-03", "BX-14-04", "BX-48-04"]
             },
             "Wizard_Arrow_v1": { 
                 name: "魔導幻箭", 
-                engName: "Wizard Arrow",
                 type: "耐力型", 
                 weight: 31.8, 
                 imgUrl: "", 
+                shopeeUrl: "",
                 stats: { atk: 15, def: 30, sta: 55, accel: 0, endurance: 0 },
-                versions: [
-                    { code: "BX-03", subName: "原色黃色版" },
-                    { code: "BX-05", subName: "紅色版" },
-                    { code: "BX-08-03", subName: "綠色版" },
-                    { code: "BX-14-06", subName: "鋼鐵戰刃版" },
-                    { code: "BX-17-02", subName: "水藍版" },
-                    { code: "BX-21-03", subName: "橘紅色版" },
-                    { code: "BX-24-06", subName: "紫色版" }
-                ]
+                versions: ["BX-03", "BX-05", "BX-08-03", "BX-14-06", "BX-17-02", "BX-21-03", "BX-24-06"]
             },
             "Knight_Shield_v1": { 
                 name: "騎士重盾", 
-                engName: "Knight Shield ",
                 type: "防禦型", 
                 weight: 34.8, 
                 imgUrl: "", 
+                shopeeUrl: "",
                 stats: { atk: 20, def: 55, sta: 25, accel: 0, endurance: 0 },
-                versions: [
-                    { code: "BX-04", subName: "原色綠色版" }, 
-                    { code: "BX-06", subName: "藍色版" }, 
-                    { code: "BX-08-02", subName: "紅色版" }, 
-                    { code: "BX-14-05", subName: "淺藍版" }, 
-                    { code: "BX-20-03", subName: "紫色版" } 
-                ]
+                versions: [ "BX-04", "BX-06", "BX-08-02", "BX-14-05", "BX-20-03"]
             },
             "Knight_Shield_v2": { 
-                name: "騎士重盾 (強化型)", 
-                engName: "Knight Shield (Special)",
+                name: "騎士重盾 (特別版)", 
                 type: "防禦型", 
                 weight: 34.8, 
                 imgUrl: "", 
+                shopeeUrl: "",
                 stats: { atk: 25, def: 60, sta: 30, accel: 0, endurance: 0 },
-                versions: [
-                    { code: "BXH-02", subName: "金屬塗層:燦金" }
-                ]
+                versions: [ "BXH-02"]
             }
             /*
             "Dranzer S": { name: "烈焰飛鳳S", type: "平衡型", weight: 34.5, imgUrl: "", stats: { atk: 35, def: 30, sta: 35, accel: 0, endurance: 0 } },
@@ -148,69 +115,129 @@ const BEYBLADE_DATABASE = {
             */
             },
         ratchets: { //15筆固鎖輪盤資料
-            "1-60": { name: "", height: 60, weight: 6.1, imgUrl: "", shopeeUrl: "", stats: { atk: 17, def: 9, sta: 4, accel: 0, endurance: 0 } },
-            "1-80": { name: "", height: 80, weight: 6.5, imgUrl: "", shopeeUrl: "", stats: { atk: 17, def: 4, sta: 9, accel: 0, endurance: 0 } },
-            "2-60": { name: "", height: 60, weight: 6.2, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 13, sta: 7, accel: 0, endurance: 0 } },
-            "2-80": { name: "", height: 80, weight: 6.9, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 11, sta: 9, accel: 0, endurance: 0 } },            
-            "3-60": { name: "", height: 60, weight: 6.4, imgUrl: "", shopeeUrl: "", stats: { atk: 15, def: 9, sta: 6, accel: 0, endurance: 0 } },
-            "3-70": { name: "", height: 70, weight: 6.4, imgUrl: "", shopeeUrl: "", stats: { atk: 15, def: 8, sta: 7, accel: 0, endurance: 0 } },
-            "3-80": { name: "", height: 80, weight: 7.1, imgUrl: "", shopeeUrl: "", stats: { atk: 15, def: 7, sta: 8, accel: 0, endurance: 0 } },
-            "4-60": { name: "", height: 60, weight: 6.4, imgUrl: "", shopeeUrl: "", stats: { atk: 11, def: 13, sta: 6, accel: 0, endurance: 0 } },
-            "4-70": { name: "", height: 70, weight: 6.5, imgUrl: "", shopeeUrl: "", stats: { atk: 11, def: 12, sta: 7, accel: 0, endurance: 0 } },
-            "4-80": { name: "", height: 80, weight: 7.0, imgUrl: "", shopeeUrl: "", stats: { atk: 11, def: 11, sta: 8, accel: 0, endurance: 0 } },
-            "5-60": { name: "", height: 60, weight: 6.6, imgUrl: "", shopeeUrl: "", stats: { atk: 12, def: 9, sta: 9, accel: 0, endurance: 0 } },
-            "5-70": { name: "", height: 70, weight: 6.7, imgUrl: "", shopeeUrl: "", stats: { atk: 12, def: 8.5, sta: 9.5, accel: 0, endurance: 0 } },
-            "5-80": { name: "", height: 80, weight: 7.2, imgUrl: "", shopeeUrl: "", stats: { atk: 12, def: 8, sta: 10, accel: 0, endurance: 0 } },
-            "9-60": { name: "", height: 60, weight: 6.2, imgUrl: "", shopeeUrl: "", stats: { atk: 13, def: 10, sta: 7, accel: 0, endurance: 0 } },
-            "9-80": { name: "", height: 80, weight: 6.8, imgUrl: "", shopeeUrl: "", stats: { atk: 13, def: 10, sta: 7, accel: 0, endurance: 0 } }
+            "1-60": { name: "1-60", height: 60, weight: 6.1, imgUrl: "", shopeeUrl: "", stats: { atk: 17, def: 9, sta: 4, accel: 0, endurance: 0 } },
+            "1-80": { name: "1-80", height: 80, weight: 6.5, imgUrl: "", shopeeUrl: "", stats: { atk: 17, def: 4, sta: 9, accel: 0, endurance: 0 } },
+            "2-60": { name: "2-60", height: 60, weight: 6.2, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 13, sta: 7, accel: 0, endurance: 0 } },
+            "2-80": { name: "2-80", height: 80, weight: 6.9, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 11, sta: 9, accel: 0, endurance: 0 } },            
+            "3-60": { name: "3-60", height: 60, weight: 6.4, imgUrl: "", shopeeUrl: "", stats: { atk:15, def: 9, sta: 6, accel: 0, endurance: 0 } },
+            "3-70": { name: "3-70", height: 70, weight: 6.4, imgUrl: "", shopeeUrl: "", stats: { atk: 15, def: 8, sta: 7, accel: 0, endurance: 0 } },
+            "3-80": { name: "3-80", height: 80, weight: 7.1, imgUrl: "", shopeeUrl: "", stats: { atk: 15, def: 7, sta: 8, accel: 0, endurance: 0 } },
+            "4-60": { name: "4-60", height: 60, weight: 6.4, imgUrl: "", shopeeUrl: "", stats: { atk: 11, def: 13, sta: 6, accel: 0, endurance: 0 } },
+            "4-70": { name: "4-70", height: 70, weight: 6.5, imgUrl: "", shopeeUrl: "", stats: { atk: 11, def: 12, sta: 7, accel: 0, endurance: 0 } },
+            "4-80": { name: "4-80", height: 80, weight: 7.0, imgUrl: "", shopeeUrl: "", stats: { atk: 11, def: 11, sta: 8, accel: 0, endurance: 0 } },
+            "5-60": { name: "5-60", height: 60, weight: 6.6, imgUrl: "", shopeeUrl: "", stats:{ atk:12, def:9, sta:9, accel:0, endurance:0 } },
+            "5-70": { name: "5-70", height: 70, weight: 6.7, imgUrl: "", shopeeUrl: "", stats:{ atk:12, def:8.5, sta:9.5, accel:0, endurance:0 } },
+            "5-80": { name: "5-80", height: 80, weight: 7.2, imgUrl: "", shopeeUrl: "", stats:{ atk:12, def:8, sta:10, accel:0, endurance:0 } },
+            "9-60": { name: "9-60", height: 60, weight: 6.2, imgUrl: "", shopeeUrl: "", stats:{ atk:13, def:10, sta:7, accel:0, endurance:0 } },
+            "9-80": { name: "9-80", height: 80, weight: 6.8, imgUrl: "", shopeeUrl: "", stats:{ atk:13, def:10, sta:7, accel:0, endurance:0 } }
 
         },
         bits: {//26筆軸心資料，屬性是錯的，請以官方資料為準
-            "Accel": { name: "加速", type: "攻擊型", weight: 2.59, imgUrl: "", shopeeUrl: "", stats: { atk: 40, def: 10, sta: 10, accel: 40, endurance: 80 } },    
-            "Ball": { name: "球狀軸心", type: "耐力型", weight: 2.01, imgUrl: "", shopeeUrl: "", stats: { atk: 15, def: 25, sta: 50, accel: 10, endurance: 30 } },
-            "Cyclone": { name: "暴風", type: "耐力型", weight: 2.11, imgUrl: "", shopeeUrl: "", stats: { atk: 40, def: 5, sta: 10, accel: 45, endurance: 80 } },
-            "Dot": { name: "圓點", type: "耐力型", weight: 2.0, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 55, sta: 25, accel: 10, endurance: 30 } },
-            "Elevate": { name: "仰昇", type: "耐力型", weight: 3.26, imgUrl: "", shopeeUrl: "", stats: { atk: 30, def: 15, sta: 20, accel: 35, endurance: 30 } },
-            "Flat": { name: "平底軸心", type: "耐力型", weight: 2.15, imgUrl: "", shopeeUrl: "", stats: { atk: 40, def: 15, sta: 10, accel: 35, endurance: 80 } },
-            "Glide": { name: "滑行", type: "耐力型", weight: 2.54, imgUrl: "", shopeeUrl: "", stats: { atk: 20, def: 10, sta: 55, accel: 15, endurance: 30 } },
-            "Hexa": { name: "六角軸心", type: "耐力型", weight: 2.57, imgUrl: "", shopeeUrl: "", stats: { atk: 30, def: 35, sta: 20, accel: 15, endurance: 80 } },
-            "Impact": { name: "衝擊", type: "耐力型", weight: 2.1, imgUrl: "", shopeeUrl: "", stats: { atk: 50, def: 15, sta: 5, accel: 30, endurance: 80 } },                    
-            "Point": { name: "針點平底軸心", type: "攻擊型", weight: 2.23, imgUrl: "", shopeeUrl: "", stats: { atk: 25, def: 25, sta: 25, accel: 25, endurance: 80 } },
-            "Needle": { name: "尖底軸心", type: "防禦型", weight: 2.01, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 50, sta: 30, accel: 10, endurance: 30 } },
-            "Taper": { name: "錐形軸心", type: "平衡型", weight: 2.22, imgUrl: "", shopeeUrl: "", stats: { atk: 35, def: 20, sta: 20, accel: 25, endurance: 80 } },
-            "High Needle": { name: "高位針狀軸", type: "防禦型", weight: 2.2, imgUrl: "", shopeeUrl: "", stats: { atk: 15, def: 55, sta: 20, accel: 10, endurance: 30 } },
-            "Low Flat": { name: "低位偏平軸", type: "攻擊型", weight: 2.1, imgUrl: "", shopeeUrl: "", stats: { atk: 45, def: 5, sta: 10, accel: 40, endurance: 80 } },
-            "Orb": { name: "微球軸", type: "防禦型", weight: 2.0, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 30, sta: 50, accel: 10, endurance: 30 } },
-            "Spike": { name: "尖刺軸", type: "防禦型", weight: 2.0, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 45, sta: 35, accel: 10, endurance: 30 } },
-            "Rush": { name: "奔馳軸", type: "攻擊型", weight: 2.1, imgUrl: "", shopeeUrl: "", stats: { atk: 40, def: 10, sta: 20, accel: 30, endurance: 80 } },
-            "High Taper": { name: "高位錐形軸", type: "平衡型", weight: 2.2, imgUrl: "", shopeeUrl: "", stats: { atk: 30, def: 25, sta: 20, accel: 25, endurance: 80 } },
-            "Gear Flat": { name: "齒輪平頭軸", type: "攻擊型", weight: 2.3, imgUrl: "", shopeeUrl: "", stats: { atk: 50, def: 5, sta: 5, accel: 40, endurance: 80 } },
-            "Gear Ball": { name: "齒輪球狀軸", type: "耐力型", weight: 2.1, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 15, sta: 45, accel: 30, endurance: 30 } },
-            "Gear Point": { name: "齒輪尖點軸", type: "平衡型", weight: 2.3, imgUrl: "", shopeeUrl: "", stats: { atk: 30, def: 25, sta: 15, accel: 30, endurance: 80 } },
-            "Disc Ball": { name: "圓盤球狀軸", type: "耐力型", weight: 3.1, imgUrl: "", shopeeUrl: "", stats: { atk: 15, def: 20, sta: 55, accel: 10, endurance: 30 } },
-            "Unite": { name: "聯結軸", type: "平衡型", weight: 2.1, imgUrl: "", shopeeUrl: "", stats: { atk: 25, def: 25, sta: 30, accel: 20, endurance: 80 } },
-            "Vortex": { name: "渦流", type: "攻擊型", weight: 2.2, imgUrl: "", shopeeUrl: "", stats: { atk: 45, def: 10, sta: 5, accel: 40, endurance: 80 } },            
-            "Quake": { name: "躍動軸", type: "攻擊型", weight: 2.2, imgUrl: "", shopeeUrl: "", stats: { atk: 55, def: 15, sta: 5, accel: 25, endurance: 80 } },
-            "Metal Needle": { name: "金屬針狀軸", type: "防禦型", weight: 2.7, imgUrl: "", shopeeUrl: "", stats: { atk: 8, def: 57, sta: 30, accel: 5, endurance: 30 } },
-            "Free Ball": { name: "自由旋轉球狀軸", type: "耐力型", weight: 1.9, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 25, sta: 60, accel: 5, endurance: 30 } }
+            "Accel": { name: "A 加速", type: "攻擊型", weight: 2.59, imgUrl: "", shopeeUrl: "", stats: { atk: 40, def: 10, sta: 10, accel: 40, endurance: 80 } },    
+            "Ball": { name: "B 球狀軸心", type: "耐力型", weight: 2.01, imgUrl: "", shopeeUrl: "", stats: { atk: 15, def: 25, sta: 50, accel: 10, endurance: 30 } },
+            "Cyclone": { name: "C 暴風", type: "耐力型", weight: 2.11, imgUrl: "", shopeeUrl: "", stats: { atk: 40, def: 5, sta: 10, accel: 45, endurance: 80 } },
+            "Dot": { name: "D 圓點", type: "耐力型", weight: 2.0, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 55, sta: 25, accel: 10, endurance: 30 } },
+            "Elevate": { name: "E 仰昇", type: "耐力型", weight: 3.26, imgUrl: "", shopeeUrl: "", stats: { atk: 30, def: 15, sta: 20, accel: 35, endurance: 30 } },
+            "Flat": { name: "F 平底軸心", type: "耐力型", weight: 2.15, imgUrl: "", shopeeUrl: "", stats: { atk: 40, def: 15, sta: 10, accel: 35, endurance: 80 } },
+            "Glide": { name: "G 滑行", type: "耐力型", weight:2.54, imgUrl:"", shopeeUrl:"", stats:{ atk:20, def:10, sta:55, accel:15, endurance:30 } },
+            "Hexa": { name: "H 六角軸心", type: "耐力型", weight: 2.57, imgUrl: "", shopeeUrl: "", stats: { atk: 30, def: 35, sta: 20, accel: 15, endurance: 80 } },
+            "Impact": { name: "I 衝擊", type: "耐力型", weight: 2.1, imgUrl: "", shopeeUrl: "", stats: { atk: 50, def: 15, sta: 5, accel: 30, endurance: 80 } },                    
+            "Point": { name: "P 針點平底軸心", type: "攻擊型", weight: 2.23, imgUrl: "", shopeeUrl: "", stats: { atk: 25, def: 25, sta: 25, accel: 25, endurance: 80 } },
+            "Needle": { name: "N 尖底軸心", type: "防禦型", weight: 2.01, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 50, sta: 30, accel: 10, endurance: 30 } },
+            "Taper": { name: "T 錐形軸心", type: "平衡型", weight: 2.22, imgUrl: "", shopeeUrl: "", stats: { atk:35, def:20, sta:20, accel:25, endurance:80 } },
+            "High Needle": { name: "HN 高位針狀軸", type: "防禦型", weight: 2.2, imgUrl: "", shopeeUrl: "", stats: { atk: 15, def: 55, sta: 20, accel: 10, endurance: 30 } },
+            "Low Flat": { name: "LF 低位偏平軸", type: "攻擊型", weight: 2.1, imgUrl: "", shopeeUrl: "", stats: { atk: 45, def: 5, sta: 10, accel: 40, endurance: 80 } },
+            "Orb": { name: "O 微球軸", type: "防禦型", weight: 2.0, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 30, sta: 50, accel: 10, endurance: 30 } },
+            "Spike": { name: "S 尖刺軸", type: "防禦型", weight: 2.0, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 45, sta: 35, accel: 10, endurance: 30 } },
+            "Rush": { name: "R 奔馳軸", type: "攻擊型", weight: 2.1, imgUrl: "", shopeeUrl: "", stats: { atk: 40, def: 10, sta: 20, accel: 30, endurance: 80 } },
+            "High Taper": { name: "HT 高位錐形軸", type:"平衡型", weight:2.2, imgUrl:"", shopeeUrl:"", stats:{ atk:30, def:25, sta:20, accel:25, endurance:80 } },
+            "Gear Flat": { name: "GF 齒輪平頭軸", type: "攻擊型", weight: 2.3, imgUrl: "", shopeeUrl: "", stats: { atk: 50, def: 5, sta: 5, accel: 40, endurance: 80 } },
+            "Gear Ball": { name: "GB 齒輪球狀軸", type: "耐力型", weight: 2.1, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 15, sta: 45, accel: 30, endurance: 30 } },
+            "Gear Point": { name: "GP 齒輪尖點軸", type: "平衡型", weight: 2.3, imgUrl: "", shopeeUrl: "", stats: { atk: 30, def: 25, sta: 15, accel: 30, endurance: 80 } },
+            "Disc Ball": { name: "DB 圓盤球狀軸", type: "耐力型", weight: 3.1, imgUrl: "", shopeeUrl: "", stats: { atk: 15, def: 20, sta: 55, accel: 10, endurance: 30 } },
+            "Unite": { name: "U 聯結軸", type: "平衡型", weight:2.1, imgUrl:"", shopeeUrl:"", stats:{ atk:25, def:25, sta:30, accel:20, endurance:80 } },
+            "Vortex": { name: "V 渦流", type: "攻擊型", weight: 2.2, imgUrl: "", shopeeUrl: "", stats: { atk: 45, def: 10, sta: 5, accel: 40, endurance: 80 } },            
+            "Quake": { name: "Q 躍動軸", type: "攻擊型", weight: 2.2, imgUrl: "", shopeeUrl: "", stats: { atk: 55, def: 15, sta: 5, accel: 25, endurance: 80 } },
+            "Metal Needle": { name: "MN 金屬針狀軸", type: "防禦型", weight: 2.7, imgUrl: "", shopeeUrl: "", stats: { atk: 8, def: 57, sta: 30, accel: 5, endurance: 30 } },
+            "Free Ball": { name: "FB 自由旋轉球狀軸", type: "耐力型", weight: 1.9, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 25, sta: 60, accel: 5, endurance: 30 } }
         }
     },
 
 
-    sets: [// 10筆套組定義區：修正 Blade 代號為英文名稱，並修正重複 ID
-// === 蒼龍神劍 系列 ===
-        { id: "S-01", name: "蒼龍神劍", type: "攻擊型", components: { blade: "dran_sword_v1", ratchet: "3-60", bit: "Flat" } },
-        { id: "S-11", name: "蒼龍神劍 (強化型)", type: "攻擊型", components: { blade: "dran_sword_v2", ratchet: "1-60", bit: "Vortex" } },
+    sets: [
+        // === 蒼龍神劍 系列 ===
+        { 
+          name: "蒼龍神劍 3-60F",
+          type: "攻擊型",
+          imgUrl: "",
+          shopeeUrl: "",
+          components: { blade: "Dran_Sword_v1", ratchet: "3-60", bit: "Flat" }, 
+          versions: ["BX-01", "BX-07", "BX-17-01", "BX-22"]
 
-        { id: "S-02", name: "惡魔紅鐮", type: "平衡型", components: { blade: "Hells_scythe_v1", ratchet: "4-60", bit: "Taper" } },
-        { id: "S-08", name: "惡魔紅鐮 (強化型)", type: "平衡型", components: { blade: "Hells_scythe_v2", ratchet: "3-80", bit: "Ball" } },
+        },
+        { 
+          name: "蒼龍神劍 3-80B",
+          type: "攻擊型",
+          imgUrl: "",
+          shopeeUrl: "",
+          components: { blade: "Dran_Sword_v1", ratchet: "3-80", bit: "Ball" },
+          versions: ["BX-14-03"]
+
+        },
+        { 
+          name: "蒼龍神劍 4-80DB 金屬塗層", 
+          type: "攻擊型", 
+          imgUrl: "", 
+          shopeeUrl: "",
+          components: { blade: "Dran_Sword_v2", ratchet: "4-80", bit: "Disc Ball" },
+          versions: ["BXC-00-01", "BXC-00-02", "BXC-00-03", "BXG-25-01", "BXG-12-04", "BXG-52"] 
+        },
+
+        // === 惡魔紅鐮 系列 ===
+        { 
+          name: "惡魔紅鐮", 
+          type: "平衡型", 
+          imgUrl: "", 
+          shopeeUrl: "",
+          components: { blade: "Hells_Scythe_v1", ratchet: "4-60", bit: "Taper" }, 
+          versions: [] 
+        },
+        { 
+          name: "惡魔紅鐮 (強化型)", 
+          type: "平衡型", 
+          imgUrl: "", 
+          shopeeUrl: "",
+          components: { blade: "Hells_Scythe_v2", ratchet: "3-80", bit: "Ball" },
+          versions: []           
+        },
 
         // === 魔導幻箭 系列 ===
-        { id: "S-03", name: "魔導幻箭", type: "耐力型", components: { blade: "wizard_arrow_v1", ratchet: "4-80", bit: "Ball" } },
+        { 
+          name: "魔導幻箭", 
+          type: "耐力型", 
+          imgUrl: "", 
+          shopeeUrl: "",
+          components: { blade: "Wizard_Arrow_v1", ratchet: "4-80", bit: "Ball" },
+          versions: [] 
+        },
 
         // === 騎士重盾 系列 ===
-        { id: "S-04", name: "騎士重盾", type: "防禦型", components: { blade: "knight_shield_v1", ratchet: "3-80", bit: "Needle" } },
-        { id: "S-09", name: "騎士重盾 (強化型)", type: "防禦型", components: { blade: "knight_shield_v2", ratchet: "4-80", bit: "Taper" } }
+        { 
+          name: "騎士重盾", 
+          type: "防禦型", 
+          imgUrl: "", 
+          shopeeUrl: "",
+          components: { blade: "Knight_Shield_v1", ratchet: "3-80", bit: "Needle" },
+          versions: [] 
+        },
+        { 
+          name: "騎士重盾 (強化型)", 
+          type: "防禦型", 
+          imgUrl: "", 
+          shopeeUrl: "",
+          components: { blade: "Knight_Shield_v2", ratchet: "4-80", bit: "Taper" },
+          versions: [] 
+        }
     ]
 };
 
