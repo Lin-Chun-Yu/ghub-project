@@ -1,12 +1,12 @@
 const BEYBLADE_DATABASE = {
     parts: {
-        blades: {//7筆刀片資料
+        blades: {//7筆戰刃資料
             "Dran_Sword_v1": {// 第一種屬性:ATK 55 / DEF 25 / STA 20
                 name: "蒼龍神劍",
                 type: "攻擊型",
                 weight: 35.1,
                 imgUrl: "",
-                shopeeUrl: "",
+                shopeeUrl: "https://s.shopee.tw/2qSDoE4DbQ",
                 stats: { atk: 55, def: 25, sta: 20, accel: 0, endurance: 0 },
                 versions: ["BX-01", "BX-07", "BX-14-03", "BX-17-01", "BX-22"]
             },
@@ -15,7 +15,7 @@ const BEYBLADE_DATABASE = {
                 type: "攻擊型",
                 weight: 35.1, // 如果重量有變可以自行調整
                 imgUrl: "",
-                shopeeUrl: "",
+                shopeeUrl: "https://s.shopee.tw/4ftrzkfnIf",
                 stats: { atk: 60, def: 30, sta: 25, accel: 0, endurance: 0 },
                 versions: ["BXC-00-01", "BXC-00-02", "BXC-00-03", "BXC-04", "BXG-25-01", "BXG-12-04", "BXG-18", "BXG-52"]
             },        
@@ -24,7 +24,7 @@ const BEYBLADE_DATABASE = {
                 type: "平衡型",
                 weight: 33.7,
                 imgUrl: "",
-                shopeeUrl: "",
+                shopeeUrl: "https://s.shopee.tw/7VE3MymXxV",
                 stats: { atk: 30, def: 35, sta: 35, accel: 0, endurance: 0 }, // 假設這是第一種數值
                 versions: ["BX-02",  "BX-08-01", "BX-14-04"]
             },
@@ -33,7 +33,7 @@ const BEYBLADE_DATABASE = {
                 type: "平衡型",
                 weight: 33.7,
                 imgUrl: "",
-                shopeeUrl: "",
+                shopeeUrl: "https://s.shopee.tw/9zvOLdWfbN",
                 stats: { atk: 35, def: 40, sta: 40, accel: 0, endurance: 0 }, // 假設這是另一種數值
                 versions: ["BXG-03", "BX-48-04"]
             },
@@ -42,7 +42,7 @@ const BEYBLADE_DATABASE = {
                 type: "耐力型", 
                 weight: 31.8, 
                 imgUrl: "", 
-                shopeeUrl: "",
+                shopeeUrl: "https://s.shopee.tw/7AbCyST2LA",
                 stats: { atk: 15, def: 30, sta: 55, accel: 0, endurance: 0 },
                 versions: ["BX-03", "BX-05", "BX-08-03", "BX-14-06", "BX-17-02", "BX-21-03", "BX-24-06"]
             },
@@ -51,7 +51,7 @@ const BEYBLADE_DATABASE = {
                 type: "防禦型", 
                 weight: 34.8, 
                 imgUrl: "", 
-                shopeeUrl: "",
+                shopeeUrl: "https://s.shopee.tw/6L25yx112O",
                 stats: { atk: 20, def: 55, sta: 25, accel: 0, endurance: 0 },
                 versions: [ "BX-04", "BX-06", "BX-08-02", "BX-14-05", "BX-20-03"]
             },
@@ -60,29 +60,29 @@ const BEYBLADE_DATABASE = {
                 type: "防禦型", 
                 weight: 34.8, 
                 imgUrl: "", 
-                shopeeUrl: "",
+                shopeeUrl: "https://s.shopee.tw/5L9YnA9Jj9",
                 stats: { atk: 25, def: 60, sta: 30, accel: 0, endurance: 0 },
                 versions: [ "BXH-02"]
             }
             },
         ratchets: { //17筆固鎖輪盤資料
-            "1-60": { name: "1-60", height: 60, weight: 6.0, imgUrl: "", shopeeUrl: "", stats: { atk: 17, def: 9, sta: 4, accel: 0, endurance: 0 } },
-            "1-80": { name: "1-80", height: 80, weight: 6.7, imgUrl: "", shopeeUrl: "", stats: { atk: 17, def: 4, sta: 9, accel: 0, endurance: 0 } },
-            "2-60": { name: "2-60", height: 60, weight: 6.2, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 13, sta: 7, accel: 0, endurance: 0 } },
-            "2-80": { name: "2-80", height: 80, weight: 6.9, imgUrl: "", shopeeUrl: "", stats: { atk: 10, def: 11, sta: 9, accel: 0, endurance: 0 } },            
-            "3-60": { name: "3-60", height: 60, weight: 6.4, imgUrl: "", shopeeUrl: "", stats: { atk:15, def: 9, sta: 6, accel: 0, endurance: 0 } },
-            "3-70": { name: "3-70", height: 70, weight: 6.4, imgUrl: "", shopeeUrl: "", stats: { atk: 15, def: 8, sta: 7, accel: 0, endurance: 0 } },
-            "3-80": { name: "3-80", height: 80, weight: 7.1, imgUrl: "", shopeeUrl: "", stats: { atk: 15, def: 7, sta: 8, accel: 0, endurance: 0 } },
-            "3-85": { name: "3-85", height: 85, weight: 4.7, imgUrl: "", shopeeUrl: "", stats: { atk: 5, def: 15, sta: 10, accel: 0, endurance: 0 } },
-            "4-60": { name: "4-60", height: 60, weight: 6.3, imgUrl: "", shopeeUrl: "", stats: { atk: 11, def: 13, sta: 6, accel: 0, endurance: 0 } },
-            "4-70": { name: "4-70", height: 70, weight: 6.4, imgUrl: "", shopeeUrl: "", stats: { atk: 11, def: 12, sta: 7, accel: 0, endurance: 0 } },
-            "4-80": { name: "4-80", height: 80, weight: 7.0, imgUrl: "", shopeeUrl: "", stats: { atk: 11, def: 11, sta: 8, accel: 0, endurance: 0 } },
-            "5-60": { name: "5-60", height: 60, weight: 6.6, imgUrl: "", shopeeUrl: "", stats:{ atk:12, def:9, sta:9, accel:0, endurance:0 } },
-            "5-70": { name: "5-70", height: 70, weight: 6.7, imgUrl: "", shopeeUrl: "", stats:{ atk:12, def:8.5, sta:9.5, accel:0, endurance:0 } },
-            "5-80": { name: "5-80", height: 80, weight: 7.3, imgUrl: "", shopeeUrl: "", stats:{ atk:12, def:8, sta:10, accel:0, endurance:0 } },
-            "7-70": { name: "7-70", height: 70, weight: 7.3, imgUrl: "", shopeeUrl: "", stats:{ atk:8, def:12, sta:10, accel:0, endurance:0 } },
-            "9-60": { name: "9-60", height: 60, weight: 6.2, imgUrl: "", shopeeUrl: "", stats:{ atk:13, def:10, sta:7, accel:0, endurance:0 } },
-            "9-80": { name: "9-80", height: 80, weight: 6.9, imgUrl: "", shopeeUrl: "", stats:{ atk:13, def:10, sta:7, accel:0, endurance:0 } }
+            "1-60": { name: "1-60", height: 60, weight: 6.0, imgUrl: "", shopeeUrl: "https://s.shopee.tw/2LVxCJQYp3", stats: { atk: 17, def: 9, sta: 4, accel: 0, endurance: 0 } },
+            "1-80": { name: "1-80", height: 80, weight: 6.7, imgUrl: "", shopeeUrl: "https://s.shopee.tw/2BCX00RCA2", stats: { atk: 17, def: 4, sta: 9, accel: 0, endurance: 0 } },
+            "2-60": { name: "2-60", height: 60, weight: 6.2, imgUrl: "", shopeeUrl: "https://s.shopee.tw/20t6nhRpV1", stats: { atk: 10, def: 13, sta: 7, accel: 0, endurance: 0 } },
+            "2-80": { name: "2-80", height: 80, weight: 6.9, imgUrl: "", shopeeUrl: "https://s.shopee.tw/qh9RGXeji", stats: { atk: 10, def: 11, sta: 9, accel: 0, endurance: 0 } },            
+            "3-60": { name: "3-60", height: 60, weight: 6.4, imgUrl: "", shopeeUrl: "https://s.shopee.tw/LksodYAsj", stats: { atk:15, def: 9, sta: 6, accel: 0, endurance: 0 } },
+            "3-70": { name: "3-70", height: 70, weight: 6.4, imgUrl: "", shopeeUrl: "https://s.shopee.tw/6pyMYdiina", stats: { atk: 15, def: 8, sta: 7, accel: 0, endurance: 0 } },
+            "3-80": { name: "3-80", height: 80, weight: 7.1, imgUrl: "", shopeeUrl: "https://s.shopee.tw/gNjCwfxIc", stats: { atk: 15, def: 7, sta: 8, accel: 0, endurance: 0 } },
+            "3-85": { name: "3-85", height: 85, weight: 4.7, imgUrl: "", shopeeUrl: "https://s.shopee.tw/qh9PFfJxf", stats: { atk: 5, def: 15, sta: 10, accel: 0, endurance: 0 } },
+            "4-60": { name: "4-60", height: 60, weight: 6.3, imgUrl: "", shopeeUrl: "https://s.shopee.tw/1gGGOmc9Gq", stats: { atk: 11, def: 13, sta: 6, accel: 0, endurance: 0 } },
+            "4-70": { name: "4-70", height: 70, weight: 6.4, imgUrl: "", shopeeUrl: "https://s.shopee.tw/1qZgb5bVvt", stats: { atk: 11, def: 12, sta: 7, accel: 0, endurance: 0 } },
+            "4-80": { name: "4-80", height: 80, weight: 7.0, imgUrl: "", shopeeUrl: "https://s.shopee.tw/1LdQ0AdPwo", stats: { atk: 11, def: 11, sta: 8, accel: 0, endurance: 0 } },
+            "5-60": { name: "5-60", height: 60, weight: 6.6, imgUrl: "", shopeeUrl: "https://s.shopee.tw/2VpNOkzfoT", stats:{ atk:12, def:9, sta:9, accel:0, endurance:0 } },
+            "5-70": { name: "5-70", height: 70, weight: 6.7, imgUrl: "", shopeeUrl: "https://s.shopee.tw/20t6nq1ZpO", stats:{ atk:12, def:8.5, sta:9.5, accel:0, endurance:0 } },
+            "5-80": { name: "5-80", height: 80, weight: 7.3, imgUrl: "", shopeeUrl: "https://s.shopee.tw/2BCX090wUR", stats:{ atk:12, def:8, sta:10, accel:0, endurance:0 } },
+            "7-70": { name: "7-70", height: 70, weight: 7.3, imgUrl: "", shopeeUrl: "https://s.shopee.tw/Lksom7vD6", stats:{ atk:8, def:12, sta:10, accel:0, endurance:0 } },
+            "9-60": { name: "9-60", height: 60, weight: 6.2, imgUrl: "", shopeeUrl: "https://s.shopee.tw/W4J157Hs9", stats:{ atk:13, def:10, sta:7, accel:0, endurance:0 } },
+            "9-80": { name: "9-80", height: 80, weight: 6.9, imgUrl: "", shopeeUrl: "https://s.shopee.tw/9pby8Hx51W", stats:{ atk:13, def:10, sta:7, accel:0, endurance:0 } }
         },
         bits: {//27筆軸心資料，屬性是錯的，請以官方資料為準
             "Accel": { name: "A 加速", type: "攻擊型", weight: 2.6, imgUrl: "", shopeeUrl: "https://s.shopee.tw/40e9bdi6DI", stats: { atk: 40, def: 10, sta: 10, accel: 40, endurance: 80 } },    
