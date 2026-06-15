@@ -1,7 +1,7 @@
 <!-- 加入我的分頁logo! -->
 <link rel="icon" type="image/png" href="assets/logo.png" sizes="512x512">
 <link rel="apple-touch-icon" href="assets/logo.png" sizes="512x512">
-
+<title>G-Hub</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -38,6 +38,8 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .etab{flex:1;padding:11px 0;font-size:12px;text-align:center;cursor:pointer;color:var(--t3);border:none;background:transparent;border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:4px}
 .etab i{font-size:13px}
 .etab.active{color:var(--blue2);border-bottom-color:var(--blue)}
+.etab-count{font-size:9px;background:var(--bg4);border:.5px solid var(--bd2);border-radius:20px;padding:1px 6px;color:var(--t3)}
+.etab.active .etab-count{color:var(--blue2);border-color:rgba(55,138,221,.3)}
 .elist{flex:1;overflow-y:auto;padding:10px}
 .elist::-webkit-scrollbar{width:3px}
 .elist::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
@@ -53,8 +55,11 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .emeta{display:flex;gap:10px;font-size:10px;color:var(--t3)}
 .emeta span{display:flex;align-items:center;gap:3px}
 .emeta i{font-size:11px}
+.elist-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:40px 20px;color:var(--t3);text-align:center}
+.elist-empty i{font-size:28px;color:var(--bd2)}
+.elist-empty span{font-size:12px}
 
-/* ═══ BEY ═══ */
+/* BEY */
 .bey-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .bey-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);flex:1;overflow:hidden;min-height:0}
 .col-radar{background:var(--bg3);border-right:.5px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;gap:10px;overflow:hidden}
@@ -76,45 +81,31 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .part-select-trigger{flex:1;display:flex;align-items:center;padding:8px 10px;background:var(--bg4);border:.5px solid var(--bd2);border-radius:8px;cursor:pointer;transition:border-color .15s;user-select:none;min-width:0;gap:8px}
 .part-select-trigger:hover,.part-select-trigger.open{border-color:var(--blue3)}
 .pst-main{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
-
-/* ── 新版 trigger 頂列：name + type badge ── */
 .pst-toprow{display:flex;align-items:center;gap:5px;min-width:0}
 .pst-name{font-size:12px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pst-type{font-size:9px;padding:1px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0}
-/* ── 第二列：versions / meta ── */
 .pst-ver{font-size:9px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pst-meta{font-size:10px;color:var(--t3)}
-
-/* ── 右側重量數字 ── */
 .pst-weight{font-size:12px;font-weight:700;color:#B8C8DC;flex-shrink:0;white-space:nowrap}
-
 .pst-arrow{color:var(--t3);font-size:13px;transition:transform .2s;flex-shrink:0}
 .pst-arrow.open{transform:rotate(180deg)}
-
 .part-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:46px;z-index:300;background:var(--bg3);border:.5px solid var(--bd2);border-radius:10px;overflow:hidden;display:none;box-shadow:0 8px 28px rgba(0,0,0,.7)}
 .part-dropdown.open{display:block}
 .part-dropdown-inner{max-height:230px;overflow-y:auto}
 .part-dropdown-inner::-webkit-scrollbar{width:3px}
 .part-dropdown-inner::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
-
-/* ── 下拉項目通用 ── */
 .pd-item{display:flex;align-items:center;padding:9px 12px;cursor:pointer;border-bottom:.5px solid var(--bd);transition:background .1s;gap:8px}
 .pd-item:last-child{border-bottom:none}
 .pd-item:hover{background:rgba(55,138,221,.07)}
 .pd-item.active{background:rgba(55,138,221,.1)}
 .pd-main{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
-/* 下拉頂列：name + type */
 .pd-toprow{display:flex;align-items:center;gap:5px;min-width:0}
 .pd-name{font-size:12px;font-weight:500;color:var(--t1)}
 .pd-type{font-size:9px;padding:1px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0}
-/* 下拉第二列：versions */
 .pd-ver{font-size:9px;color:var(--t3)}
-/* 下拉右側：重量 */
 .pd-weight{font-size:11px;font-weight:700;color:#B8C8DC;flex-shrink:0;white-space:nowrap;margin-right:4px}
 .pd-check{font-size:13px;color:var(--blue);display:none;flex-shrink:0}
 .pd-item.active .pd-check{display:block}
-
-/* 蝦皮按鈕 */
 .btn-shopee-part{display:flex;align-items:center;justify-content:center;width:36px;border-radius:8px;border:.5px solid rgba(238,77,45,.3);background:var(--shopee-bg);color:var(--shopee);cursor:pointer;transition:all .15s;flex-shrink:0;font-size:16px}
 .btn-shopee-part:hover{background:rgba(238,77,45,.2);border-color:var(--shopee);transform:scale(1.05)}
 @keyframes shopee-pulse{0%,100%{box-shadow:0 0 0 0 rgba(238,77,45,.4)}50%{box-shadow:0 0 0 4px rgba(238,77,45,0)}}
@@ -137,8 +128,38 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .combo-score-row{display:flex;align-items:center;justify-content:space-between;gap:6px}
 .mrow{display:flex;gap:4px;flex-wrap:wrap}
 .mp{font-size:9px;padding:2px 7px;border-radius:20px;background:var(--bg3);color:var(--t2);border:.5px solid var(--bd)}
-.sbadge{font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;background:var(--bg3);border:.5px solid var(--bd2);white-space:nowrap;flex-shrink:0}
+
+/* sbadge + 問號提示 */
+.score-wrap{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.sbadge{font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;background:var(--bg3);border:.5px solid var(--bd2);white-space:nowrap}
 .sbadge.limitbreak-score{border-color:#FF4500aa!important;text-shadow:0 0 6px #FF450099}
+.score-info{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--bg3);border:.5px solid var(--bd2);
+  color:var(--t3);font-size:10px;font-weight:600;
+  cursor:help;flex-shrink:0;transition:all .15s;
+}
+.score-info:hover{color:var(--blue2);border-color:var(--blue3);background:rgba(55,138,221,.1)}
+.score-tooltip{
+  position:absolute;bottom:calc(100% + 8px);right:0;
+  width:230px;background:var(--bg3);border:.5px solid var(--bd2);
+  border-radius:10px;padding:10px 12px;
+  font-size:10px;line-height:1.6;color:var(--t2);font-weight:400;
+  text-align:left;white-space:normal;
+  box-shadow:0 8px 24px rgba(0,0,0,.6);
+  opacity:0;visibility:hidden;transform:translateY(4px);
+  transition:opacity .15s,transform .15s;
+  z-index:400;
+}
+.score-tooltip strong{color:var(--t1);font-weight:600}
+.score-tooltip::after{
+  content:"";position:absolute;top:100%;right:5px;
+  border:6px solid transparent;border-top-color:var(--bd2);
+}
+.score-info:hover .score-tooltip{opacity:1;visibility:visible;transform:translateY(0)}
+
 .btn-shopee-full{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px 12px;border-radius:9px;border:none;cursor:pointer;background:linear-gradient(90deg,var(--shopee),var(--shopee2));color:#fff;font-size:12px;font-weight:600;transition:opacity .15s,transform .1s;margin-top:8px;position:relative;overflow:hidden}
 .btn-shopee-full::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transform:translateX(-100%);transition:transform .4s}
 .btn-shopee-full:hover::before{transform:translateX(100%)}
@@ -189,7 +210,6 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 .kofi-meta{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .kofi-pill{font-size:9px;padding:2px 8px;border-radius:20px;background:var(--bg4);color:var(--t3);border:.5px solid var(--bd)}
 .sdiv{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;padding:5px 0 7px;margin-top:3px}
-/* 頁尾 */
 .site-footer{background:var(--bg2);border-top:.5px solid var(--bd2);flex-shrink:0}
 .footer-toggle{display:flex;align-items:center;justify-content:space-between;padding:8px 20px;cursor:pointer;user-select:none;transition:background .15s}
 .footer-toggle:hover{background:var(--bg3)}
@@ -236,12 +256,13 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 .leaflet-popup-content{margin:9px 13px;font-size:12px;font-family:var(--font-sans)}
 .pop-name{font-weight:500;font-size:13px;margin-bottom:3px}
 .pop-meta{font-size:10px;color:var(--t2);display:flex;flex-direction:column;gap:2px}
-@media(max-width:540px){.nav-links{display:none}.hamburger{display:block}.home-layout,.bey-layout{grid-template-columns:1fr}.map-col{border-right:none;border-bottom:.5px solid var(--bd)}#leaflet-map{height:200px;min-height:200px;flex:none}.col-radar{border-right:none;border-bottom:.5px solid var(--bd);min-height:260px}.footer-links-inline{display:none}}
+@media(max-width:540px){.nav-links{display:none}.hamburger{display:block}.home-layout,.bey-layout{grid-template-columns:1fr}.map-col{border-right:none;border-bottom:.5px solid var(--bd)}#leaflet-map{height:200px;min-height:200px;flex:none}.col-radar{border-right:none;border-bottom:.5px solid var(--bd);min-height:260px}.footer-links-inline{display:none}.score-tooltip{width:190px}}
 </style>
 
 <div class="shell">
 <nav class="navbar">
   <div class="brand">
+    <img src="https://raw.githubusercontent.com/twbs/icons/main/icons/compass-fill.svg" style="display:none">
     <svg width="32" height="32" viewBox="0 0 34 34" fill="none" aria-hidden="true">
       <rect width="34" height="34" rx="8" fill="#0C447C"/>
       <circle cx="17" cy="17" r="10" stroke="#378ADD" stroke-width="1.5" fill="none"/>
@@ -270,7 +291,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 
 <div class="content">
 
-<!-- 賽事中心（不動） -->
+<!-- 賽事中心：依日期自動分類 -->
 <div class="page active" id="page-home">
   <div class="home-layout">
     <div class="map-col">
@@ -279,8 +300,14 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
     </div>
     <div class="events-col">
       <div class="etabs">
-        <button class="etab active" onclick="switchTab('upcoming',this)"><i class="ti ti-calendar-event" aria-hidden="true"></i>近期賽事</button>
-        <button class="etab" onclick="switchTab('past',this)"><i class="ti ti-history" aria-hidden="true"></i>歷史賽事</button>
+        <button class="etab active" onclick="switchTab('upcoming',this)">
+          <i class="ti ti-calendar-event" aria-hidden="true"></i>近期賽事
+          <span class="etab-count" id="count-upcoming">0</span>
+        </button>
+        <button class="etab" onclick="switchTab('past',this)">
+          <i class="ti ti-history" aria-hidden="true"></i>歷史賽事
+          <span class="etab-count" id="count-past">0</span>
+        </button>
       </div>
       <div class="elist" id="elist"></div>
     </div>
@@ -397,7 +424,17 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
                 </div>
                 <div class="combo-score-row">
                   <div class="mrow" id="mrow"></div>
-                  <div class="sbadge" id="sbadge">—</div>
+                  <!-- ★ 評分 Badge + 問號提示 -->
+                  <div class="score-wrap">
+                    <div class="sbadge" id="sbadge">—</div>
+                    <div class="score-info">
+                      ?
+                      <div class="score-tooltip">
+                        <strong>評分機制說明</strong><br>
+                        依配置「型態」（攻擊/防禦/耐力/平衡）動態調整五屬性權重；屬性超過100視為「極限突破」可額外加分；總重量超過 40g 也會獲得加分。滿分錨定在 95~100 分。
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <button class="btn-shopee-full" onclick="shopeeOpenFull()">
                   🛒&nbsp;一鍵到蝦皮購買此配置
@@ -412,7 +449,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
   </div>
 </div>
 
-<!-- 更新日誌（不動） -->
+<!-- 更新日誌（完全不動） -->
 <div class="page" id="page-cl">
   <div class="cl-wrap">
     <div class="cl-grid">
@@ -527,23 +564,11 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="beyblade_data.js"></script>
 <script>
-/* ══════════════════════════════════════════════════════
-   BEYBLADE_DATABASE  v1.8
-   versions 格式改為純字串陣列 ["BX-01", "BX-07" ...]
-   ══════════════════════════════════════════════════════ */
 
-/* ── 輔助：type badge HTML ── */
-function typeBadgeHtml(type,size=9){
-  const tc=TYPE_COLOR[type]||"#9090a8";
-  return type?`<span style="font-size:${size}px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44;white-space:nowrap;flex-shrink:0">${type}</span>`:"";
-}
-/* ── versions 字串（最多顯示 4 個）── */
-function versStr(arr){
-  if(!arr||arr.length===0) return "";
-  return arr.length<=5? arr.join("　"):arr.slice(0,4).join("　")+" …";
-}
+function typeBadgeHtml(type,size=9){const tc=TYPE_COLOR[type]||"#9090a8";return type?`<span style="font-size:${size}px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44;white-space:nowrap;flex-shrink:0">${type}</span>`:"";}
+function versStr(arr){if(!arr||arr.length===0)return"";return arr.length<=5?arr.join("　"):arr.slice(0,4).join("　")+" …";}
 
-/* ══ 評分公式 v1.6 ══ */
+/* ══ 評分公式 v1.6（不動）══ */
 const TYPE_WEIGHTS={"攻擊型":{atk:0.35,def:0.10,sta:0.15,accel:0.25,endurance:0.15},"防禦型":{atk:0.10,def:0.35,sta:0.15,accel:0.10,endurance:0.30},"耐力型":{atk:0.10,def:0.15,sta:0.35,accel:0.10,endurance:0.30},"平衡型":{atk:0.22,def:0.22,sta:0.22,accel:0.17,endurance:0.17}};
 function calcScore(atk,def,sta,accel,endurance,w,type){
   const wt=TYPE_WEIGHTS[type]||TYPE_WEIGHTS["平衡型"];
@@ -554,34 +579,25 @@ function calcScore(atk,def,sta,accel,endurance,w,type){
   return Math.min(Math.round((raw/100)*87+lb+wBonus+3),100);
 }
 
-/* ══ 蝦皮直連 ══ */
+/* ══ 蝦皮直連（不動）══ */
 function shopeeOpen(url){window.open((url&&url!=="")?url:"https://shopee.tw/search?keyword=戰鬥陀螺X","_blank");}
 function shopeeOpenPart(type){const pm={blade:selBlade,ratchet:selRatchet,bit:selBit};const p=pm[type];shopeeOpen(p?p.shopeeUrl:"");}
 function shopeeOpenSet(){shopeeOpen(selSet?selSet.shopeeUrl:"");}
 function shopeeOpenFull(){if(selSet&&selSet.shopeeUrl)shopeeOpen(selSet.shopeeUrl);else if(selBlade)shopeeOpen(selBlade.shopeeUrl);else shopeeOpen("");}
 
-/* ══ 下拉統一開關 ══ */
+/* ══ 下拉統一開關（不動）══ */
 const ALL_DD_TYPES=["sets","blade","ratchet","bit"];
 function toggleDD(type){const dd=document.getElementById("dd-"+type),arr=document.getElementById("arr-"+type),trig=document.getElementById("trig-"+type);const wo=dd.classList.contains("open");closeAllDD();if(!wo){dd.classList.add("open");arr.classList.add("open");trig.classList.add("open");}}
 function closeAllDD(){ALL_DD_TYPES.forEach(t=>{const dd=document.getElementById("dd-"+t),arr=document.getElementById("arr-"+t),trig=document.getElementById("trig-"+t);if(dd)dd.classList.remove("open");if(arr)arr.classList.remove("open");if(trig)trig.classList.remove("open");});}
 document.addEventListener("click",e=>{if(!e.target.closest(".part-group"))closeAllDD();});
 
-/* ══ 套組下拉 ══ */
+/* ══ 套組下拉（不動）══ */
 let selSet=null;
 function buildSetsDropdown(){
   const inner=document.getElementById("ddi-sets");inner.innerHTML="";
   BEYBLADE_DATABASE.sets.forEach((set,idx)=>{
-    const tc=TYPE_COLOR[set.type]||"#9090a8";
     const div=document.createElement("div");div.className="pd-item";div.dataset.idx=idx;
-    div.innerHTML=`
-      <div class="pd-main">
-        <div class="pd-toprow">
-          <span class="pd-name">${set.name}</span>
-          ${typeBadgeHtml(set.type)}
-        </div>
-        ${set.versions&&set.versions.length>0?`<div class="pd-ver">${versStr(set.versions)}</div>`:""}
-      </div>
-      <i class="ti ti-check pd-check" aria-hidden="true"></i>`;
+    div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${set.name}</span>${typeBadgeHtml(set.type)}</div>${set.versions&&set.versions.length>0?`<div class="pd-ver">${versStr(set.versions)}</div>`:""}</div><i class="ti ti-check pd-check" aria-hidden="true"></i>`;
     div.addEventListener("click",()=>{applySet(idx);closeAllDD();});
     inner.appendChild(div);
   });
@@ -589,21 +605,17 @@ function buildSetsDropdown(){
 function applySet(idx){
   const set=BEYBLADE_DATABASE.sets[idx];if(!set)return;selSet=set;
   const tc=TYPE_COLOR[set.type]||"#9090a8";
-  /* 觸發器 */
   document.getElementById("disp-sets-name").textContent=set.name;
   const typeEl=document.getElementById("disp-sets-type");
-  typeEl.textContent=set.type;typeEl.style.display="";
-  typeEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;
-  const verEl=document.getElementById("disp-sets-ver");
-  verEl.textContent=set.versions&&set.versions.length>0?versStr(set.versions):"";
-  /* active */
+  typeEl.textContent=set.type;typeEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;
+  document.getElementById("disp-sets-ver").textContent=set.versions&&set.versions.length>0?versStr(set.versions):"";
   document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.toggle("active",parseInt(el.dataset.idx)===idx));
   selectPart("blade",set.components.blade,true);
   selectPart("ratchet",set.components.ratchet,true);
   selectPart("bit",set.components.bit,true);
 }
 
-/* ══ 零件下拉 ══ */
+/* ══ 零件下拉（不動）══ */
 let selBlade=null,selRatchet=null,selBit=null;
 function buildPartDropdown(type){
   const map={blade:"blades",ratchet:"ratchets",bit:"bits"};
@@ -611,40 +623,15 @@ function buildPartDropdown(type){
   const inner=document.getElementById("ddi-"+type);inner.innerHTML="";
   Object.entries(parts).forEach(([key,p])=>{
     const div=document.createElement("div");div.className="pd-item";div.dataset.key=key;
-    /* 根據零件類型決定顯示結構 */
     if(type==="blade"){
-      div.innerHTML=`
-        <div class="pd-main">
-          <div class="pd-toprow">
-            <span class="pd-name">${p.name}</span>
-            ${typeBadgeHtml(p.type)}
-          </div>
-          ${p.versions&&p.versions.length>0?`<div class="pd-ver">${versStr(p.versions)}</div>`:""}
-        </div>
-        <span class="pd-weight">${p.weight}g</span>
-        <i class="ti ti-check pd-check" aria-hidden="true"></i>`;
+      div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div>${p.versions&&p.versions.length>0?`<div class="pd-ver">${versStr(p.versions)}</div>`:""}</div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check" aria-hidden="true"></i>`;
     } else if(type==="ratchet"){
-      div.innerHTML=`
-        <div class="pd-main">
-          <div class="pd-toprow"><span class="pd-name">${p.name}</span></div>
-          <div class="pd-ver" style="color:var(--t3)">高度 ${p.height} mm</div>
-        </div>
-        <span class="pd-weight">${p.weight}g</span>
-        <i class="ti ti-check pd-check" aria-hidden="true"></i>`;
-    } else { /* bit */
-      div.innerHTML=`
-        <div class="pd-main">
-          <div class="pd-toprow">
-            <span class="pd-name">${p.name}</span>
-            ${typeBadgeHtml(p.type)}
-          </div>
-        </div>
-        <span class="pd-weight">${p.weight}g</span>
-        <i class="ti ti-check pd-check" aria-hidden="true"></i>`;
+      div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span></div><div class="pd-ver" style="color:var(--t3)">高度 ${p.height} mm</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check" aria-hidden="true"></i>`;
+    } else {
+      div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check" aria-hidden="true"></i>`;
     }
     div.addEventListener("click",()=>{
-      selSet=null;
-      document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.remove("active"));
+      selSet=null;document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.remove("active"));
       document.getElementById("disp-sets-name").textContent="請選擇套組";
       document.getElementById("disp-sets-type").style.display="none";
       document.getElementById("disp-sets-ver").textContent="—";
@@ -653,7 +640,6 @@ function buildPartDropdown(type){
     inner.appendChild(div);
   });
 }
-
 function selectPart(type,key,fromSet){
   const map={blade:"blades",ratchet:"ratchets",bit:"bits"};
   const p=BEYBLADE_DATABASE.parts[map[type]][key];if(!p)return;
@@ -661,13 +647,11 @@ function selectPart(type,key,fromSet){
   if(type==="blade")  selBlade  =obj;
   if(type==="ratchet")selRatchet=obj;
   if(type==="bit")    selBit    =obj;
-  /* 觸發器更新 */
   const tc=TYPE_COLOR[p.type]||"";
   if(type==="blade"){
     document.getElementById("disp-blade-name").textContent=p.name;
     const tEl=document.getElementById("disp-blade-type");
-    if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}
-    else tEl.style.display="none";
+    if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";
     document.getElementById("disp-blade-ver").textContent=versStr(p.versions)||"";
     document.getElementById("disp-blade-weight").textContent=p.weight+"g";
   } else if(type==="ratchet"){
@@ -677,15 +661,14 @@ function selectPart(type,key,fromSet){
   } else {
     document.getElementById("disp-bit-name").textContent=p.name;
     const tEl=document.getElementById("disp-bit-type");
-    if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}
-    else tEl.style.display="none";
+    if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";
     document.getElementById("disp-bit-weight").textContent=p.weight+"g";
   }
   document.querySelectorAll(`#ddi-${type} .pd-item`).forEach(el=>el.classList.toggle("active",el.dataset.key===key));
   updateStats();
 }
 
-/* ══ 雷達圖 ══ */
+/* ══ 雷達圖（不動）══ */
 const AXES=[{key:"atk",label:"攻擊",color:"#D85A30"},{key:"def",label:"防禦",color:"#378ADD"},{key:"endurance",label:"耐久度",color:"#D85070"},{key:"accel",label:"加速",color:"#D8A030"},{key:"sta",label:"耐力",color:"#1D9E75"}];
 const N=5,STEPS=5;let rCvs=null,rCtx=null,rSize=0,rCX=0,rCY=0,rMax=0;
 let rVals={atk:0,def:0,sta:0,accel:0,endurance:0};let rTarget={atk:0,def:0,sta:0,accel:0,endurance:0};let rScale=100,rScaleTarget=100;
@@ -697,7 +680,7 @@ function pt(idx,val){const a=(idx/N)*Math.PI*2-Math.PI/2,r=(val/rScale)*rMax;ret
 function gpt(idx,step){const a=(idx/N)*Math.PI*2-Math.PI/2,r=(step/STEPS)*rMax;return{x:rCX+Math.cos(a)*r,y:rCY+Math.sin(a)*r};}
 function drawRadar(){const c=rCtx;c.clearRect(0,0,rSize,rSize);const isOver=rScaleTarget>100;for(let s=1;s<=STEPS;s++){c.beginPath();for(let i=0;i<N;i++){const p=gpt(i,s);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}c.closePath();if(s<STEPS){c.fillStyle="rgba(24,24,31,0.55)";c.fill();}if(s===STEPS&&isOver){c.strokeStyle="#FF450066";c.lineWidth=1.2;c.setLineDash([4,3]);c.stroke();c.setLineDash([]);}else{c.strokeStyle=s===STEPS?"#363648aa":"#2a2a3866";c.lineWidth=s===STEPS?1:.6;c.stroke();}}c.save();c.font="9px sans-serif";c.fillStyle=isOver?"#D8A030":"#5a5a70";c.textAlign="center";c.textBaseline="middle";const tp=gpt(0,STEPS);c.fillText(Math.round(rScale),tp.x,tp.y-10);c.restore();for(let i=0;i<N;i++){const o=gpt(i,STEPS);c.beginPath();c.moveTo(rCX,rCY);c.lineTo(o.x,o.y);c.strokeStyle="#2a2a3888";c.lineWidth=.7;c.stroke();}c.beginPath();for(let i=0;i<N;i++){const p=pt(i,rVals[AXES[i].key]);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}c.closePath();if(isOver){const g=c.createRadialGradient(rCX,rCY,0,rCX,rCY,rMax);g.addColorStop(0,"rgba(255,69,0,0.35)");g.addColorStop(.5,"rgba(138,43,226,0.2)");g.addColorStop(1,"rgba(138,43,226,0.05)");c.fillStyle=g;c.fill();c.strokeStyle="rgba(255,100,50,0.85)";c.lineWidth=2;c.stroke();}else{const g=c.createRadialGradient(rCX,rCY,0,rCX,rCY,rMax);g.addColorStop(0,"rgba(55,138,221,0.42)");g.addColorStop(1,"rgba(55,138,221,0.08)");c.fillStyle=g;c.fill();c.strokeStyle="rgba(133,183,235,0.75)";c.lineWidth=1.8;c.stroke();}const lo=rMax+24,vo=rMax+37;for(let i=0;i<N;i++){const ax=AXES[i],dv=rVals[ax.key],rv=Math.round(rTarget[ax.key]),p=pt(i,dv);const a=(i/N)*Math.PI*2-Math.PI/2;const lx=rCX+Math.cos(a)*lo,ly=rCY+Math.sin(a)*lo,vx=rCX+Math.cos(a)*vo,vy=rCY+Math.sin(a)*vo;c.beginPath();c.arc(p.x,p.y,4.5,0,Math.PI*2);c.fillStyle=rv>100?"#FF4500":ax.color;c.fill();c.strokeStyle="#0a0a0f88";c.lineWidth=1.5;c.stroke();if(rv>100){c.beginPath();c.arc(p.x,p.y,7,0,Math.PI*2);c.strokeStyle="#FF450055";c.lineWidth=2;c.stroke();}c.save();c.font="10px sans-serif";c.fillStyle="#9090a8";c.textAlign="center";c.textBaseline="middle";c.fillText(ax.label,lx,ly);c.font="bold 13px sans-serif";c.fillStyle=rv>100?"#FF4500":ax.color;if(rv>100){c.shadowColor="#FF4500";c.shadowBlur=8;}c.fillText(rv,vx,vy);c.shadowBlur=0;c.restore();}}
 
-/* ══ 屬性計算 ══ */
+/* ══ 屬性計算（不動）══ */
 function updateStats(){
   if(!selBlade||!selRatchet||!selBit)return;
   const b=selBlade.stats,r=selRatchet.stats,bt=selBit.stats;
@@ -717,16 +700,14 @@ function updateStats(){
   else if(max===def&&def-atk>15&&def-sta>15){type="防禦型";tc="#378ADD";}
   else if(max===sta&&sta-atk>15&&sta-def>15){type="耐力型";tc="#1D9E75";}
   const score=calcScore(atk,def,sta,accel,endurance,totalWeight,type);
-  document.getElementById("combo-name").textContent=selSet
-    ?`${selSet.name}  /  ${selBlade.name} ・ ${selRatchet.name} ・ ${selBit.name}`
-    :`${selBlade.name} / ${selRatchet.name} / ${selBit.name}`;
+  document.getElementById("combo-name").textContent=selSet?`${selSet.name}  /  ${selBlade.name} ・ ${selRatchet.name} ・ ${selBit.name}`:`${selBlade.name} / ${selRatchet.name} / ${selBit.name}`;
   const sb=document.getElementById("sbadge");sb.textContent=`${score} 分・${type}`;sb.style.color=tc;sb.style.borderColor=tc+"44";
   sb.classList.toggle("limitbreak-score",isOver);
   document.getElementById("mrow").innerHTML=`<span class="mp">⚖ ${totalWeight}g</span>`;
   document.getElementById("cl-atk").textContent=atk;document.getElementById("cl-def").textContent=def;document.getElementById("cl-sta").textContent=sta;
 }
 
-/* ══ 頁尾 ══ */
+/* ══ 頁尾（不動）══ */
 let footerOpen=false;
 function toggleFooter(){footerOpen=!footerOpen;document.getElementById("footer-body").classList.toggle("open",footerOpen);document.getElementById("footer-chevron").classList.toggle("open",footerOpen);}
 function openModal(id){document.getElementById("modal-"+id).classList.add("open");}
@@ -734,7 +715,7 @@ function closeModal(id){document.getElementById(id).classList.remove("open");}
 function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
 document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll(".modal-overlay.open").forEach(m=>closeModal(m.id));});
 
-/* ══ 回饋 ══ */
+/* ══ 回饋（不動）══ */
 const FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLSfOET3LO_fbMNnPVmx_dNSt4IfbdxrmPtAueEJxtJ8BaFICYg/formResponse";
 const ENTRY_ID="entry.1318000550";
 const handleFeedbackSubmit=async(msg)=>{const fd=new FormData();fd.append(ENTRY_ID,msg);try{await fetch(FORM_URL,{method:"POST",mode:"no-cors",body:fd});return true;}catch(e){return false;}};
@@ -745,18 +726,84 @@ function updateChar(){document.getElementById("char-count").textContent=document
 async function submitFeedback(){const txt=document.getElementById("fb-text").value.trim();if(!txt){document.getElementById("fb-text").style.borderColor="#A32D2D";setTimeout(()=>document.getElementById("fb-text").style.borderColor="",1500);return;}const btn=document.getElementById("fb-submit-btn");btn.disabled=true;btn.innerHTML='<i class="ti ti-loader-2" aria-hidden="true"></i>送出中…';const r=selectedRating?`[滿意度: ${"⭐".repeat(selectedRating)}]`:"";const ct=selectedCat?`[${selectedCat}]`:"";const ok=await handleFeedbackSubmit([r,ct,txt].filter(Boolean).join(" "));btn.disabled=false;btn.innerHTML='<i class="ti ti-send" aria-hidden="true"></i>送出回饋';if(ok){const el=document.getElementById("fb-ok");el.style.display="flex";setTimeout(()=>el.style.display="none",4000);const now=new Date();fbHistory.push({msg:txt,rating:selectedRating,cat:selectedCat,time:`${now.getHours().toString().padStart(2,"0")}:${now.getMinutes().toString().padStart(2,"0")}`});renderFbHistory();document.getElementById("fb-text").value="";document.getElementById("char-count").textContent="0";document.querySelectorAll(".rating-btn").forEach(b=>{b.classList.remove("selected");b.style.cssText="";});document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("selected"));selectedRating=0;selectedCat="";}else{const el=document.getElementById("fb-err");el.style.display="flex";setTimeout(()=>el.style.display="none",4000);}}
 function renderFbHistory(){if(!fbHistory.length)return;document.getElementById("fb-history").style.display="block";const c=["","#D85A30","#D8A030","#D8D030","#1D9E75","#5DCAA5"];document.getElementById("fb-history-list").innerHTML=fbHistory.slice(-3).reverse().map(h=>`<div class="fb-history-item">${h.msg.length>60?h.msg.slice(0,60)+"…":h.msg}<div class="fb-history-meta">${h.rating?`<span style="color:${c[h.rating]}">${"⭐".repeat(h.rating)}</span>`:""}${h.cat?`<span>${h.cat}</span>`:""}<span>${h.time}</span></div></div>`).join("");}
 
-/* ══ 賽事 ══ */
-const EVT={upcoming:[{name:"2026 台北 BeyBlade X 公開賽",date:"2026/06/15",loc:"台北・中正區",lat:25.042,lng:121.517,badge:"badge-open",bt:"報名中"},{name:"台中夏季個人賽",date:"2026/06/22",loc:"台中・西屯區",lat:24.173,lng:120.641,badge:"badge-soon",bt:"即將開始"},{name:"北部青少年聯賽 Q2",date:"2026/07/05",loc:"台北・內湖區",lat:25.082,lng:121.584,badge:"badge-open",bt:"報名中"},{name:"花蓮盃邀請賽",date:"2026/07/18",loc:"花蓮・壽豐鄉",lat:23.852,lng:121.524,badge:"badge-soon",bt:"籌備中"},{name:"台南南部錦標賽",date:"2026/08/03",loc:"台南・東區",lat:22.999,lng:120.212,badge:"badge-open",bt:"報名中"}],past:[{name:"2026 台灣冠軍賽（春季）",date:"2026/04/20",loc:"台北・信義區",lat:25.033,lng:121.563,badge:"badge-past",bt:"已結束"},{name:"高雄城市盃",date:"2026/03/30",loc:"高雄・三民區",lat:22.638,lng:120.303,badge:"badge-past",bt:"已結束"},{name:"台中春季友誼賽",date:"2026/03/08",loc:"台中・北屯區",lat:24.187,lng:120.688,badge:"badge-past",bt:"已結束"},{name:"全台青少年聯賽 Q1",date:"2026/02/14",loc:"台北・大安區",lat:25.026,lng:121.543,badge:"badge-past",bt:"已結束"}]};
+/* ══════════════════════════════════════════════════════
+   ★ 賽事中心：依日期自動分類 v1.9
+   ══════════════════════════════════════════════════════
+   每筆賽事資料含 date（YYYY/MM/DD）。
+   今天日期 >= 賽事日期 → 歷史賽事；否則 → 近期賽事。
+   tab 切換時即時依「今天」重新分類，無需手動搬移資料。
+══════════════════════════════════════════════════════ */
+const EVT_RAW=[
+  {name:"2026 台北 BeyBlade X 公開賽",date:"2026/06/15",loc:"台北・中正區",lat:25.042,lng:121.517},
+  {name:"台中夏季個人賽",date:"2026/06/22",loc:"台中・西屯區",lat:24.173,lng:120.641},
+  {name:"北部青少年聯賽 Q2",date:"2026/07/05",loc:"台北・內湖區",lat:25.082,lng:121.584},
+  {name:"花蓮盃邀請賽",date:"2026/07/18",loc:"花蓮・壽豐鄉",lat:23.852,lng:121.524},
+  {name:"台南南部錦標賽",date:"2026/08/03",loc:"台南・東區",lat:22.999,lng:120.212},
+  {name:"2026 台灣冠軍賽（春季）",date:"2026/04/20",loc:"台北・信義區",lat:25.033,lng:121.563},
+  {name:"高雄城市盃",date:"2026/03/30",loc:"高雄・三民區",lat:22.638,lng:120.303},
+  {name:"台中春季友誼賽",date:"2026/03/08",loc:"台中・北屯區",lat:24.187,lng:120.688},
+  {name:"全台青少年聯賽 Q1",date:"2026/02/14",loc:"台北・大安區",lat:25.026,lng:121.543}
+];
+
+/* 今天日期（只比較到日，去除時間誤差） */
+const TODAY=new Date();TODAY.setHours(0,0,0,0);
+
+function parseEventDate(str){
+  const [y,m,d]=str.split("/").map(Number);
+  return new Date(y,m-1,d);
+}
+
+/* 動態分類：依「今天」即時計算，賽事結束(日期已過)自動歸入歷史 */
+function classifyEvents(){
+  const upcoming=[],past=[];
+  EVT_RAW.forEach(e=>{
+    const ed=parseEventDate(e.date);
+    const diffDays=Math.round((ed-TODAY)/86400000);
+    let item={...e,_diffDays:diffDays};
+    if(ed.getTime() < TODAY.getTime()){
+      /* 已過去：歷史賽事 */
+      item.badge="badge-past";item.bt="已結束";
+      past.push(item);
+    } else {
+      /* 尚未到來或就是今天：近期賽事 */
+      if(diffDays===0){item.badge="badge-open";item.bt="今天開賽";}
+      else if(diffDays<=7){item.badge="badge-soon";item.bt="即將開始";}
+      else{item.badge="badge-open";item.bt="報名中";}
+      upcoming.push(item);
+    }
+  });
+  /* 近期賽事：日期由近到遠排序 */
+  upcoming.sort((a,b)=>a._diffDays-b._diffDays);
+  /* 歷史賽事：日期由近到遠（最近結束的排前面） */
+  past.sort((a,b)=>b._diffDays-a._diffDays);
+  return {upcoming,past};
+}
+
+let EVT={upcoming:[],past:[]};
 let curTab="upcoming",lmap=null,mapMarkers=[];
+
 function makeIcon(c){return L.divIcon({html:`<svg width="22" height="28" viewBox="0 0 22 28"><path d="M11 0C4.9 0 0 4.9 0 11c0 6.6 11 17 11 17S22 17.6 22 11C22 4.9 17.1 0 11 0z" fill="${c}"/><circle cx="11" cy="11" r="4.5" fill="white" opacity="0.9"/></svg>`,iconSize:[22,28],iconAnchor:[11,28],popupAnchor:[0,-28],className:""});}
 function renderMapMarkers(tab){mapMarkers.forEach(m=>m.remove());mapMarkers=[];EVT[tab].forEach(e=>{const col=tab==="upcoming"?"#378ADD":"#5a5a70";const m=L.marker([e.lat,e.lng],{icon:makeIcon(col)}).addTo(lmap).bindPopup(`<div class="pop-name">${e.name}</div><div class="pop-meta"><span>${e.date}</span><span>${e.loc}</span></div>`);mapMarkers.push(m);});}
 function initMap(){if(lmap)return;lmap=L.map("leaflet-map",{center:[23.8,121.0],zoom:7});L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:'© <a href="https://www.openstreetmap.org/copyright" style="color:#85B7EB">OpenStreetMap</a>',maxZoom:18}).addTo(lmap);renderMapMarkers("upcoming");}
-function renderEvents(tab){document.getElementById("elist").innerHTML=EVT[tab].map(e=>`<div class="ecard ${tab}"><div class="etop"><div class="ename">${e.name}</div><span class="ebadge ${e.badge}">${e.bt}</span></div><div class="emeta"><span><i class="ti ti-calendar" aria-hidden="true"></i>${e.date}</span><span><i class="ti ti-map-pin" aria-hidden="true"></i>${e.loc}</span></div></div>`).join("");}
+
+function renderEvents(tab){
+  const list=EVT[tab];
+  document.getElementById("count-upcoming").textContent=EVT.upcoming.length;
+  document.getElementById("count-past").textContent=EVT.past.length;
+  if(list.length===0){
+    const emptyMsg=tab==="upcoming"?"目前沒有近期賽事":"目前沒有歷史賽事紀錄";
+    document.getElementById("elist").innerHTML=`<div class="elist-empty"><i class="ti ti-calendar-off" aria-hidden="true"></i><span>${emptyMsg}</span></div>`;
+    return;
+  }
+  document.getElementById("elist").innerHTML=list.map(e=>`<div class="ecard ${tab}"><div class="etop"><div class="ename">${e.name}</div><span class="ebadge ${e.badge}">${e.bt}</span></div><div class="emeta"><span><i class="ti ti-calendar" aria-hidden="true"></i>${e.date}</span><span><i class="ti ti-map-pin" aria-hidden="true"></i>${e.loc}</span></div></div>`).join("");
+}
 function switchTab(tab,el){curTab=tab;document.querySelectorAll(".etab").forEach(b=>b.classList.remove("active"));el.classList.add("active");renderEvents(tab);if(lmap)renderMapMarkers(tab);}
+
 function goto(page,el){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("page-"+page).classList.add("active");document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));document.querySelectorAll("[data-m]").forEach(b=>b.classList.remove("active"));const ids={home:"nb-home",bey:"nb-bey",cl:"nb-cl"};if(ids[page])document.getElementById(ids[page]).classList.add("active");document.querySelectorAll(`[data-m="${{home:"home",bey:"bey",cl:"cl"}[page]}"]`).forEach(b=>b.classList.add("active"));if(page==="home"){setTimeout(()=>{initMap();if(lmap)lmap.invalidateSize();},80);}if(page==="bey"){setTimeout(resizeRadar,50);}}
 function toggleMob(){document.getElementById("mob-menu").classList.toggle("open");}
 
 /* ══ 初始化 ══ */
+EVT=classifyEvents();
 renderEvents("upcoming");
 setTimeout(()=>initMap(),200);
 initRadar();
