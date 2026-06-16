@@ -11,7 +11,7 @@ const BEYBLADE_DATABASE = {
                 versions: ["BX-01", "BX-07", "BX-14-03", "BX-17-01", "BX-22"]
             },
             "Dran_Sword_v2": {// 第二種屬性:ATK 60 / DEF 25 / STA 30
-                name: "蒼龍神劍 (特別版)",
+                name: "蒼龍神劍 (強化)",
                 type: "攻擊型",
                 weight: 35.1, // 如果重量有變可以自行調整
                 imgUrl: "",
@@ -29,7 +29,7 @@ const BEYBLADE_DATABASE = {
                 versions: ["BX-02",  "BX-08-01", "BX-14-04"]
             },
             "Hells_Scythe_v2": {
-                name: "惡魔紅鐮 (特別版)",
+                name: "惡魔紅鐮 (強化)",
                 type: "平衡型",
                 weight: 33.7,
                 imgUrl: "",
@@ -56,13 +56,31 @@ const BEYBLADE_DATABASE = {
                 versions: [ "BX-04", "BX-06", "BX-08-02", "BX-14-05", "BX-20-03"]
             },
             "Knight_Shield_v2": { 
-                name: "騎士重盾 (特別版)", 
+                name: "騎士重盾 (強化)", 
                 type: "防禦型", 
                 weight: 34.8, 
                 imgUrl: "", 
                 shopeeUrl: "https://s.shopee.tw/5L9YnA9Jj9",
                 stats: { atk: 25, def: 60, sta: 30, accel: 0, endurance: 0 },
                 versions: [ "BXH-02"]
+            },
+            "Wizard_Rod_v1": { 
+                name: "魔導神杖", 
+                type: "耐力型", 
+                weight:35.3, 
+                imgUrl: "", 
+                shopeeUrl: "https://s.shopee.tw/1LdRZ11aha",
+                stats: { atk: 15, def: 25, sta: 60, accel: 0, endurance: 0 },
+                versions: [ "UX-03", "BX-35-04", "UX-04-02"]
+            },
+            "Wizard_Rod_v2": { 
+                name: "魔導神杖 (強化)", 
+                type: "耐力型", 
+                weight: 35.3, 
+                imgUrl: "", 
+                shopeeUrl: "https://s.shopee.tw/LkuNCqZ9P",
+                stats: { atk: 20, def: 30, sta: 65, accel: 0, endurance: 0 },
+                versions: [ "BXH-09"]
             }
             },
         ratchets: { //17筆固鎖輪盤資料
@@ -256,7 +274,31 @@ const BEYBLADE_DATABASE = {
           imgUrl: "", 
           shopeeUrl: "https://s.shopee.tw/5Aq6yxzQaf",
           components: { blade: "Knight_Shield_v2", ratchet: "3-80", bit: "Needle" },
-          versions: ["BXH-02"]}
+          versions: ["BXH-02"]},
+
+          //魔導神杖系列
+          { 
+          name: "魔導神杖 5-70DB", 
+          type: "耐力型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/5fmQj1nnja",
+          components: { blade: "Wizard_Rod_v1", ratchet: "5-70", bit: "Disc Ball" },
+          versions: ["UX-03","UX-04-02"]},
+          { 
+          name: "魔導神杖 1-60R", 
+          type: "耐力型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/8ATlhdoKSh",
+          components: { blade: "Wizard_Rod_v1", ratchet: "1-60", bit: "Rush" },
+          versions: ["BX-35-04"]},
+          { 
+          name: "魔導神杖 5-70DB 金屬塗層", 
+          type: "耐力型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/5fmQj44w4a",
+          components: { blade: "Wizard_Rod_v2", ratchet: "5-70", bit: "Disc Ball" },
+          versions: ["BXH-09"]}
+
     ]
 };
 
