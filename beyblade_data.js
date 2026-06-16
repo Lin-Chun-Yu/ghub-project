@@ -81,6 +81,33 @@ const BEYBLADE_DATABASE = {
                 shopeeUrl: "https://s.shopee.tw/LkuNCqZ9P",
                 stats: { atk: 20, def: 30, sta: 65, accel: 0, endurance: 0 },
                 versions: [ "BXH-09"]
+            },
+            "Shark_Scale_v1": { 
+                name: "鮫鯊狂鱗", 
+                type: "攻擊型", 
+                weight: 37.6, 
+                imgUrl: "", 
+                shopeeUrl: "https://s.shopee.tw/5VT0ekUta4",
+                stats: { atk: 70, def: 15, sta: 15, accel: 0, endurance: 0 },
+                versions: [ "UX-15-01"]
+            },
+            "Phoenix_Wing_v1": { 
+                name: "鳳凰飛翼", 
+                type: "攻擊型", 
+                weight: 39, 
+                imgUrl: "", 
+                shopeeUrl: "https://s.shopee.tw/30lfhEgltA",
+                stats: { atk: 60, def: 25, sta: 15, accel: 0, endurance: 0 },
+                versions: [ "BX-35-05"]
+            },
+            "Phoenix_Wing_v2": { 
+                name: "鳳凰飛翼 (強化)", 
+                type: "攻擊型", 
+                weight: 39, 
+                imgUrl: "", 
+                shopeeUrl: "https://s.shopee.tw/BRUK3vlgu",
+                stats: { atk: 65, def: 30, sta: 20, accel: 0, endurance: 0 },
+                versions: [ "BX-23", "BXG-35", "BXC-05"]
             }
             },
         ratchets: { //17筆固鎖輪盤資料
@@ -92,6 +119,7 @@ const BEYBLADE_DATABASE = {
             "3-70": { name: "3-70", height: 70, weight: 6.4, imgUrl: "", shopeeUrl: "https://s.shopee.tw/6pyMYdiina", stats: { atk: 15, def: 8, sta: 7, accel: 0, endurance: 0 } },
             "3-80": { name: "3-80", height: 80, weight: 7.1, imgUrl: "", shopeeUrl: "https://s.shopee.tw/gNjCwfxIc", stats: { atk: 15, def: 7, sta: 8, accel: 0, endurance: 0 } },
             "3-85": { name: "3-85", height: 85, weight: 4.7, imgUrl: "", shopeeUrl: "https://s.shopee.tw/qh9PFfJxf", stats: { atk: 5, def: 15, sta: 10, accel: 0, endurance: 0 } },
+            "4-50": { name: "4-50", height: 50, weight: 5.9, imgUrl: "", shopeeUrl: "https://s.shopee.tw/9AMJ0boqBA", stats: { atk: 12, def: 13, sta: 5, accel: 0, endurance: 0 } },
             "4-60": { name: "4-60", height: 60, weight: 6.3, imgUrl: "", shopeeUrl: "https://s.shopee.tw/1gGGOmc9Gq", stats: { atk: 11, def: 13, sta: 6, accel: 0, endurance: 0 } },
             "4-70": { name: "4-70", height: 70, weight: 6.4, imgUrl: "", shopeeUrl: "https://s.shopee.tw/1qZgb5bVvt", stats: { atk: 11, def: 12, sta: 7, accel: 0, endurance: 0 } },
             "4-80": { name: "4-80", height: 80, weight: 7.0, imgUrl: "", shopeeUrl: "https://s.shopee.tw/1LdQ0AdPwo", stats: { atk: 11, def: 11, sta: 8, accel: 0, endurance: 0 } },
@@ -129,7 +157,9 @@ const BEYBLADE_DATABASE = {
             "Vortex": { name: "V 渦流", type: "攻擊型", weight: 2.2, imgUrl: "", shopeeUrl: "https://s.shopee.tw/1gGEpmPe4N", stats: { atk: 45, def: 10, sta: 5, accel: 40, endurance: 80 } },            
             "Quake": { name: "Q 躍動軸", type: "攻擊型", weight: 2.2, imgUrl: "", shopeeUrl: "https://s.shopee.tw/9zvMlsPx9p", stats: { atk: 55, def: 15, sta: 5, accel: 25, endurance: 80 } },
             "Metal Needle": { name: "MN 金屬針狀軸", type: "防禦型", weight: 2.8, imgUrl: "", shopeeUrl: "https://s.shopee.tw/5L9XCZiIWX", stats: { atk: 8, def: 57, sta: 30, accel: 5, endurance: 30 } },
-            "Free Ball": { name: "FB 自由旋轉球狀軸", type: "耐力型", weight: 1.9, imgUrl: "", shopeeUrl: "https://s.shopee.tw/5q5nnUgOVe", stats: { atk: 10, def: 25, sta: 60, accel: 5, endurance: 30 } }
+            "Free Ball": { name: "FB 自由旋轉球狀軸", type: "耐力型", weight: 1.9, imgUrl: "", shopeeUrl: "https://s.shopee.tw/5q5nnUgOVe", stats: { atk: 10, def: 25, sta: 60, accel: 5, endurance: 30 } },
+            "Under Flat": { name: "UF 低位偏平軸", type: "攻擊型", weight: 2.0, imgUrl: "", shopeeUrl: "https://s.shopee.tw/9fIZbm3dI4", stats: { atk: 55, def: 5, sta: 5, accel: 35, endurance: 80 } }
+
         }
     },
 
@@ -297,8 +327,39 @@ const BEYBLADE_DATABASE = {
           imgUrl: "", 
           shopeeUrl: "https://s.shopee.tw/5fmQj44w4a",
           components: { blade: "Wizard_Rod_v2", ratchet: "5-70", bit: "Disc Ball" },
-          versions: ["BXH-09"]}
+          versions: ["BXH-09"]},
+          
+          //鮫鯊狂鱗系列
+          { 
+          name: "鮫鯊狂鱗 4-50UF", 
+          type: "攻擊型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/1gGI5jIHaU",
+          components: { blade: "Shark_Scale_v1", ratchet: "4-50", bit: "Under Flat" },
+          versions: ["UX-15-01"]},
 
+          //鳳凰飛翼系列
+          { 
+          name: "鳳凰飛翼 5-80H", 
+          type: "攻擊型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/2LVyuIOq5R",
+          components: { blade: "Phoenix_Wing_v1", ratchet: "5-80", bit: "Hexa" },
+          versions: ["BX-35-05"]},
+          { 
+          name: "鳳凰飛翼 9-80DB", 
+          type: "攻擊型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/60PHH37nOM",
+          components: { blade: "Phoenix_Wing_v2", ratchet: "9-80", bit: "Disc Ball" },
+          versions: ["BXC-05"]},
+          { 
+          name: "鳳凰飛翼 9-60GF 金屬塗層", 
+          type: "攻擊型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/8fQ2Rxvvwz",
+          components: { blade: "Phoenix_Wing_v2", ratchet: "9-60", bit: "Gear Flat" },
+          versions: ["BX-23", "BXG-35"]},
     ]
 };
 
