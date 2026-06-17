@@ -108,6 +108,24 @@ const BEYBLADE_DATABASE = {
                 shopeeUrl: "https://s.shopee.tw/BRUK3vlgu",
                 stats: { atk: 65, def: 30, sta: 20, accel: 0, endurance: 0 },
                 versions: [ "BX-23", "BXG-35", "BXC-05"]
+            },
+            "Knight_Mail_v1": { 
+                name: "騎士圓甲", 
+                type: "防禦型", 
+                weight: 36.7, 
+                imgUrl: "", 
+                shopeeUrl: "https://s.shopee.tw/W4LTl005x",
+                stats: { atk: 10, def: 65, sta: 35, accel: 0, endurance: 0 },
+                versions: [ "UX-10-01"]
+            },
+            "Knight_Mail_v2": { 
+                name: "騎士圓甲 (強化)", 
+                type: "防禦型", 
+                weight: 36.7, 
+                imgUrl: "", 
+                shopeeUrl: "https://s.shopee.tw/9Kfk00o2Iq",
+                stats: { atk: 15, def: 70, sta: 40, accel: 0, endurance: 0 },
+                versions: [ "BXG-42"]
             }
             },
         ratchets: { //17筆固鎖輪盤資料
@@ -158,7 +176,8 @@ const BEYBLADE_DATABASE = {
             "Quake": { name: "Q 躍動軸", type: "攻擊型", weight: 2.2, imgUrl: "", shopeeUrl: "https://s.shopee.tw/9zvMlsPx9p", stats: { atk: 55, def: 15, sta: 5, accel: 25, endurance: 80 } },
             "Metal Needle": { name: "MN 金屬針狀軸", type: "防禦型", weight: 2.8, imgUrl: "", shopeeUrl: "https://s.shopee.tw/5L9XCZiIWX", stats: { atk: 8, def: 57, sta: 30, accel: 5, endurance: 30 } },
             "Free Ball": { name: "FB 自由旋轉球狀軸", type: "耐力型", weight: 1.9, imgUrl: "", shopeeUrl: "https://s.shopee.tw/5q5nnUgOVe", stats: { atk: 10, def: 25, sta: 60, accel: 5, endurance: 30 } },
-            "Under Flat": { name: "UF 低位偏平軸", type: "攻擊型", weight: 2.0, imgUrl: "", shopeeUrl: "https://s.shopee.tw/9fIZbm3dI4", stats: { atk: 55, def: 5, sta: 5, accel: 35, endurance: 80 } }
+            "Under Flat": { name: "UF 超平底軸", type: "攻擊型", weight: 2.0, imgUrl: "", shopeeUrl: "https://s.shopee.tw/9fIZbm3dI4", stats: { atk: 55, def: 5, sta: 5, accel: 35, endurance: 80 } },
+            "Bound Spike": { name: "BS 彈簧防禦軸", type: "防禦型", weight: 2.0, imgUrl: "", shopeeUrl: "https://s.shopee.tw/1VwsfCjXva", stats: { atk: 5, def: 60, sta: 30, accel: 5, endurance: 30 } }
 
         }
     },
@@ -360,6 +379,22 @@ const BEYBLADE_DATABASE = {
           shopeeUrl: "https://s.shopee.tw/8fQ2Rxvvwz",
           components: { blade: "Phoenix_Wing_v2", ratchet: "9-60", bit: "Gear Flat" },
           versions: ["BX-23", "BXG-35"]},
+
+          //騎士圓甲
+          { 
+          name: "騎士圓甲 3-85BS", 
+          type: "防禦型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/8fQ3D77rX4",
+          components: { blade: "Knight_Mail_v1", ratchet: "3-85", bit: "Bound Spike" },
+          versions: ["UX-10-01"]},
+          { 
+          name: "騎士圓甲 3-85BS 金屬塗層", 
+          type: "防禦型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/4LH43ANokD",
+          components: { blade: "Knight_Mail_v2", ratchet: "3-85", bit: "Bound Spike" },
+          versions: ["BXG-42"]}
     ]
 };
 
