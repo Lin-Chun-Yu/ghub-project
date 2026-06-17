@@ -135,6 +135,24 @@ const BEYBLADE_DATABASE = {
                 shopeeUrl: "https://s.shopee.tw/4ftuTbkbub",
                 stats: { atk: 35, def: 40, sta: 25, accel: 0, endurance: 0 },
                 versions: [ "BX-21-01", "BX-31-03"]
+            },
+            "Dran_Dagger_v1": { 
+                name: "蒼龍利刃", 
+                type: "攻擊型", 
+                weight: 36, 
+                imgUrl: "", 
+                shopeeUrl: "https://s.shopee.tw/110cAEl1Mo",
+                stats: { atk: 50, def: 25, sta: 25, accel: 0, endurance: 0 },
+                versions: [ "BX-20-01", "BX-31-04", "UX-18-05"]
+            },
+            "Dran_Dagger_v2": { 
+                name: "蒼龍利刃 (強化)", 
+                type: "攻擊型", 
+                weight: 36, 
+                imgUrl: "", 
+                shopeeUrl: "https://s.shopee.tw/4qDKjMUPMj",
+                stats: { atk: 55, def: 30, sta: 30, accel: 0, endurance: 0 },
+                versions: [ "BXG-14", "BXG-25-03"]
             }
 
             },
@@ -154,6 +172,7 @@ const BEYBLADE_DATABASE = {
             "5-60": { name: "5-60", height: 60, weight: 6.6, imgUrl: "", shopeeUrl: "https://s.shopee.tw/2VpNOkzfoT", stats:{ atk:12, def:9, sta:9, accel:0, endurance:0 } },
             "5-70": { name: "5-70", height: 70, weight: 6.7, imgUrl: "", shopeeUrl: "https://s.shopee.tw/20t6nq1ZpO", stats:{ atk:12, def:8.5, sta:9.5, accel:0, endurance:0 } },
             "5-80": { name: "5-80", height: 80, weight: 7.3, imgUrl: "", shopeeUrl: "https://s.shopee.tw/2BCX090wUR", stats:{ atk:12, def:8, sta:10, accel:0, endurance:0 } },
+            "7-55": { name: "7-55", height: 55, weight: 5.2, imgUrl: "", shopeeUrl: "https://s.shopee.tw/6pyP6X4WCn", stats:{ atk:6, def:14, sta:10, accel:0, endurance:0 } },
             "7-70": { name: "7-70", height: 70, weight: 7.3, imgUrl: "", shopeeUrl: "https://s.shopee.tw/Lksom7vD6", stats:{ atk:8, def:12, sta:10, accel:0, endurance:0 } },
             "9-60": { name: "9-60", height: 60, weight: 6.2, imgUrl: "", shopeeUrl: "https://s.shopee.tw/W4J157Hs9", stats:{ atk:13, def:10, sta:7, accel:0, endurance:0 } },
             "9-80": { name: "9-80", height: 80, weight: 6.9, imgUrl: "", shopeeUrl: "https://s.shopee.tw/9pby8Hx51W", stats:{ atk:13, def:10, sta:7, accel:0, endurance:0 } }
@@ -188,7 +207,6 @@ const BEYBLADE_DATABASE = {
             "Free Ball": { name: "FB 自由旋轉球狀軸", type: "耐力型", weight: 1.9, imgUrl: "", shopeeUrl: "https://s.shopee.tw/5q5nnUgOVe", stats: { atk: 10, def: 25, sta: 60, accel: 5, endurance: 30 } },
             "Under Flat": { name: "UF 超平底軸", type: "攻擊型", weight: 2.0, imgUrl: "", shopeeUrl: "https://s.shopee.tw/9fIZbm3dI4", stats: { atk: 55, def: 5, sta: 5, accel: 35, endurance: 80 } },
             "Bound Spike": { name: "BS 彈簧防禦軸", type: "防禦型", weight: 2.0, imgUrl: "", shopeeUrl: "https://s.shopee.tw/1VwsfCjXva", stats: { atk: 5, def: 60, sta: 30, accel: 5, endurance: 30 } }
-
         }
     },
 
@@ -420,8 +438,44 @@ const BEYBLADE_DATABASE = {
           imgUrl: "", 
           shopeeUrl: "https://s.shopee.tw/6feyrV31ar",
           components: { blade: "Hells_Chain_v1", ratchet: "9-80", bit: "Orb" },
-          versions: ["BX-31-03"]}
+          versions: ["BX-31-03"]},
 
+          //蒼龍利刃
+          { 
+          name: "蒼龍利刃 4-60R", 
+          type: "攻擊型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/7VE5umgFjW",
+          components: { blade: "Dran_Dagger_v1", ratchet: "4-60", bit: "Rush" },
+          versions: ["BX-20-01"]},
+          { 
+          name: "蒼龍利刃 4-70P", 
+          type: "攻擊型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/BRVBK7UVb",
+          components: { blade: "Dran_Dagger_v1", ratchet: "4-70", bit: "Point" },
+          versions: ["BX-31-04"]},
+          { 
+          name: "蒼龍利刃 2-80GP 金屬塗層", 
+          type: "攻擊型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/8KnCuLmina",
+          components: { blade: "Dran_Dagger_v2", ratchet: "2-80", bit: "Gear Point" },
+          versions: ["BXG-14"]},
+          { 
+          name: "蒼龍利刃 9-60LF 金屬塗層", 
+          type: "攻擊型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/6feyvIoGM1",
+          components: { blade: "Dran_Dagger_v2", ratchet: "9-60", bit: "Low Flat" },
+          versions: ["BXG-25-03"]},
+          { 
+          name: "蒼龍利刃 7-55G", 
+          type: "攻擊型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/6L28Whijb8",
+          components: { blade: "Dran_Dagger_v1", ratchet: "7-55", bit: "Glide" },
+          versions: ["UX-18-05"]}
     ]
 };
 
