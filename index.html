@@ -6,6 +6,7 @@
 <html lang="zh-TW">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- GOOGLE analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2EKSPQG5T2"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -34,38 +35,12 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .nav-item:hover{background:var(--bg3);color:var(--t1)}
 .nav-item.active{background:rgba(55,138,221,.12);color:var(--blue2)}
 .nav-item.active i{color:var(--blue)}
-
-/* ══ 漢堡按鈕：明顯白色實心三條線 ══ */
-.hamburger{
-  display:none;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:5px;
-  width:40px;
-  height:40px;
-  padding:8px;
-  background:transparent;
-  border:1.5px solid var(--bd2);
-  border-radius:8px;
-  cursor:pointer;
-  flex-shrink:0;
-  transition:background .15s,border-color .15s;
-}
-.hamburger:hover{background:rgba(55,138,221,.12);border-color:var(--blue3);}
-.hamburger span{
-  display:block;
-  width:18px;
-  height:2px;
-  background:#f0f0f8;
-  border-radius:2px;
-  transition:all .2s;
-}
-/* 開啟狀態：第一條旋轉成 X */
+.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:40px;height:40px;padding:8px;background:transparent;border:1.5px solid var(--bd2);border-radius:8px;cursor:pointer;flex-shrink:0;transition:background .15s,border-color .15s}
+.hamburger:hover{background:rgba(55,138,221,.12);border-color:var(--blue3)}
+.hamburger span{display:block;width:18px;height:2px;background:#f0f0f8;border-radius:2px;transition:all .2s}
 .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
 .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-
 .mob-menu{display:none;flex-direction:column;gap:2px;background:var(--bg2);border-bottom:.5px solid var(--bd2);padding:8px 12px 12px;position:sticky;top:52px;z-index:199}
 .mob-menu.open{display:flex}
 .mob-menu .nav-item{width:100%;padding:10px 12px;justify-content:flex-start}
@@ -153,13 +128,32 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .btn-shopee-part:hover{background:rgba(238,77,45,.2);border-color:var(--shopee);transform:scale(1.05)}
 @keyframes shopee-pulse{0%,100%{box-shadow:0 0 0 0 rgba(238,77,45,.4)}50%{box-shadow:0 0 0 4px rgba(238,77,45,0)}}
 .btn-shopee-part{animation:shopee-pulse 2.8s ease-in-out infinite}
+
+/* ══════════════════════════════════════════════
+   ★ 屬性卡 v2.3 — 數值 + 進度條
+   ══════════════════════════════════════════════ */
 .stats-card{background:var(--bg4);border:.5px solid var(--bd);border-radius:10px;padding:10px;margin-top:10px}
+/* 五格 grid：比之前稍高，容納進度條 */
 .sg5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-bottom:8px}
-.sb{background:var(--bg3);border-radius:7px;border:.5px solid var(--bd);padding:.45rem;text-align:center;transition:border-color .3s,background .3s}
-.sl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
-.sv{font-size:15px;font-weight:500;transition:color .3s,text-shadow .3s}
+.sb{
+  background:var(--bg3);border-radius:7px;border:.5px solid var(--bd);
+  padding:6px 5px 5px;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  transition:border-color .3s,background .3s;
+}
+.sl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;line-height:1}
+.sv{font-size:15px;font-weight:700;line-height:1.1;transition:color .3s,text-shadow .3s}
+
+/* 進度條外框 */
+.sbar-wrap{width:100%;height:3px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-top:1px}
+/* 進度條填充 — 寬度由 JS 動態設定 */
+.sbar{height:3px;border-radius:3px;transition:width .4s cubic-bezier(.25,.8,.25,1),box-shadow .4s;width:0}
+
+/* limitbreak 時整格發光 */
 .sb.limitbreak{border-color:#FF4500aa;background:rgba(255,69,0,.08)}
 .sv.limitbreak{color:#FF4500!important;text-shadow:0 0 8px #FF4500cc,0 0 16px #FF450066}
+.sbar.limitbreak{box-shadow:0 0 6px currentColor}
+
 .divid{height:.5px;background:var(--bd);margin:6px 0}
 .combo-bottom{display:flex;flex-direction:column;gap:5px}
 .combo-detail-row{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
@@ -174,10 +168,12 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .sbadge.limitbreak-score{border-color:#FF4500aa!important;text-shadow:0 0 6px #FF450099}
 .score-info{position:relative;display:flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--bg3);border:.5px solid var(--bd2);color:var(--t3);font-size:10px;font-weight:600;cursor:help;flex-shrink:0;transition:all .15s}
 .score-info:hover{color:var(--blue2);border-color:var(--blue3);background:rgba(55,138,221,.1)}
-.score-tooltip{position:absolute;bottom:calc(100% + 8px);right:0;width:230px;background:var(--bg3);border:.5px solid var(--bd2);border-radius:10px;padding:10px 12px;font-size:10px;line-height:1.6;color:var(--t2);font-weight:400;text-align:left;white-space:normal;box-shadow:0 8px 24px rgba(0,0,0,.6);opacity:0;visibility:hidden;transform:translateY(4px);transition:opacity .15s,transform .15s;z-index:400}
+.score-tooltip{position:absolute;bottom:calc(100% + 8px);right:0;width:230px;background:var(--bg3);border:.5px solid var(--bd2);border-radius:10px;padding:10px 12px;font-size:10px;line-height:1.6;color:var(--t2);text-align:left;white-space:normal;box-shadow:0 8px 24px rgba(0,0,0,.6);opacity:0;visibility:hidden;transform:translateY(4px);transition:opacity .15s,transform .15s;z-index:400}
 .score-tooltip strong{color:var(--t1);font-weight:600}
 .score-tooltip::after{content:"";position:absolute;top:100%;right:5px;border:6px solid transparent;border-top-color:var(--bd2)}
 .score-info:hover .score-tooltip{opacity:1;visibility:visible;transform:translateY(0)}
+
+/* 其他 */
 .cl-wrap{flex:1;overflow-y:auto;padding:16px}
 .cl-wrap::-webkit-scrollbar{width:3px}
 .cl-wrap::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
@@ -266,36 +262,29 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 .leaflet-popup-content{margin:9px 13px;font-size:12px;font-family:var(--font-sans)}
 .pop-name{font-weight:500;font-size:13px;margin-bottom:3px}
 .pop-meta{font-size:10px;color:var(--t2);display:flex;flex-direction:column;gap:2px}
-
 @media(max-width:768px){
   .shell{height:auto;min-height:100vh;max-height:none}
-  .content{overflow:visible}
-  .page{overflow:visible}
-  .page.active{display:flex}
-  .nav-links{display:none}
-  .hamburger{display:flex}
+  .content{overflow:visible}.page{overflow:visible}.page.active{display:flex}
+  .nav-links{display:none}.hamburger{display:flex}
   .home-layout{display:flex;flex-direction:column;overflow:visible}
   .map-col,.events-col{width:100%;flex:none}
   .map-col{border-right:none;border-bottom:.5px solid var(--bd)}
   #leaflet-map{height:240px;min-height:240px;flex:none;width:100%}
   .elist{overflow:visible;max-height:none}
-  .bey-wrap{overflow:visible}
-  .bey-layout{display:flex;flex-direction:column;overflow:visible}
+  .bey-wrap{overflow:visible}.bey-layout{display:flex;flex-direction:column;overflow:visible}
   .col-radar,.col-right{width:100%;flex:none}
   .col-radar{border-right:none;border-bottom:.5px solid var(--bd);min-height:360px;padding:16px 10px;order:1}
   #radar-canvas{max-width:300px;width:100%;height:auto}
-  .col-right{order:2;overflow:visible}
-  .parts-panel{overflow:visible}
+  .col-right{order:2;overflow:visible}.parts-panel{overflow:visible}
   .parts-scroll-area{overflow:visible;max-height:none;padding:0 12px 16px}
-  .part-dropdown{right:0}
-  .footer-links-inline{display:none}
+  .part-dropdown{right:0}.footer-links-inline{display:none}
 }
 </style>
 
 <div class="shell">
 <nav class="navbar">
   <div class="brand">
-    <svg width="32" height="32" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+    <svg width="32" height="32" viewBox="0 0 34 34" fill="none">
       <rect width="34" height="34" rx="8" fill="#0C447C"/>
       <circle cx="17" cy="17" r="10" stroke="#378ADD" stroke-width="1.5" fill="none"/>
       <circle cx="17" cy="17" r="5.5" stroke="#85B7EB" stroke-width="1" fill="none"/>
@@ -313,14 +302,10 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
     <button class="nav-item" onclick="goto('bey',this)" id="nb-bey"><i class="ti ti-tornado"></i>神配置計算機</button>
     <button class="nav-item" onclick="goto('cl',this)" id="nb-cl"><i class="ti ti-notes"></i>更新日誌</button>
   </div>
-  <!-- ★ 漢堡按鈕：純 CSS 三條線，無任何 icon 字型依賴 -->
   <button class="hamburger" id="hamburger-btn" onclick="toggleMob()" aria-label="開啟選單" aria-expanded="false">
-    <span></span>
-    <span></span>
-    <span></span>
+    <span></span><span></span><span></span>
   </button>
 </nav>
-
 <div class="mob-menu" id="mob-menu">
   <button class="nav-item active" onclick="goto('home',this);toggleMob()" data-m="home"><i class="ti ti-map-2"></i>賽事中心</button>
   <button class="nav-item" onclick="goto('bey',this);toggleMob()" data-m="bey"><i class="ti ti-tornado"></i>神配置計算機</button>
@@ -368,7 +353,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
                   </div>
                   <i class="ti ti-chevron-down pst-arrow" id="arr-sets"></i>
                 </div>
-                <button class="btn-shopee-part" onclick="shopeeOpenSet()" title="蝦皮購買此套組">🛒</button>
+                <button class="btn-shopee-part" onclick="shopeeOpenSet()">🛒</button>
               </div>
               <div class="part-dropdown" id="dd-sets"><div class="part-dropdown-inner" id="ddi-sets"></div></div>
             </div>
@@ -383,7 +368,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
                   <span class="pst-weight" id="disp-blade-weight"></span>
                   <i class="ti ti-chevron-down pst-arrow" id="arr-blade"></i>
                 </div>
-                <button class="btn-shopee-part" onclick="shopeeOpenPart('blade')" title="蝦皮購買此零件">🛒</button>
+                <button class="btn-shopee-part" onclick="shopeeOpenPart('blade')">🛒</button>
               </div>
               <div class="part-dropdown" id="dd-blade"><div class="part-dropdown-inner" id="ddi-blade"></div></div>
             </div>
@@ -398,7 +383,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
                   <span class="pst-weight" id="disp-ratchet-weight"></span>
                   <i class="ti ti-chevron-down pst-arrow" id="arr-ratchet"></i>
                 </div>
-                <button class="btn-shopee-part" onclick="shopeeOpenPart('ratchet')" title="蝦皮購買此零件">🛒</button>
+                <button class="btn-shopee-part" onclick="shopeeOpenPart('ratchet')">🛒</button>
               </div>
               <div class="part-dropdown" id="dd-ratchet"><div class="part-dropdown-inner" id="ddi-ratchet"></div></div>
             </div>
@@ -412,17 +397,39 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
                   <span class="pst-weight" id="disp-bit-weight"></span>
                   <i class="ti ti-chevron-down pst-arrow" id="arr-bit"></i>
                 </div>
-                <button class="btn-shopee-part" onclick="shopeeOpenPart('bit')" title="蝦皮購買此零件">🛒</button>
+                <button class="btn-shopee-part" onclick="shopeeOpenPart('bit')">🛒</button>
               </div>
               <div class="part-dropdown" id="dd-bit"><div class="part-dropdown-inner" id="ddi-bit"></div></div>
             </div>
+
+            <!-- ★ 屬性卡：新版含進度條 -->
             <div class="stats-card">
               <div class="sg5">
-                <div class="sb" id="sb-atk"><div class="sl">攻擊</div><div class="sv" id="v-atk">—</div></div>
-                <div class="sb" id="sb-def"><div class="sl">防禦</div><div class="sv" id="v-def">—</div></div>
-                <div class="sb" id="sb-sta"><div class="sl">耐力</div><div class="sv" id="v-sta">—</div></div>
-                <div class="sb" id="sb-accel"><div class="sl">加速</div><div class="sv" id="v-accel">—</div></div>
-                <div class="sb" id="sb-end"><div class="sl">耐久度</div><div class="sv" id="v-end">—</div></div>
+                <div class="sb" id="sb-atk">
+                  <div class="sl">攻擊</div>
+                  <div class="sv" id="v-atk">—</div>
+                  <div class="sbar-wrap"><div class="sbar" id="bar-atk"></div></div>
+                </div>
+                <div class="sb" id="sb-def">
+                  <div class="sl">防禦</div>
+                  <div class="sv" id="v-def">—</div>
+                  <div class="sbar-wrap"><div class="sbar" id="bar-def"></div></div>
+                </div>
+                <div class="sb" id="sb-sta">
+                  <div class="sl">耐力</div>
+                  <div class="sv" id="v-sta">—</div>
+                  <div class="sbar-wrap"><div class="sbar" id="bar-sta"></div></div>
+                </div>
+                <div class="sb" id="sb-accel">
+                  <div class="sl">加速</div>
+                  <div class="sv" id="v-accel">—</div>
+                  <div class="sbar-wrap"><div class="sbar" id="bar-accel"></div></div>
+                </div>
+                <div class="sb" id="sb-end">
+                  <div class="sl">耐久度</div>
+                  <div class="sv" id="v-end">—</div>
+                  <div class="sbar-wrap"><div class="sbar" id="bar-end"></div></div>
+                </div>
               </div>
               <div class="divid"></div>
               <div class="combo-bottom">
@@ -441,6 +448,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -456,12 +464,11 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
         <div class="sdiv">版本記錄</div>
         <div class="cl-card">
           <div class="cl-title"><i class="ti ti-git-branch"></i>更新日誌</div>
-          <div class="cl-item"><span class="cl-ver">v2.1</span><div class="cl-txt">手機版 RWD 修正：flex-direction:column 垂直堆疊，斷點 768px；漢堡按鈕改為純 CSS 三條線，明顯可見，點開後變 ✕</div></div>
-          <div class="cl-item"><span class="cl-ver">v2.0</span><div class="cl-txt">手機版響應式優化：上下垂直堆疊、雷達圖置頂並放大、導覽列捲動時固定於頂部</div></div>
+          <div class="cl-item"><span class="cl-ver">v2.3</span><div class="cl-txt">屬性卡新增視覺化進度條，顏色與各屬性一致，長度對應數值大小，limitbreak 時進度條發光</div></div>
+          <div class="cl-item"><span class="cl-ver">v2.2</span><div class="cl-txt">雷達圖文字重疊修正：屬性標籤與數值改為上下兩行渲染，清晰不碰撞</div></div>
+          <div class="cl-item"><span class="cl-ver">v2.1</span><div class="cl-txt">手機版 RWD：flex-direction:column 垂直堆疊，斷點 768px；漢堡按鈕改為純 CSS 三條線</div></div>
           <div class="cl-item"><span class="cl-ver">v1.9</span><div class="cl-txt">賽事中心改為依日期自動分類近期/歷史；評分Badge旁加上說明提示</div></div>
           <div class="cl-item"><span class="cl-ver">v1.8</span><div class="cl-txt">套組顯示 versions 標籤；戰刃/固鎖輪盤/軸心重量移至右側加粗</div></div>
-          <div class="cl-item"><span class="cl-ver">v1.7</span><div class="cl-txt">畫面完全不顯示 key 值；🛒直接連結 shopeeUrl</div></div>
-          <div class="cl-item"><span class="cl-ver">v1.6</span><div class="cl-txt">評分公式升級：動態型態權重、重量加分、極限突破</div></div>
           <div class="cl-item"><span class="cl-ver">v1.0</span><div class="cl-txt">雷達圖五角形、動態刻度、極限突破特效</div></div>
         </div>
         <div class="sdiv" style="margin-top:10px">即將推出</div>
@@ -558,9 +565,9 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 </footer>
 </div>
 
-<div class="modal-overlay" id="modal-privacy" onclick="closeModalOutside(event,'modal-privacy')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-lock"></i>隱私權政策</div><button class="modal-close" onclick="closeModal('modal-privacy')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-shield"></i>資料收集與使用</div><p>本站承諾保護使用者的個人資料。我們僅收集處理贊助與聯繫相關之必要資訊，絕不外洩給第三方。</p></div></div></div>
-<div class="modal-overlay" id="modal-terms" onclick="closeModalOutside(event,'modal-terms')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-file-text"></i>服務條款</div><button class="modal-close" onclick="closeModal('modal-terms')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-info-circle"></i>服務範圍</div><p>本站提供之數據計算與查詢服務僅供參考。本站為非官方玩家資源，與 TAKARA TOMY 無關。</p></div></div></div>
-<div class="modal-overlay" id="modal-refund" onclick="closeModalOutside(event,'modal-refund')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-refresh"></i>退換貨及退款流程</div><button class="modal-close" onclick="closeModal('modal-refund')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-package"></i>服務性質</div><p>本站提供之服務為「無形數位數據服務」，服務即時交付。若因系統錯誤導致功能無法正常使用，請聯繫我們，經確認後將為您安排退款事宜。</p></div></div></div>
+<div class="modal-overlay" id="modal-privacy" onclick="closeModalOutside(event,'modal-privacy')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-lock"></i>隱私權政策</div><button class="modal-close" onclick="closeModal('modal-privacy')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-shield"></i>資料收集與使用</div><p>本站承諾保護使用者的個人資料，絕不外洩給第三方。</p></div></div></div>
+<div class="modal-overlay" id="modal-terms" onclick="closeModalOutside(event,'modal-terms')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-file-text"></i>服務條款</div><button class="modal-close" onclick="closeModal('modal-terms')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-info-circle"></i>服務範圍</div><p>本站提供之數據計算與查詢服務僅供參考，與 TAKARA TOMY 無關。</p></div></div></div>
+<div class="modal-overlay" id="modal-refund" onclick="closeModalOutside(event,'modal-refund')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-refresh"></i>退換貨及退款流程</div><button class="modal-close" onclick="closeModal('modal-refund')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-package"></i>服務性質</div><p>本站提供之服務為「無形數位數據服務」，服務即時交付。若因系統錯誤無法正常使用，請聯繫我們安排退款。</p></div></div></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="beyblade_data.js"></script>
@@ -578,21 +585,79 @@ function closeAllDD(){ALL_DD.forEach(t=>{const dd=document.getElementById("dd-"+
 document.addEventListener("click",e=>{if(!e.target.closest(".part-group"))closeAllDD();});
 let selSet=null;
 function buildSetsDropdown(){const inner=document.getElementById("ddi-sets");inner.innerHTML="";BEYBLADE_DATABASE.sets.forEach((set,idx)=>{const div=document.createElement("div");div.className="pd-item";div.dataset.idx=idx;div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${set.name}</span>${typeBadgeHtml(set.type)}</div>${set.versions&&set.versions.length?`<div class="pd-ver">${versStr(set.versions)}</div>`:""}</div><i class="ti ti-check pd-check"></i>`;div.addEventListener("click",()=>{applySet(idx);closeAllDD();});inner.appendChild(div);});}
-function applySet(idx){const set=BEYBLADE_DATABASE.sets[idx];if(!set)return;selSet=set;const tc=TYPE_COLOR[set.type]||"#9090a8";document.getElementById("disp-sets-name").textContent=set.name;const tEl=document.getElementById("disp-sets-type");tEl.textContent=set.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;document.getElementById("disp-sets-ver").textContent=set.versions&&set.versions.length?versStr(set.versions):"";document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.toggle("active",parseInt(el.dataset.idx)===idx));selectPart("blade",set.components.blade,true);selectPart("ratchet",set.components.ratchet,true);selectPart("bit",set.components.bit,true);}
+function applySet(idx){const set=BEYBLADE_DATABASE.sets[idx];if(!set)return;selSet=set;const tc=TYPE_COLOR[set.type]||"#9090a8";document.getElementById("disp-sets-name").textContent=set.name;const tEl=document.getElementById("disp-sets-type");tEl.textContent=set.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;document.getElementById("disp-sets-ver").textContent=set.versions&&set.versions.length?versStr(set.versions):"";document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.toggle("active",parseInt(el.dataset.idx)===idx));selectPart("blade",set.components.blade);selectPart("ratchet",set.components.ratchet);selectPart("bit",set.components.bit);}
 let selBlade=null,selRatchet=null,selBit=null;
-function buildPartDropdown(type){const map={blade:"blades",ratchet:"ratchets",bit:"bits"};const parts=BEYBLADE_DATABASE.parts[map[type]];const inner=document.getElementById("ddi-"+type);inner.innerHTML="";Object.entries(parts).forEach(([key,p])=>{const div=document.createElement("div");div.className="pd-item";div.dataset.key=key;if(type==="blade"){div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div>${p.versions&&p.versions.length?`<div class="pd-ver">${versStr(p.versions)}</div>`:""}</div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;}else if(type==="ratchet"){div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span></div><div class="pd-ver" style="color:var(--t3)">高度 ${p.height} mm</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;}else{div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;}div.addEventListener("click",()=>{selSet=null;document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.remove("active"));document.getElementById("disp-sets-name").textContent="請選擇套組";document.getElementById("disp-sets-type").style.display="none";document.getElementById("disp-sets-ver").textContent="—";selectPart(type,key,false);closeAllDD();});inner.appendChild(div);});}
-function selectPart(type,key,fromSet){const map={blade:"blades",ratchet:"ratchets",bit:"bits"};const p=BEYBLADE_DATABASE.parts[map[type]][key];if(!p)return;const obj={_key:key,...p};if(type==="blade")selBlade=obj;if(type==="ratchet")selRatchet=obj;if(type==="bit")selBit=obj;const tc=TYPE_COLOR[p.type]||"";if(type==="blade"){document.getElementById("disp-blade-name").textContent=p.name;const tEl=document.getElementById("disp-blade-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";document.getElementById("disp-blade-ver").textContent=versStr(p.versions)||"";document.getElementById("disp-blade-weight").textContent=p.weight+"g";}else if(type==="ratchet"){document.getElementById("disp-ratchet-name").textContent=p.name;document.getElementById("disp-ratchet-meta").textContent=`高度 ${p.height} mm`;document.getElementById("disp-ratchet-weight").textContent=p.weight+"g";}else{document.getElementById("disp-bit-name").textContent=p.name;const tEl=document.getElementById("disp-bit-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";document.getElementById("disp-bit-weight").textContent=p.weight+"g";}document.querySelectorAll(`#ddi-${type} .pd-item`).forEach(el=>el.classList.toggle("active",el.dataset.key===key));updateStats();}
+function buildPartDropdown(type){const map={blade:"blades",ratchet:"ratchets",bit:"bits"};const parts=BEYBLADE_DATABASE.parts[map[type]];const inner=document.getElementById("ddi-"+type);inner.innerHTML="";Object.entries(parts).forEach(([key,p])=>{const div=document.createElement("div");div.className="pd-item";div.dataset.key=key;if(type==="blade"){div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div>${p.versions&&p.versions.length?`<div class="pd-ver">${versStr(p.versions)}</div>`:""}</div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;}else if(type==="ratchet"){div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span></div><div class="pd-ver" style="color:var(--t3)">高度 ${p.height} mm</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;}else{div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;}div.addEventListener("click",()=>{selSet=null;document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.remove("active"));document.getElementById("disp-sets-name").textContent="請選擇套組";document.getElementById("disp-sets-type").style.display="none";document.getElementById("disp-sets-ver").textContent="—";selectPart(type,key);closeAllDD();});inner.appendChild(div);});}
+function selectPart(type,key){const map={blade:"blades",ratchet:"ratchets",bit:"bits"};const p=BEYBLADE_DATABASE.parts[map[type]][key];if(!p)return;const obj={_key:key,...p};if(type==="blade")selBlade=obj;if(type==="ratchet")selRatchet=obj;if(type==="bit")selBit=obj;const tc=TYPE_COLOR[p.type]||"";if(type==="blade"){document.getElementById("disp-blade-name").textContent=p.name;const tEl=document.getElementById("disp-blade-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";document.getElementById("disp-blade-ver").textContent=versStr(p.versions)||"";document.getElementById("disp-blade-weight").textContent=p.weight+"g";}else if(type==="ratchet"){document.getElementById("disp-ratchet-name").textContent=p.name;document.getElementById("disp-ratchet-meta").textContent=`高度 ${p.height} mm`;document.getElementById("disp-ratchet-weight").textContent=p.weight+"g";}else{document.getElementById("disp-bit-name").textContent=p.name;const tEl=document.getElementById("disp-bit-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";document.getElementById("disp-bit-weight").textContent=p.weight+"g";}document.querySelectorAll(`#ddi-${type} .pd-item`).forEach(el=>el.classList.toggle("active",el.dataset.key===key));updateStats();}
+
+/* 雷達圖 */
 const AXES=[{key:"atk",label:"攻擊",color:"#D85A30"},{key:"def",label:"防禦",color:"#378ADD"},{key:"endurance",label:"耐久度",color:"#D85070"},{key:"accel",label:"加速",color:"#D8A030"},{key:"sta",label:"耐力",color:"#1D9E75"}];
 const N=5,STEPS=5;let rCvs=null,rCtx=null,rSize=0,rCX=0,rCY=0,rMax=0;
 let rVals={atk:0,def:0,sta:0,accel:0,endurance:0},rTarget={atk:0,def:0,sta:0,accel:0,endurance:0},rScale=100,rScaleTarget=100;
 function calcScale(v){const m=Math.max(...Object.values(v));return m<=100?100:Math.ceil(m/20)*20;}
-function resizeRadar(){const col=document.querySelector(".col-radar");if(!col||!rCvs)return;const isMobile=window.innerWidth<=768;const availW=col.offsetWidth-24;const availH=isMobile?Math.min(availW,300):(col.offsetHeight-78);const a=Math.min(availW,availH);rSize=Math.max(150,a);rCvs.width=rCvs.height=rSize;rCX=rSize/2;rCY=rSize/2;rMax=rSize*.33;}
+function resizeRadar(){const col=document.querySelector(".col-radar");if(!col||!rCvs)return;const isMobile=window.innerWidth<=768;const availW=col.offsetWidth-24;const availH=isMobile?Math.min(availW,300):(col.offsetHeight-78);rSize=Math.max(160,Math.min(availW,availH));rCvs.width=rCvs.height=rSize;rCX=rSize/2;rCY=rSize/2;rMax=rSize*.30;}
 function initRadar(){rCvs=document.getElementById("radar-canvas");rCtx=rCvs.getContext("2d");document.getElementById("radar-legend").innerHTML=[{label:"攻擊",color:"#D85A30"},{label:"防禦",color:"#378ADD"},{label:"耐力",color:"#1D9E75"},{label:"加速",color:"#D8A030"},{label:"耐久度",color:"#D85070"}].map(a=>`<div class="rl-item"><div class="rl-dot" style="background:${a.color}"></div><span>${a.label}</span></div>`).join("");resizeRadar();radarLoop();}
 function radarLoop(){AXES.forEach(a=>{const d=rTarget[a.key]-rVals[a.key];rVals[a.key]+=Math.abs(d)>.15?d*.12:d;});const sd=rScaleTarget-rScale;rScale+=Math.abs(sd)>.15?sd*.12:sd;if(rCtx)drawRadar();requestAnimationFrame(radarLoop);}
 function pt(idx,val){const a=(idx/N)*Math.PI*2-Math.PI/2,r=(val/rScale)*rMax;return{x:rCX+Math.cos(a)*r,y:rCY+Math.sin(a)*r};}
 function gpt(idx,step){const a=(idx/N)*Math.PI*2-Math.PI/2,r=(step/STEPS)*rMax;return{x:rCX+Math.cos(a)*r,y:rCY+Math.sin(a)*r};}
-function drawRadar(){const c=rCtx;c.clearRect(0,0,rSize,rSize);const isOver=rScaleTarget>100;for(let s=1;s<=STEPS;s++){c.beginPath();for(let i=0;i<N;i++){const p=gpt(i,s);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}c.closePath();if(s<STEPS){c.fillStyle="rgba(24,24,31,0.55)";c.fill();}if(s===STEPS&&isOver){c.strokeStyle="#FF450066";c.lineWidth=1.2;c.setLineDash([4,3]);c.stroke();c.setLineDash([]);}else{c.strokeStyle=s===STEPS?"#363648aa":"#2a2a3866";c.lineWidth=s===STEPS?1:.6;c.stroke();}}c.save();c.font="9px sans-serif";c.fillStyle=isOver?"#D8A030":"#5a5a70";c.textAlign="center";c.textBaseline="middle";const tp=gpt(0,STEPS);c.fillText(Math.round(rScale),tp.x,tp.y-10);c.restore();for(let i=0;i<N;i++){const o=gpt(i,STEPS);c.beginPath();c.moveTo(rCX,rCY);c.lineTo(o.x,o.y);c.strokeStyle="#2a2a3888";c.lineWidth=.7;c.stroke();}c.beginPath();for(let i=0;i<N;i++){const p=pt(i,rVals[AXES[i].key]);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}c.closePath();if(isOver){const g=c.createRadialGradient(rCX,rCY,0,rCX,rCY,rMax);g.addColorStop(0,"rgba(255,69,0,0.35)");g.addColorStop(.5,"rgba(138,43,226,0.2)");g.addColorStop(1,"rgba(138,43,226,0.05)");c.fillStyle=g;c.fill();c.strokeStyle="rgba(255,100,50,0.85)";c.lineWidth=2;c.stroke();}else{const g=c.createRadialGradient(rCX,rCY,0,rCX,rCY,rMax);g.addColorStop(0,"rgba(55,138,221,0.42)");g.addColorStop(1,"rgba(55,138,221,0.08)");c.fillStyle=g;c.fill();c.strokeStyle="rgba(133,183,235,0.75)";c.lineWidth=1.8;c.stroke();}const lo=rMax+24,vo=rMax+37;for(let i=0;i<N;i++){const ax=AXES[i],dv=rVals[ax.key],rv=Math.round(rTarget[ax.key]),p=pt(i,dv);const a=(i/N)*Math.PI*2-Math.PI/2;const lx=rCX+Math.cos(a)*lo,ly=rCY+Math.sin(a)*lo,vx=rCX+Math.cos(a)*vo,vy=rCY+Math.sin(a)*vo;c.beginPath();c.arc(p.x,p.y,4.5,0,Math.PI*2);c.fillStyle=rv>100?"#FF4500":ax.color;c.fill();c.strokeStyle="#0a0a0f88";c.lineWidth=1.5;c.stroke();if(rv>100){c.beginPath();c.arc(p.x,p.y,7,0,Math.PI*2);c.strokeStyle="#FF450055";c.lineWidth=2;c.stroke();}c.save();c.font="10px sans-serif";c.fillStyle="#9090a8";c.textAlign="center";c.textBaseline="middle";c.fillText(ax.label,lx,ly);c.font="bold 13px sans-serif";c.fillStyle=rv>100?"#FF4500":ax.color;if(rv>100){c.shadowColor="#FF4500";c.shadowBlur=8;}c.fillText(rv,vx,vy);c.shadowBlur=0;c.restore();}}
-function updateStats(){if(!selBlade||!selRatchet||!selBit)return;const b=selBlade.stats,r=selRatchet.stats,bt=selBit.stats;const atk=b.atk+r.atk+bt.atk,def=b.def+r.def+bt.def,sta=b.sta+r.sta+bt.sta;const accel=(b.accel||0)+(r.accel||0)+(bt.accel||0),endurance=(b.endurance||0)+(r.endurance||0)+(bt.endurance||0);const height=selRatchet.height||60;const totalWeight=parseFloat(((selBlade.weight||0)+(selRatchet.weight||0)+(selBit.weight||0)).toFixed(2));const vals={atk,def,sta,accel,endurance};const ns=calcScale(vals);rScaleTarget=ns;rTarget={...vals};const isOver=ns>100;document.getElementById("radar-scale-label").textContent=isOver?`極限突破！刻度上限：${ns}`:`刻度上限：100`;document.getElementById("radar-scale-badge").classList.toggle("overscale",isOver);const cm={atk:{sb:"sb-atk",sv:"v-atk",c:"#D85A30"},def:{sb:"sb-def",sv:"v-def",c:"#378ADD"},sta:{sb:"sb-sta",sv:"v-sta",c:"#1D9E75"},accel:{sb:"sb-accel",sv:"v-accel",c:"#D8A030"},endurance:{sb:"sb-end",sv:"v-end",c:"#D85070"}};Object.entries(vals).forEach(([k,v])=>{const m=cm[k];const sbE=document.getElementById(m.sb),svE=document.getElementById(m.sv);svE.textContent=v;const lb=v>100;sbE.classList.toggle("limitbreak",lb);svE.classList.toggle("limitbreak",lb);if(!lb)svE.style.color=m.c;});document.getElementById("height-val").textContent=height+" mm";const max=Math.max(atk,def,sta);let type="平衡型",tc="#BA7517";if(max===atk&&atk-def>15&&atk-sta>15){type="攻擊型";tc="#D85A30";}else if(max===def&&def-atk>15&&def-sta>15){type="防禦型";tc="#378ADD";}else if(max===sta&&sta-atk>15&&sta-def>15){type="耐力型";tc="#1D9E75";}const score=calcScore(atk,def,sta,accel,endurance,totalWeight,type);document.getElementById("combo-name").textContent=selSet?`${selSet.name}  /  ${selBlade.name} ・ ${selRatchet.name} ・ ${selBit.name}`:`${selBlade.name} / ${selRatchet.name} / ${selBit.name}`;const sb=document.getElementById("sbadge");sb.textContent=`${score} 分・${type}`;sb.style.color=tc;sb.style.borderColor=tc+"44";sb.classList.toggle("limitbreak-score",isOver);document.getElementById("mrow").innerHTML=`<span class="mp">⚖ ${totalWeight}g</span>`;document.getElementById("cl-atk").textContent=atk;document.getElementById("cl-def").textContent=def;document.getElementById("cl-sta").textContent=sta;}
+function axisTextAlign(a){const cos=Math.cos(a);return cos>0.3?"left":cos<-0.3?"right":"center";}
+function axisTextBaseline(a){const sin=Math.sin(a);return sin<-0.3?"bottom":sin>0.3?"top":"middle";}
+function drawRadar(){const c=rCtx;c.clearRect(0,0,rSize,rSize);const isOver=rScaleTarget>100;for(let s=1;s<=STEPS;s++){c.beginPath();for(let i=0;i<N;i++){const p=gpt(i,s);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}c.closePath();if(s<STEPS){c.fillStyle="rgba(24,24,31,0.55)";c.fill();}if(s===STEPS&&isOver){c.strokeStyle="#FF450066";c.lineWidth=1.2;c.setLineDash([4,3]);c.stroke();c.setLineDash([]);}else{c.strokeStyle=s===STEPS?"#363648aa":"#2a2a3866";c.lineWidth=s===STEPS?1:.6;c.stroke();}}c.save();c.font="9px sans-serif";c.fillStyle=isOver?"#D8A030":"#5a5a70";c.textAlign="center";c.textBaseline="middle";const tp=gpt(0,STEPS);c.fillText(Math.round(rScale),tp.x,tp.y-10);c.restore();for(let i=0;i<N;i++){const o=gpt(i,STEPS);c.beginPath();c.moveTo(rCX,rCY);c.lineTo(o.x,o.y);c.strokeStyle="#2a2a3888";c.lineWidth=.7;c.stroke();}c.beginPath();for(let i=0;i<N;i++){const p=pt(i,rVals[AXES[i].key]);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}c.closePath();if(isOver){const g=c.createRadialGradient(rCX,rCY,0,rCX,rCY,rMax);g.addColorStop(0,"rgba(255,69,0,0.35)");g.addColorStop(.5,"rgba(138,43,226,0.2)");g.addColorStop(1,"rgba(138,43,226,0.05)");c.fillStyle=g;c.fill();c.strokeStyle="rgba(255,100,50,0.85)";c.lineWidth=2;c.stroke();}else{const g=c.createRadialGradient(rCX,rCY,0,rCX,rCY,rMax);g.addColorStop(0,"rgba(55,138,221,0.42)");g.addColorStop(1,"rgba(55,138,221,0.08)");c.fillStyle=g;c.fill();c.strokeStyle="rgba(133,183,235,0.75)";c.lineWidth=1.8;c.stroke();}const LABEL_R=rMax+18,VAL_R=rMax+32;for(let i=0;i<N;i++){const ax=AXES[i];const angle=(i/N)*Math.PI*2-Math.PI/2;const rv=Math.round(rTarget[ax.key]);const dp=pt(i,rVals[ax.key]);c.beginPath();c.arc(dp.x,dp.y,4.5,0,Math.PI*2);c.fillStyle=rv>100?"#FF4500":ax.color;c.fill();c.strokeStyle="#0a0a0f88";c.lineWidth=1.5;c.stroke();if(rv>100){c.beginPath();c.arc(dp.x,dp.y,7,0,Math.PI*2);c.strokeStyle="#FF450055";c.lineWidth=2;c.stroke();}const ta=axisTextAlign(angle),tb=axisTextBaseline(angle);const lx=rCX+Math.cos(angle)*LABEL_R,ly=rCY+Math.sin(angle)*LABEL_R;c.save();c.font="10px sans-serif";c.fillStyle="#9090a8";c.textAlign=ta;c.textBaseline=tb;c.fillText(ax.label,lx,ly);c.restore();const vx=rCX+Math.cos(angle)*VAL_R,vy=rCY+Math.sin(angle)*VAL_R;c.save();c.font="bold 13px sans-serif";c.fillStyle=rv>100?"#FF4500":ax.color;c.textAlign=ta;c.textBaseline=tb;if(rv>100){c.shadowColor="#FF4500";c.shadowBlur=8;}c.fillText(rv,vx,vy);c.shadowBlur=0;c.restore();}}
+
+/* ══ 屬性計算 + 進度條更新 ══ */
+/* 各屬性對應的顏色和 bar id */
+const STAT_META={
+  atk:{sv:"v-atk",sb:"sb-atk",bar:"bar-atk",color:"#D85A30"},
+  def:{sv:"v-def",sb:"sb-def",bar:"bar-def",color:"#378ADD"},
+  sta:{sv:"v-sta",sb:"sb-sta",bar:"bar-sta",color:"#1D9E75"},
+  accel:{sv:"v-accel",sb:"sb-accel",bar:"bar-accel",color:"#D8A030"},
+  endurance:{sv:"v-end",sb:"sb-end",bar:"bar-end",color:"#D85070"},
+};
+function updateStats(){
+  if(!selBlade||!selRatchet||!selBit)return;
+  const b=selBlade.stats,r=selRatchet.stats,bt=selBit.stats;
+  const atk=b.atk+r.atk+bt.atk,def=b.def+r.def+bt.def,sta=b.sta+r.sta+bt.sta;
+  const accel=(b.accel||0)+(r.accel||0)+(bt.accel||0),endurance=(b.endurance||0)+(r.endurance||0)+(bt.endurance||0);
+  const height=selRatchet.height||60;
+  const totalWeight=parseFloat(((selBlade.weight||0)+(selRatchet.weight||0)+(selBit.weight||0)).toFixed(2));
+  const vals={atk,def,sta,accel,endurance};
+  const ns=calcScale(vals);rScaleTarget=ns;rTarget={...vals};
+  const isOver=ns>100;
+  document.getElementById("radar-scale-label").textContent=isOver?`極限突破！刻度上限：${ns}`:`刻度上限：100`;
+  document.getElementById("radar-scale-badge").classList.toggle("overscale",isOver);
+
+  /* ★ 更新每個屬性的數值、顏色、進度條 */
+  Object.entries(vals).forEach(([k,v])=>{
+    const m=STAT_META[k];if(!m)return;
+    const sbEl=document.getElementById(m.sb);
+    const svEl=document.getElementById(m.sv);
+    const barEl=document.getElementById(m.bar);
+    const lb=v>100;
+    svEl.textContent=v;
+    sbEl.classList.toggle("limitbreak",lb);
+    svEl.classList.toggle("limitbreak",lb);
+    if(!lb) svEl.style.color=m.color;
+    /* 進度條：百分比 = min(v/100, 1)*100%；limitbreak 時滿格 + 發光 */
+    const pct=Math.min(v/100,1)*100;
+    barEl.style.width=pct+"%";
+    barEl.style.background=lb?"#FF4500":m.color;
+    barEl.classList.toggle("limitbreak",lb);
+    if(lb) barEl.style.color="#FF4500"; /* 供 box-shadow currentColor 使用 */
+  });
+
+  document.getElementById("height-val").textContent=height+" mm";
+  const max=Math.max(atk,def,sta);let type="平衡型",tc="#BA7517";
+  if(max===atk&&atk-def>15&&atk-sta>15){type="攻擊型";tc="#D85A30";}
+  else if(max===def&&def-atk>15&&def-sta>15){type="防禦型";tc="#378ADD";}
+  else if(max===sta&&sta-atk>15&&sta-def>15){type="耐力型";tc="#1D9E75";}
+  const score=calcScore(atk,def,sta,accel,endurance,totalWeight,type);
+  document.getElementById("combo-name").textContent=selSet?`${selSet.name}  /  ${selBlade.name} ・ ${selRatchet.name} ・ ${selBit.name}`:`${selBlade.name} / ${selRatchet.name} / ${selBit.name}`;
+  const sb=document.getElementById("sbadge");sb.textContent=`${score} 分・${type}`;sb.style.color=tc;sb.style.borderColor=tc+"44";
+  sb.classList.toggle("limitbreak-score",isOver);
+  document.getElementById("mrow").innerHTML=`<span class="mp">⚖ ${totalWeight}g</span>`;
+  document.getElementById("cl-atk").textContent=atk;document.getElementById("cl-def").textContent=def;document.getElementById("cl-sta").textContent=sta;
+}
+
 let footerOpen=false;
 function toggleFooter(){footerOpen=!footerOpen;document.getElementById("footer-body").classList.toggle("open",footerOpen);document.getElementById("footer-chevron").classList.toggle("open",footerOpen);}
 function openModal(id){document.getElementById("modal-"+id).classList.add("open");}
@@ -610,35 +675,15 @@ async function submitFeedback(){const txt=document.getElementById("fb-text").val
 function renderFbHistory(){if(!fbHistory.length)return;document.getElementById("fb-history").style.display="block";const c=["","#D85A30","#D8A030","#D8D030","#1D9E75","#5DCAA5"];document.getElementById("fb-history-list").innerHTML=fbHistory.slice(-3).reverse().map(h=>`<div class="fb-history-item">${h.msg.length>60?h.msg.slice(0,60)+"…":h.msg}<div class="fb-history-meta">${h.rating?`<span style="color:${c[h.rating]}">${"⭐".repeat(h.rating)}</span>`:""}${h.cat?`<span>${h.cat}</span>`:""}<span>${h.time}</span></div></div>`).join("");}
 const EVT_RAW=[{name:"2026 台北 BeyBlade X 公開賽",date:"2026/06/15",loc:"台北・中正區",lat:25.042,lng:121.517},{name:"台中夏季個人賽",date:"2026/06/22",loc:"台中・西屯區",lat:24.173,lng:120.641},{name:"北部青少年聯賽 Q2",date:"2026/07/05",loc:"台北・內湖區",lat:25.082,lng:121.584},{name:"花蓮盃邀請賽",date:"2026/07/18",loc:"花蓮・壽豐鄉",lat:23.852,lng:121.524},{name:"台南南部錦標賽",date:"2026/08/03",loc:"台南・東區",lat:22.999,lng:120.212},{name:"2026 台灣冠軍賽（春季）",date:"2026/04/20",loc:"台北・信義區",lat:25.033,lng:121.563},{name:"高雄城市盃",date:"2026/03/30",loc:"高雄・三民區",lat:22.638,lng:120.303},{name:"台中春季友誼賽",date:"2026/03/08",loc:"台中・北屯區",lat:24.187,lng:120.688},{name:"全台青少年聯賽 Q1",date:"2026/02/14",loc:"台北・大安區",lat:25.026,lng:121.543}];
 const TODAY=new Date();TODAY.setHours(0,0,0,0);
-function parseEventDate(str){const [y,m,d]=str.split("/").map(Number);return new Date(y,m-1,d);}
-function classifyEvents(){const upcoming=[],past=[];EVT_RAW.forEach(e=>{const ed=parseEventDate(e.date);const diffDays=Math.round((ed-TODAY)/86400000);let item={...e,_diffDays:diffDays};if(ed.getTime()<TODAY.getTime()){item.badge="badge-past";item.bt="已結束";past.push(item);}else{if(diffDays===0){item.badge="badge-open";item.bt="今天開賽";}else if(diffDays<=7){item.badge="badge-soon";item.bt="即將開始";}else{item.badge="badge-open";item.bt="報名中";}upcoming.push(item);}});upcoming.sort((a,b)=>a._diffDays-b._diffDays);past.sort((a,b)=>b._diffDays-a._diffDays);return{upcoming,past};}
-let EVT={upcoming:[],past:[]};
-let curTab="upcoming",lmap=null,mapMarkers=[];
+function parseEventDate(str){const[y,m,d]=str.split("/").map(Number);return new Date(y,m-1,d);}
+function classifyEvents(){const upcoming=[],past=[];EVT_RAW.forEach(e=>{const ed=parseEventDate(e.date);const diff=Math.round((ed-TODAY)/86400000);let item={...e,_diffDays:diff};if(ed.getTime()<TODAY.getTime()){item.badge="badge-past";item.bt="已結束";past.push(item);}else{if(diff===0){item.badge="badge-open";item.bt="今天開賽";}else if(diff<=7){item.badge="badge-soon";item.bt="即將開始";}else{item.badge="badge-open";item.bt="報名中";}upcoming.push(item);}});upcoming.sort((a,b)=>a._diffDays-b._diffDays);past.sort((a,b)=>b._diffDays-a._diffDays);return{upcoming,past};}
+let EVT={upcoming:[],past:[]};let curTab="upcoming",lmap=null,mapMarkers=[];
 function makeIcon(c){return L.divIcon({html:`<svg width="22" height="28" viewBox="0 0 22 28"><path d="M11 0C4.9 0 0 4.9 0 11c0 6.6 11 17 11 17S22 17.6 22 11C22 4.9 17.1 0 11 0z" fill="${c}"/><circle cx="11" cy="11" r="4.5" fill="white" opacity="0.9"/></svg>`,iconSize:[22,28],iconAnchor:[11,28],popupAnchor:[0,-28],className:""});}
 function renderMapMarkers(tab){mapMarkers.forEach(m=>m.remove());mapMarkers=[];EVT[tab].forEach(e=>{const col=tab==="upcoming"?"#378ADD":"#5a5a70";const m=L.marker([e.lat,e.lng],{icon:makeIcon(col)}).addTo(lmap).bindPopup(`<div class="pop-name">${e.name}</div><div class="pop-meta"><span>${e.date}</span><span>${e.loc}</span></div>`);mapMarkers.push(m);});}
 function initMap(){if(lmap)return;lmap=L.map("leaflet-map",{center:[23.8,121.0],zoom:7});L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:'© <a href="https://www.openstreetmap.org/copyright" style="color:#85B7EB">OpenStreetMap</a>',maxZoom:18}).addTo(lmap);renderMapMarkers("upcoming");}
 function renderEvents(tab){const list=EVT[tab];document.getElementById("count-upcoming").textContent=EVT.upcoming.length;document.getElementById("count-past").textContent=EVT.past.length;if(!list.length){document.getElementById("elist").innerHTML=`<div class="elist-empty"><i class="ti ti-calendar-off"></i><span>${tab==="upcoming"?"目前沒有近期賽事":"目前沒有歷史賽事紀錄"}</span></div>`;return;}document.getElementById("elist").innerHTML=list.map(e=>`<div class="ecard ${tab}"><div class="etop"><div class="ename">${e.name}</div><span class="ebadge ${e.badge}">${e.bt}</span></div><div class="emeta"><span><i class="ti ti-calendar"></i>${e.date}</span><span><i class="ti ti-map-pin"></i>${e.loc}</span></div></div>`).join("");}
 function switchTab(tab,el){curTab=tab;document.querySelectorAll(".etab").forEach(b=>b.classList.remove("active"));el.classList.add("active");renderEvents(tab);if(lmap)renderMapMarkers(tab);}
 function goto(page,el){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("page-"+page).classList.add("active");document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));document.querySelectorAll("[data-m]").forEach(b=>b.classList.remove("active"));const ids={home:"nb-home",bey:"nb-bey",cl:"nb-cl"};if(ids[page])document.getElementById(ids[page]).classList.add("active");document.querySelectorAll(`[data-m="${{home:"home",bey:"bey",cl:"cl"}[page]}"]`).forEach(b=>b.classList.add("active"));if(page==="home"){setTimeout(()=>{initMap();if(lmap)lmap.invalidateSize();},80);}if(page==="bey"){setTimeout(resizeRadar,50);}}
-
-/* ★ toggleMob：同步更新按鈕狀態（open class + aria-expanded）*/
-function toggleMob(){
-  const menu=document.getElementById("mob-menu");
-  const btn=document.getElementById("hamburger-btn");
-  const isOpen=menu.classList.toggle("open");
-  btn.classList.toggle("open",isOpen);
-  btn.setAttribute("aria-expanded",isOpen);
-  btn.setAttribute("aria-label",isOpen?"關閉選單":"開啟選單");
-}
-
-EVT=classifyEvents();
-renderEvents("upcoming");
-setTimeout(()=>initMap(),200);
-initRadar();
-buildSetsDropdown();
-buildPartDropdown("blade");
-buildPartDropdown("ratchet");
-buildPartDropdown("bit");
-applySet(0);
-window.addEventListener("resize",()=>resizeRadar());
+function toggleMob(){const menu=document.getElementById("mob-menu");const btn=document.getElementById("hamburger-btn");const isOpen=menu.classList.toggle("open");btn.classList.toggle("open",isOpen);btn.setAttribute("aria-expanded",isOpen);btn.setAttribute("aria-label",isOpen?"關閉選單":"開啟選單");}
+EVT=classifyEvents();renderEvents("upcoming");setTimeout(()=>initMap(),200);initRadar();buildSetsDropdown();buildPartDropdown("blade");buildPartDropdown("ratchet");buildPartDropdown("bit");applySet(0);window.addEventListener("resize",()=>resizeRadar());
 </script>
