@@ -183,7 +183,7 @@ const BEYBLADE_DATABASE = {
             "Cyclone": { name: "C 暴風", type: "耐力型", weight: 2.1, imgUrl: "", shopeeUrl: "https://s.shopee.tw/4LH00FgpXO", stats: { atk: 40, def: 5, sta: 10, accel: 45, endurance: 80 } },
             "Dot": { name: "D 圓點", type: "耐力型", weight: 2.0, imgUrl: "", shopeeUrl: "https://s.shopee.tw/4VaQCYgCCR", stats: { atk: 10, def: 55, sta: 25, accel: 10, endurance: 30 } },
             "Elevate": { name: "E 仰昇", type: "耐力型", weight: 3.2, imgUrl: "", shopeeUrl: "https://s.shopee.tw/4ftqOrfYrU", stats: { atk: 30, def: 15, sta: 20, accel: 35, endurance: 30 } },
-            "Flat": { name: "F 平底軸心", type: "耐力型", weight: 2.2, imgUrl: "", shopeeUrl: "https://s.shopee.tw/9KffxXcyFp", stats: { atk: 40, def: 15, sta: 10, accel: 35, endurance: 80 } },
+            "Flat": { name: "F 平底軸心", type: "攻擊型", weight: 2.2, imgUrl: "", shopeeUrl: "https://s.shopee.tw/9KffxXcyFp", stats: { atk: 40, def: 15, sta: 10, accel: 35, endurance: 80 } },
             "Glide": { name: "G 滑行", type: "耐力型", weight:2.5, imgUrl:"", shopeeUrl:"https://s.shopee.tw/9pbwYSb4Ew", stats:{ atk:20, def:10, sta:55, accel:15, endurance:30 } },
             "Hexa": { name: "H 六角軸心", type: "耐力型", weight: 2.6, imgUrl: "", shopeeUrl: "https://s.shopee.tw/9fIWM9bhZv", stats: { atk: 30, def: 35, sta: 20, accel: 15, endurance: 80 } },
             "Ignition": { name: "I 點火", type: "耐力型", weight: 2.4, imgUrl: "", shopeeUrl: "https://s.shopee.tw/8pjPMcesGm", stats: { atk: 50, def: 15, sta: 5, accel: 30, endurance: 80 } },                    
