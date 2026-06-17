@@ -126,7 +126,17 @@ const BEYBLADE_DATABASE = {
                 shopeeUrl: "https://s.shopee.tw/9Kfk00o2Iq",
                 stats: { atk: 15, def: 70, sta: 40, accel: 0, endurance: 0 },
                 versions: [ "BXG-42"]
+            },
+            "Hells_Chain_v1": { 
+                name: "惡魔鎖鏈", 
+                type: "平衡型", 
+                weight: 33.2, 
+                imgUrl: "", 
+                shopeeUrl: "https://s.shopee.tw/4ftuTbkbub",
+                stats: { atk: 35, def: 40, sta: 25, accel: 0, endurance: 0 },
+                versions: [ "BX-21-01", "BX-31-03"]
             }
+
             },
         ratchets: { //17筆固鎖輪盤資料
             "1-60": { name: "1-60", height: 60, weight: 6.0, imgUrl: "", shopeeUrl: "https://s.shopee.tw/2LVxCJQYp3", stats: { atk: 17, def: 9, sta: 4, accel: 0, endurance: 0 } },
@@ -394,7 +404,24 @@ const BEYBLADE_DATABASE = {
           imgUrl: "", 
           shopeeUrl: "https://s.shopee.tw/4LH43ANokD",
           components: { blade: "Knight_Mail_v2", ratchet: "3-85", bit: "Bound Spike" },
-          versions: ["BXG-42"]}
+          versions: ["BXG-42"]},
+
+          //惡魔鎖鏈
+          { 
+          name: "惡魔鎖鏈 5-60HT", 
+          type: "平衡型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/3Vhx5f1jbt",
+          components: { blade: "Hells_Chain_v1", ratchet: "5-60", bit: "High Taper" },
+          versions: ["BX-21-01"]},
+          { 
+          name: "惡魔鎖鏈 9-80O", 
+          type: "平衡型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/6feyrV31ar",
+          components: { blade: "Hells_Chain_v1", ratchet: "9-80", bit: "Orb" },
+          versions: ["BX-31-03"]}
+
     ]
 };
 
