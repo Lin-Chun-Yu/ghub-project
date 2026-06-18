@@ -153,8 +153,16 @@ const BEYBLADE_DATABASE = {
                 shopeeUrl: "https://s.shopee.tw/4qDKjMUPMj",
                 stats: { atk: 55, def: 30, sta: 30, accel: 0, endurance: 0 },
                 versions: [ "BXG-14", "BXG-25-03"]
-            }
-
+            },
+            "DRANZER_SPIRAL_v1": { 
+                name: "烈焰飛鳳S", 
+                type: "平衡型", 
+                weight: 27.7, 
+                imgUrl: "", 
+                shopeeUrl: "https://s.shopee.tw/7KuhDQgryq",
+                stats: { atk: 35, def: 30, sta: 35, accel: 0, endurance: 0 },
+                versions: [ "BXG-01", "BXG-15"]
+            },
             },
         ratchets: { //17筆固鎖輪盤資料
             "1-60": { name: "1-60", height: 60, weight: 6.0, imgUrl: "", shopeeUrl: "https://s.shopee.tw/2LVxCJQYp3", stats: { atk: 17, def: 9, sta: 4, accel: 0, endurance: 0 } },
@@ -475,7 +483,16 @@ const BEYBLADE_DATABASE = {
           imgUrl: "", 
           shopeeUrl: "https://s.shopee.tw/6L28Whijb8",
           components: { blade: "Dran_Dagger_v1", ratchet: "7-55", bit: "Glide" },
-          versions: ["UX-18-05"]}
+          versions: ["UX-18-05"]},
+          
+          //烈焰飛鳳S
+          { 
+          name: "烈焰飛鳳S 3-80T", 
+          type: "平衡型", 
+          imgUrl: "", 
+          shopeeUrl: "https://s.shopee.tw/9pc2CDNckj",
+          components: { blade: "DRANZER_SPIRAL_v1", ratchet: "3-80", bit: "Taper" },
+          versions: ["BXG-01", "BXG-15"]}
     ]
 };
 
