@@ -109,6 +109,20 @@ const BEYBLADE_DATABASE = {
                 stats: { atk: 35, def: 30, sta: 35},
                 versions: [ "BXG-01", "BXG-15"]
             },
+
+            "Cobalt_Drake_v1": { 
+                name: "蒼穹龍神", type: "攻擊型", weight: 37.3, 
+                shopeeUrl: "https://s.shopee.tw/7VE99gmDpo",
+                stats: { atk: 65, def: 30, sta: 20},
+                versions: [ "BXG-23"]
+            },
+            "Cobalt_Drake_v2": { 
+                name: "蒼穹龍神 (強化)", type: "攻擊型", weight: 37.3, 
+                shopeeUrl: "https://s.shopee.tw/3Vi0ONWoaN",
+                stats: { atk: 70, def: 35, sta: 25},
+                versions: [ "BXH-01", "BX-46-01"]
+            },
+
             },
         ratchets: { //17筆固鎖輪盤資料
             "1-60": { name: "1-60", height: 60, weight: 6.0, shopeeUrl: "https://s.shopee.tw/2LVxCJQYp3", stats: { atk: 17, def: 9, sta: 4} },
@@ -366,7 +380,24 @@ const BEYBLADE_DATABASE = {
           name: "烈焰飛鳳S 3-80T", 
           shopeeUrl: "https://s.shopee.tw/9pc2CDNckj",
           components: { blade: "DRANZER_SPIRAL_v1", ratchet: "3-80", bit: "Taper" },
-          versions: ["BXG-01", "BXG-15"]}
+          versions: ["BXG-01", "BXG-15"]},
+
+          //蒼穹龍神
+          { 
+          name: "蒼穹龍神 4-60F", 
+          shopeeUrl: "https://s.shopee.tw/70HsYpmzVW",
+          components: { blade: "Cobalt_Drake_v1", ratchet: "4-60", bit: "Flat" },
+          versions: ["BXG-23"]},
+          { 
+          name: "蒼穹龍神 4-60F 金屬塗層", 
+          shopeeUrl: "https://s.shopee.tw/2qSJbCAle4",
+          components: { blade: "Cobalt_Drake_v2", ratchet: "4-60", bit: "Flat" },
+          versions: ["BXH-01"]},
+          { 
+          name: "蒼穹龍神 9-60R 金屬塗層", 
+          shopeeUrl: "https://s.shopee.tw/AKYKWze1yW",
+          components: { blade: "Cobalt_Drake_v2", ratchet: "9-60", bit: "Rush" },
+          versions: ["BX-46-01"]}
     ]
 };
 
