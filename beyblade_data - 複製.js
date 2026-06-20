@@ -122,12 +122,6 @@ const BEYBLADE_DATABASE = {
                 stats: { atk: 70, def: 35, sta: 25},
                 versions: [ "BXH-01", "BX-46-01"]
             },
-            "Knight_Lance_v1": { 
-                name: "騎士長槍", type: "防禦型", weight: 32.9, 
-                shopeeUrl: "https://s.shopee.tw/9KfotaZHUt",
-                stats: { atk: 25, def: 60, sta: 15},
-                versions: [ "BX-24-03", "BX-21-02", "BX-13"]
-            }
 
             },
         ratchets: { //17筆固鎖輪盤資料
@@ -403,24 +397,7 @@ const BEYBLADE_DATABASE = {
           name: "蒼穹龍神 9-60R 金屬塗層", 
           shopeeUrl: "https://s.shopee.tw/AKYKWze1yW",
           components: { blade: "Cobalt_Drake_v2", ratchet: "9-60", bit: "Rush" },
-          versions: ["BX-46-01"]},
-
-          //騎士長槍
-          { 
-          name: "騎士長槍 4-80HN", 
-          shopeeUrl: "https://s.shopee.tw/1BK7AoOuLo",
-          components: { blade: "Knight_Lance_v1", ratchet: "4-80", bit: "High Needle" },
-          versions: ["BX-13"]},
-          { 
-          name: "騎士長槍 3-60LF", 
-          shopeeUrl: "https://s.shopee.tw/qhGmDhN6x",
-          components: { blade: "Knight_Lance_v1", ratchet: "3-60", bit: "Low Flat" },
-          versions: ["BX-21-02"]},
-          { 
-          name: "騎士長槍 4-60GB", 
-          shopeeUrl: "https://s.shopee.tw/8KnHi1bNQp",
-          components: { blade: "Knight_Lance_v1", ratchet: "4-60", bit: "Gear Ball" },
-          versions: ["BX-24-03"]}
+          versions: ["BX-46-01"]}
     ]
 };
 
