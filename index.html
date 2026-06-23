@@ -634,6 +634,9 @@ async function submitFeedback(){const txt=document.getElementById("fb-text").val
 function renderFbHistory(){if(!fbHistory.length)return;document.getElementById("fb-history").style.display="block";const c=["","#D85A30","#D8A030","#D8D030","#1D9E75","#5DCAA5"];document.getElementById("fb-history-list").innerHTML=fbHistory.slice(-3).reverse().map(h=>`<div class="fb-history-item">${h.msg.length>60?h.msg.slice(0,60)+"…":h.msg}<div class="fb-history-meta">${h.rating?`<span style="color:${c[h.rating]}">${"⭐".repeat(h.rating)}</span>`:""}${h.cat?`<span>${h.cat}</span>`:""}<span>${h.time}</span></div></div>`).join("");}
 
 const EVT_RAW = [
+  { name: "2026 極限盃 G1 全國大賽-台中 LaLaport", date: "2026/06/27", loc: "台中・東區", lat: 24.1352, lng: 120.6953 },
+  { name: "2026 極限盃 G1 全國大賽-高雄夢時代", date: "2026/07/25", loc: "高雄・前鎮區", lat: 22.5951, lng: 120.3069 },
+  { name: "2026 極限盃 G1 全國大賽-誠品生活新店", date: "2026/09/19", loc: "新北・新店區", lat: 24.9781, lng: 121.5422 },
   { name: "2026 戰鬥陀螺門市G3賽-宜蘭新月", date: "2026/05/10", loc: "宜蘭・宜蘭市", lat: 24.7534, lng: 121.7523 },
   { name: "2026 戰鬥陀螺門市G3賽-宜蘭新月", date: "2026/06/14", loc: "宜蘭・宜蘭市", lat: 24.7534, lng: 121.7523 },
   { name: "2026 戰鬥陀螺門市G3賽-中壢大江購物中心", date: "2026/05/16", loc: "桃園・中壢區", lat: 25.0004, lng: 121.2291 },
