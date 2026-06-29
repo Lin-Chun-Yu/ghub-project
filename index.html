@@ -18,7 +18,7 @@
 </head>
 <body></body>
 <!-- 請勿動到上面的程式碼 -->
- 
+
 
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -126,10 +126,49 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .pd-weight{font-size:11px;font-weight:700;color:#B8C8DC;flex-shrink:0;white-space:nowrap;margin-right:4px}
 .pd-check{font-size:13px;color:var(--blue);display:none;flex-shrink:0}
 .pd-item.active .pd-check{display:block}
+.pd-empty{padding:12px;text-align:center;font-size:11px;color:var(--t3)}
 .btn-shopee-part{display:flex;align-items:center;justify-content:center;width:36px;border-radius:8px;border:.5px solid rgba(238,77,45,.3);background:var(--shopee-bg);color:var(--shopee);cursor:pointer;transition:all .15s;flex-shrink:0;font-size:16px}
 .btn-shopee-part:hover{background:rgba(238,77,45,.2);border-color:var(--shopee);transform:scale(1.05)}
 @keyframes shopee-pulse{0%,100%{box-shadow:0 0 0 0 rgba(238,77,45,.4)}50%{box-shadow:0 0 0 4px rgba(238,77,45,0)}}
 .btn-shopee-part{animation:shopee-pulse 2.8s ease-in-out infinite}
+
+/* ★ 軸心篩選工具列 */
+.bit-toolbar{
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:7px 10px 6px;
+  border-bottom:.5px solid var(--bd);
+  background:var(--bg4);
+  border-radius:8px 8px 0 0;
+}
+.bit-filter-btns{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+.bit-filter-btn{
+  font-size:9px;padding:2px 8px;border-radius:20px;
+  border:.5px solid var(--bd2);background:transparent;color:var(--t3);
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.bit-filter-btn:hover{color:var(--t2);border-color:var(--bd2)}
+.bit-filter-btn.active{color:var(--t1);border-color:transparent}
+.bit-filter-btn[data-type="全部"].active{background:var(--bg3);color:var(--t2)}
+.bit-filter-btn[data-type="攻擊型"].active{background:rgba(216,90,48,.15);color:#D85A30;border-color:rgba(216,90,48,.35)}
+.bit-filter-btn[data-type="防禦型"].active{background:rgba(55,138,221,.15);color:var(--blue2);border-color:rgba(55,138,221,.35)}
+.bit-filter-btn[data-type="耐力型"].active{background:rgba(29,158,117,.15);color:#5DCAA5;border-color:rgba(29,158,117,.35)}
+.bit-filter-btn[data-type="平衡型"].active{background:rgba(216,160,48,.15);color:#D8A030;border-color:rgba(216,160,48,.35)}
+.bit-sort-select{
+  font-size:9px;padding:2px 6px 2px 8px;
+  border:.5px solid var(--bd2);border-radius:6px;
+  background:var(--bg3);color:var(--t3);
+  cursor:pointer;outline:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24'%3E%3Cpath fill='%235a5a70' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 4px center;
+  padding-right:18px;
+  transition:border-color .15s,color .15s;
+  flex-shrink:0;
+}
+.bit-sort-select:hover{border-color:var(--blue3);color:var(--t2)}
+/* 工具列存在時，dropdown 上圓角去掉 */
+.part-dropdown.has-toolbar .bit-toolbar{border-radius:0}
+.part-dropdown.has-toolbar{border-radius:0 0 10px 10px;top:calc(100% + 4px)}
+
 .stats-card{background:var(--bg4);border:.5px solid var(--bd);border-radius:10px;padding:10px;margin-top:10px}
 .sg5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-bottom:8px}
 .sb{background:var(--bg3);border-radius:7px;border:.5px solid var(--bd);padding:6px 5px 5px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;transition:border-color .3s,background .3s}
@@ -226,24 +265,10 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 .copyright-bar strong{color:var(--t2)}
 .footer-modal-trigger{font-size:10px;color:var(--t3);background:transparent;border:none;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px}
 .footer-modal-trigger:hover{color:var(--blue2)}
-
-/* ★ 社群 Icon 按鈕 */
 .social-links{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.social-btn{
-  display:flex;align-items:center;justify-content:center;
-  width:28px;height:28px;border-radius:8px;
-  background:var(--bg3);border:.5px solid var(--bd2);
-  color:var(--t3);cursor:pointer;
-  text-decoration:none;
-  transition:color .15s,border-color .15s,background .15s;
-  flex-shrink:0;
-}
-.social-btn:hover{color:var(--t1);border-color:var(--bd2);background:var(--bg4)}
-.social-btn.threads:hover{color:#f0f0f8}
-.social-btn.ig:hover{color:#E1306C}
-/* 純 SVG icon，不依賴字型 */
+.social-btn{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:var(--bg3);border:.5px solid var(--bd2);color:var(--t3);cursor:pointer;text-decoration:none;transition:color .15s,border-color .15s,background .15s;flex-shrink:0}
+.social-btn:hover{color:var(--t1);background:var(--bg4)}
 .social-btn svg{width:14px;height:14px;fill:currentColor}
-
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-overlay.open{display:flex}
 .modal-box{background:var(--bg3);border:.5px solid var(--bd2);border-radius:14px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto;padding:20px;box-shadow:0 16px 48px rgba(0,0,0,.6)}
@@ -283,7 +308,8 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
   .col-right{order:3;overflow:visible}.parts-panel{overflow:visible}
   .parts-scroll-area{overflow:visible;max-height:none;padding:0 12px 16px}
   .part-dropdown{right:0}.footer-links-inline{display:none}
-  .social-links{display:none} /* 手機版底欄太窄，social icon 收起 */
+  .social-links{display:none}
+  .bit-toolbar{flex-direction:column;align-items:flex-start;gap:5px}
 }
 </style>
 
@@ -347,7 +373,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
         <div class="radar-scale-badge" id="radar-scale-badge"><i class="ti ti-chart-radar"></i><span id="radar-scale-label">刻度上限：100</span></div>
       </div>
       <div class="stats-card-mobile-wrapper">
-        <div class="stats-card" id="stats-card-mobile">
+        <div class="stats-card">
           <div class="sg5">
             <div class="sb" id="mob-sb-atk"><div class="sl">攻擊</div><div class="sv" id="mob-v-atk">—</div><div class="sbar-wrap"><div class="sbar" id="mob-bar-atk"></div></div></div>
             <div class="sb" id="mob-sb-def"><div class="sl">防禦</div><div class="sv" id="mob-v-def">—</div><div class="sbar-wrap"><div class="sbar" id="mob-bar-def"></div></div></div>
@@ -358,19 +384,15 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
           <div class="divid"></div>
           <div class="combo-bottom">
             <div class="combo-detail-row"><div class="combo-name" id="mob-combo-name">—</div><div class="height-tag"><i class="ti ti-ruler"></i><span id="mob-height-val">— mm</span></div></div>
-            <div class="combo-score-row">
-              <div class="mrow" id="mob-mrow"></div>
-              <div class="score-wrap">
-                <div class="sbadge" id="mob-sbadge">—</div>
-                <div class="score-info">?<div class="score-tooltip"><strong>評分機制說明</strong><br>依配置「型態」動態調整五屬性權重；屬性超過100視為「極限突破」可額外加分；總重量超過 40g 也會獲得加分。滿分錨定在 95~100 分。</div></div>
-              </div>
-            </div>
+            <div class="combo-score-row"><div class="mrow" id="mob-mrow"></div><div class="score-wrap"><div class="sbadge" id="mob-sbadge">—</div><div class="score-info">?<div class="score-tooltip"><strong>評分機制說明</strong><br>依配置「型態」動態調整五屬性權重；屬性超過100視為「極限突破」可額外加分；總重量超過 40g 也會獲得加分。滿分錨定在 95~100 分。</div></div></div></div>
           </div>
         </div>
       </div>
       <div class="col-right">
         <div class="parts-panel">
           <div class="parts-scroll-area">
+
+            <!-- 套組 -->
             <div class="part-group" id="pg-sets">
               <div class="part-group-label"><i class="ti ti-package"></i>官方套組</div>
               <div class="part-trigger-row">
@@ -382,6 +404,8 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
               </div>
               <div class="part-dropdown" id="dd-sets"><div class="part-dropdown-inner" id="ddi-sets"></div></div>
             </div>
+
+            <!-- 戰刃 -->
             <div class="part-group" id="pg-blade">
               <div class="part-group-label"><i class="ti ti-sword"></i>戰刃 Blade</div>
               <div class="part-trigger-row">
@@ -394,6 +418,8 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
               </div>
               <div class="part-dropdown" id="dd-blade"><div class="part-dropdown-inner" id="ddi-blade"></div></div>
             </div>
+
+            <!-- 固鎖輪盤 -->
             <div class="part-group" id="pg-ratchet">
               <div class="part-group-label"><i class="ti ti-circle-dashed"></i>固鎖輪盤 Ratchet</div>
               <div class="part-trigger-row">
@@ -406,6 +432,8 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
               </div>
               <div class="part-dropdown" id="dd-ratchet"><div class="part-dropdown-inner" id="ddi-ratchet"></div></div>
             </div>
+
+            <!-- ★ 軸心（含篩選工具列）-->
             <div class="part-group" id="pg-bit">
               <div class="part-group-label"><i class="ti ti-point"></i>軸心 Bit</div>
               <div class="part-trigger-row">
@@ -416,8 +444,27 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
                 </div>
                 <button class="btn-shopee-part" onclick="shopeeOpenPart('bit')">🛒</button>
               </div>
-              <div class="part-dropdown" id="dd-bit"><div class="part-dropdown-inner" id="ddi-bit"></div></div>
+              <div class="part-dropdown has-toolbar" id="dd-bit">
+                <!-- 工具列：篩選 + 排序 -->
+                <div class="bit-toolbar">
+                  <div class="bit-filter-btns" id="bit-filter-btns">
+                    <button class="bit-filter-btn active" data-type="全部"   onclick="setBitFilter('全部',this)">全部</button>
+                    <button class="bit-filter-btn"        data-type="攻擊型" onclick="setBitFilter('攻擊型',this)">攻擊型</button>
+                    <button class="bit-filter-btn"        data-type="防禦型" onclick="setBitFilter('防禦型',this)">防禦型</button>
+                    <button class="bit-filter-btn"        data-type="耐力型" onclick="setBitFilter('耐力型',this)">耐力型</button>
+                    <button class="bit-filter-btn"        data-type="平衡型" onclick="setBitFilter('平衡型',this)">平衡型</button>
+                  </div>
+                  <select class="bit-sort-select" id="bit-sort-select" onchange="setBitSort(this.value)">
+                    <option value="default">預設排序</option>
+                    <option value="desc">重量：由重到輕</option>
+                    <option value="asc">重量：由輕到重</option>
+                  </select>
+                </div>
+                <div class="part-dropdown-inner" id="ddi-bit"></div>
+              </div>
             </div>
+
+            <!-- 桌面版屬性卡 -->
             <div class="stats-card stats-card-desktop">
               <div class="sg5">
                 <div class="sb" id="sb-atk"><div class="sl">攻擊</div><div class="sv" id="v-atk">—</div><div class="sbar-wrap"><div class="sbar" id="bar-atk"></div></div></div>
@@ -429,15 +476,10 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
               <div class="divid"></div>
               <div class="combo-bottom">
                 <div class="combo-detail-row"><div class="combo-name" id="combo-name">—</div><div class="height-tag"><i class="ti ti-ruler"></i><span id="height-val">— mm</span></div></div>
-                <div class="combo-score-row">
-                  <div class="mrow" id="mrow"></div>
-                  <div class="score-wrap">
-                    <div class="sbadge" id="sbadge">—</div>
-                    <div class="score-info">?<div class="score-tooltip"><strong>評分機制說明</strong><br>依配置「型態」（攻擊/防禦/耐力/平衡）動態調整五屬性權重；屬性超過100視為「極限突破」可額外加分；總重量超過 40g 也會獲得加分。滿分錨定在 95~100 分。</div></div>
-                  </div>
-                </div>
+                <div class="combo-score-row"><div class="mrow" id="mrow"></div><div class="score-wrap"><div class="sbadge" id="sbadge">—</div><div class="score-info">?<div class="score-tooltip"><strong>評分機制說明</strong><br>依配置「型態」（攻擊/防禦/耐力/平衡）動態調整五屬性權重；屬性超過100視為「極限突破」可額外加分；總重量超過 40g 也會獲得加分。滿分錨定在 95~100 分。</div></div></div></div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -453,11 +495,11 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
         <div class="sdiv">版本記錄</div>
         <div class="cl-card">
           <div class="cl-title"><i class="ti ti-git-branch"></i>更新日誌</div>
-          <div class="cl-item"><span class="cl-ver">v3.2</span><div class="cl-txt">頁尾加入 Threads 和 IG 社群 Icon，點擊直達官方帳號</div></div>
-          <div class="cl-item"><span class="cl-ver">v3.1</span><div class="cl-txt">手機版神配置計算機排版調整：雷達圖 → 五屬性數值 → 套組/零件選單</div></div>
+          <div class="cl-item"><span class="cl-ver">v3.3</span><div class="cl-txt">軸心下拉新增篩選標籤（全部/攻擊型/防禦型/耐力型/平衡型）與重量排序（預設/由重到輕/由輕到重），即時過濾</div></div>
+          <div class="cl-item"><span class="cl-ver">v3.2</span><div class="cl-txt">頁尾加入 Threads 和 IG 社群 Icon</div></div>
+          <div class="cl-item"><span class="cl-ver">v3.1</span><div class="cl-txt">手機版神配置計算機排版：雷達圖 → 屬性數值 → 套組/零件選單</div></div>
           <div class="cl-item"><span class="cl-ver">v3.0</span><div class="cl-txt">資料庫大幅擴充：6支戰刃、5種固鎖輪盤、8種軸心、8組官方套組</div></div>
           <div class="cl-item"><span class="cl-ver">v2.3</span><div class="cl-txt">屬性卡新增視覺化進度條，顏色與各屬性一致</div></div>
-          <div class="cl-item"><span class="cl-ver">v2.2</span><div class="cl-txt">雷達圖文字重疊修正：屬性標籤與數值上下分離</div></div>
           <div class="cl-item"><span class="cl-ver">v1.9</span><div class="cl-txt">賽事中心依日期自動分類；評分Badge旁說明提示</div></div>
           <div class="cl-item"><span class="cl-ver">v1.0</span><div class="cl-txt">雷達圖五角形、動態刻度、極限突破特效</div></div>
         </div>
@@ -546,27 +588,14 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
       <div class="footer-col"><div class="footer-col-title"><i class="ti ti-shield-check"></i>法律資訊</div><ul style="display:flex;flex-direction:column;gap:4px"><li><button class="footer-modal-trigger" onclick="openModal('privacy')">隱私權政策</button></li><li><button class="footer-modal-trigger" onclick="openModal('terms')">服務條款</button></li><li><button class="footer-modal-trigger" onclick="openModal('refund')">退換貨及退款流程</button></li></ul></div>
     </div>
     <div class="footer-divider"></div>
-
-    <!-- ★ 底部最後一行：左側社群 icon + 右側版權 -->
     <div class="footer-bottom">
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-        <!-- 社群 Icon 並排在最左 -->
         <div class="social-links">
-          <!-- Threads icon（官方 SVG 路徑）-->
-          <a class="social-btn threads"
-             href="https://www.threads.com/@ghub.official.tw?xmt=AQG0LNZr01qnnG2B817629GDNUpm7-_-RrINjvpIGeH82s0"
-             target="_blank" rel="noopener noreferrer" title="Threads @ghub.official.tw">
-            <svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
-              <path d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.244-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.453-15.153 9.899-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.206 17.11 97.015 16.94c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.202 1.205 97.144 1h-.29c-28.006.205-49.567 9.68-64.104 28.172C20.05 45.84 13.938 68.84 13.7 96.04l-.002.96.002.96c.238 27.2 6.35 50.2 18.85 66.868 14.537 18.492 36.098 27.967 64.104 28.172h.29c24.958-.174 42.826-6.713 57.37-21.256 18.964-18.952 18.517-42.653 12.222-57.332-4.537-10.574-13.194-19.212-24.999-24.414zM96.99 121.63c-10.438.587-21.283-4.098-21.834-14.136-.407-7.638 5.43-16.166 23.008-17.197 2.013-.116 3.994-.173 5.952-.173 6.047 0 11.714.594 16.898 1.744-1.925 24.005-13.513 29.207-24.024 29.762z"/>
-            </svg>
+          <a class="social-btn" href="https://www.threads.com/@ghub.official.tw?xmt=AQG0LNZr01qnnG2B817629GDNUpm7-_-RrINjvpIGeH82s0" target="_blank" rel="noopener noreferrer" title="Threads">
+            <svg viewBox="0 0 192 192"><path d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.244-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.453-15.153 9.899-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.206 17.11 97.015 16.94c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.202 1.205 97.144 1h-.29c-28.006.205-49.567 9.68-64.104 28.172C20.05 45.84 13.938 68.84 13.7 96.04l-.002.96.002.96c.238 27.2 6.35 50.2 18.85 66.868 14.537 18.492 36.098 27.967 64.104 28.172h.29c24.958-.174 42.826-6.713 57.37-21.256 18.964-18.952 18.517-42.653 12.222-57.332-4.537-10.574-13.194-19.212-24.999-24.414zM96.99 121.63c-10.438.587-21.283-4.098-21.834-14.136-.407-7.638 5.43-16.166 23.008-17.197 2.013-.116 3.994-.173 5.952-.173 6.047 0 11.714.594 16.898 1.744-1.925 24.005-13.513 29.207-24.024 29.762z"/></svg>
           </a>
-          <!-- Instagram icon -->
-          <a class="social-btn ig"
-             href="https://www.instagram.com/ghub.official.tw/"
-             target="_blank" rel="noopener noreferrer" title="Instagram @ghub.official.tw">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
-            </svg>
+          <a class="social-btn" href="https://www.instagram.com/ghub.official.tw/" target="_blank" rel="noopener noreferrer" title="Instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
           </a>
         </div>
         <span>© 2026 G-Hub 數據站 ── 非官方粉絲站，圖片版權歸 TAKARA TOMY 所有，僅供交流使用。</span>
@@ -592,16 +621,73 @@ function calcScore(atk,def,sta,accel,endurance,w,type){const wt=TYPE_WEIGHTS[typ
 function shopeeOpen(url){window.open((url&&url!=="")?url:"https://shopee.tw/search?keyword=戰鬥陀螺X","_blank");}
 function shopeeOpenPart(type){const pm={blade:selBlade,ratchet:selRatchet,bit:selBit};const p=pm[type];shopeeOpen(p?p.shopeeUrl:"");}
 function shopeeOpenSet(){shopeeOpen(selSet?selSet.shopeeUrl:"");}
+
+/* ══ 軸心篩選 / 排序 狀態 ══ */
+let bitFilterType="全部";
+let bitSortMode="default";  /* default | asc | desc */
+
+/* 原始 key 順序備存（預設排序用）*/
+const BIT_KEYS_DEFAULT=Object.keys(BEYBLADE_DATABASE.parts.bits);
+
+function setBitFilter(type,btn){
+  bitFilterType=type;
+  document.querySelectorAll(".bit-filter-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  renderBitDropdown();
+}
+function setBitSort(val){
+  bitSortMode=val;
+  renderBitDropdown();
+}
+
+/* ★ 軸心下拉獨立渲染，支援篩選＋排序 */
+function renderBitDropdown(){
+  const inner=document.getElementById("ddi-bit");inner.innerHTML="";
+  let entries=BIT_KEYS_DEFAULT.map(k=>([k,BEYBLADE_DATABASE.parts.bits[k]]));
+  /* 篩選 */
+  if(bitFilterType!=="全部") entries=entries.filter(([,p])=>p.type===bitFilterType);
+  /* 排序 */
+  if(bitSortMode==="desc") entries.sort((a,b)=>b[1].weight-a[1].weight);
+  else if(bitSortMode==="asc") entries.sort((a,b)=>a[1].weight-b[1].weight);
+  /* 無結果 */
+  if(!entries.length){inner.innerHTML=`<div class="pd-empty">沒有符合「${bitFilterType}」的軸心</div>`;return;}
+  entries.forEach(([key,p])=>{
+    const div=document.createElement("div");div.className="pd-item";div.dataset.key=key;
+    if(selBit&&selBit._key===key) div.classList.add("active");
+    div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;
+    div.addEventListener("click",()=>{
+      selSet=null;document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.remove("active"));
+      document.getElementById("disp-sets-name").textContent="請選擇套組";
+      document.getElementById("disp-sets-type").style.display="none";
+      document.getElementById("disp-sets-ver").textContent="—";
+      selectPart("bit",key);closeAllDD();
+    });
+    inner.appendChild(div);
+  });
+}
+
 const ALL_DD=["sets","blade","ratchet","bit"];
 function toggleDD(type){const dd=document.getElementById("dd-"+type),arr=document.getElementById("arr-"+type),trig=document.getElementById("trig-"+type);const wo=dd.classList.contains("open");closeAllDD();if(!wo){dd.classList.add("open");arr.classList.add("open");trig.classList.add("open");}}
 function closeAllDD(){ALL_DD.forEach(t=>{const dd=document.getElementById("dd-"+t),arr=document.getElementById("arr-"+t),trig=document.getElementById("trig-"+t);if(dd)dd.classList.remove("open");if(arr)arr.classList.remove("open");if(trig)trig.classList.remove("open");});}
-document.addEventListener("click",e=>{if(!e.target.closest(".part-group"))closeAllDD();});
+document.addEventListener("click",e=>{if(!e.target.closest(".part-group")&&!e.target.closest(".bit-toolbar"))closeAllDD();});
+
 let selSet=null;
 function buildSetsDropdown(){const inner=document.getElementById("ddi-sets");inner.innerHTML="";BEYBLADE_DATABASE.sets.forEach((set,idx)=>{const setType=getSetType(set);const div=document.createElement("div");div.className="pd-item";div.dataset.idx=idx;div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${set.name}</span>${typeBadgeHtml(setType)}</div>${set.versions&&set.versions.length?`<div class="pd-ver">${versStr(set.versions)}</div>`:""}</div><i class="ti ti-check pd-check"></i>`;div.addEventListener("click",()=>{applySet(idx);closeAllDD();});inner.appendChild(div);});}
 function applySet(idx){const set=BEYBLADE_DATABASE.sets[idx];if(!set)return;selSet=set;const setType=getSetType(set);const tc=TYPE_COLOR[setType]||"#9090a8";document.getElementById("disp-sets-name").textContent=set.name;const tEl=document.getElementById("disp-sets-type");tEl.textContent=setType;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;document.getElementById("disp-sets-ver").textContent=set.versions&&set.versions.length?versStr(set.versions):"";document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.toggle("active",parseInt(el.dataset.idx)===idx));selectPart("blade",set.components.blade);selectPart("ratchet",set.components.ratchet);selectPart("bit",set.components.bit);}
 let selBlade=null,selRatchet=null,selBit=null;
-function buildPartDropdown(type){const map={blade:"blades",ratchet:"ratchets",bit:"bits"};const parts=BEYBLADE_DATABASE.parts[map[type]];const inner=document.getElementById("ddi-"+type);inner.innerHTML="";Object.entries(parts).forEach(([key,p])=>{const div=document.createElement("div");div.className="pd-item";div.dataset.key=key;if(type==="blade"){div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div>${p.versions&&p.versions.length?`<div class="pd-ver">${versStr(p.versions)}</div>`:""}</div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;}else if(type==="ratchet"){div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span></div><div class="pd-ver" style="color:var(--t3)">高度 ${p.height} mm</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;}else{div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;}div.addEventListener("click",()=>{selSet=null;document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.remove("active"));document.getElementById("disp-sets-name").textContent="請選擇套組";document.getElementById("disp-sets-type").style.display="none";document.getElementById("disp-sets-ver").textContent="—";selectPart(type,key);closeAllDD();});inner.appendChild(div);});}
-function selectPart(type,key){const map={blade:"blades",ratchet:"ratchets",bit:"bits"};const p=BEYBLADE_DATABASE.parts[map[type]][key];if(!p)return;const obj={_key:key,...p};if(type==="blade")selBlade=obj;if(type==="ratchet")selRatchet=obj;if(type==="bit")selBit=obj;const tc=TYPE_COLOR[p.type]||"";if(type==="blade"){document.getElementById("disp-blade-name").textContent=p.name;const tEl=document.getElementById("disp-blade-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";document.getElementById("disp-blade-ver").textContent=versStr(p.versions)||"";document.getElementById("disp-blade-weight").textContent=p.weight+"g";}else if(type==="ratchet"){document.getElementById("disp-ratchet-name").textContent=p.name;document.getElementById("disp-ratchet-meta").textContent=`高度 ${p.height} mm`;document.getElementById("disp-ratchet-weight").textContent=p.weight+"g";}else{document.getElementById("disp-bit-name").textContent=p.name;const tEl=document.getElementById("disp-bit-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";document.getElementById("disp-bit-weight").textContent=p.weight+"g";}document.querySelectorAll(`#ddi-${type} .pd-item`).forEach(el=>el.classList.toggle("active",el.dataset.key===key));updateStats();}
+function buildPartDropdown(type){
+  if(type==="bit"){renderBitDropdown();return;} /* 軸心用獨立方法 */
+  const map={blade:"blades",ratchet:"ratchets"};const parts=BEYBLADE_DATABASE.parts[map[type]];const inner=document.getElementById("ddi-"+type);inner.innerHTML="";
+  Object.entries(parts).forEach(([key,p])=>{const div=document.createElement("div");div.className="pd-item";div.dataset.key=key;if(type==="blade"){div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div>${p.versions&&p.versions.length?`<div class="pd-ver">${versStr(p.versions)}</div>`:""}</div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;}else{div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span></div><div class="pd-ver" style="color:var(--t3)">高度 ${p.height} mm</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;}div.addEventListener("click",()=>{selSet=null;document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.remove("active"));document.getElementById("disp-sets-name").textContent="請選擇套組";document.getElementById("disp-sets-type").style.display="none";document.getElementById("disp-sets-ver").textContent="—";selectPart(type,key);closeAllDD();});inner.appendChild(div);});
+}
+function selectPart(type,key){const map={blade:"blades",ratchet:"ratchets",bit:"bits"};const p=BEYBLADE_DATABASE.parts[map[type]][key];if(!p)return;const obj={_key:key,...p};if(type==="blade")selBlade=obj;if(type==="ratchet")selRatchet=obj;if(type==="bit")selBit=obj;const tc=TYPE_COLOR[p.type]||"";if(type==="blade"){document.getElementById("disp-blade-name").textContent=p.name;const tEl=document.getElementById("disp-blade-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";document.getElementById("disp-blade-ver").textContent=versStr(p.versions)||"";document.getElementById("disp-blade-weight").textContent=p.weight+"g";}else if(type==="ratchet"){document.getElementById("disp-ratchet-name").textContent=p.name;document.getElementById("disp-ratchet-meta").textContent=`高度 ${p.height} mm`;document.getElementById("disp-ratchet-weight").textContent=p.weight+"g";}else{document.getElementById("disp-bit-name").textContent=p.name;const tEl=document.getElementById("disp-bit-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";document.getElementById("disp-bit-weight").textContent=p.weight+"g";}
+  /* 選中狀態同步到下拉列表 */
+  if(type==="bit") renderBitDropdown();
+  else document.querySelectorAll(`#ddi-${type} .pd-item`).forEach(el=>el.classList.toggle("active",el.dataset.key===key));
+  updateStats();}
+
+/* 雷達圖 */
+
 const AXES=[{key:"atk",label:"攻擊",color:"#D85A30"},{key:"def",label:"防禦",color:"#378ADD"},{key:"endurance",label:"耐久度",color:"#D85070"},{key:"accel",label:"加速",color:"#D8A030"},{key:"sta",label:"耐力",color:"#1D9E75"}];
 const N=5,STEPS=5;let rCvs=null,rCtx=null,rSize=0,rCX=0,rCY=0,rMax=0;
 let rVals={atk:0,def:0,sta:0,accel:0,endurance:0},rTarget={atk:0,def:0,sta:0,accel:0,endurance:0},rScale=100,rScaleTarget=100;
