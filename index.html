@@ -20,7 +20,6 @@
 <!-- 請勿動到上面的程式碼 -->
 
 
-
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -110,11 +109,42 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .pst-weight{font-size:12px;font-weight:700;color:#B8C8DC;flex-shrink:0;white-space:nowrap}
 .pst-arrow{color:var(--t3);font-size:13px;transition:transform .2s;flex-shrink:0}
 .pst-arrow.open{transform:rotate(180deg)}
+
+/* ══ 下拉選單（含工具列）══ */
 .part-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:46px;z-index:300;background:var(--bg3);border:.5px solid var(--bd2);border-radius:10px;overflow:hidden;display:none;box-shadow:0 8px 28px rgba(0,0,0,.7)}
 .part-dropdown.open{display:block}
-.part-dropdown-inner{max-height:230px;overflow-y:auto}
+/* ★ 工具列：固定在下拉頂部，不隨列表捲動 */
+.pd-toolbar{
+  display:flex;align-items:center;gap:5px;flex-wrap:wrap;
+  padding:7px 10px;
+  background:var(--bg4);
+  border-bottom:.5px solid var(--bd);
+  flex-shrink:0;
+}
+.pd-filter-btn{
+  font-size:9px;padding:2px 8px;border-radius:20px;
+  border:.5px solid var(--bd2);background:transparent;
+  color:var(--t3);cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.pd-filter-btn:hover{color:var(--t2)}
+.pd-filter-btn.active{background:rgba(55,138,221,.12);color:var(--blue2);border-color:rgba(55,138,221,.35)}
+.pd-filter-btn.active[data-type="攻擊型"]{background:rgba(216,90,48,.12);color:#D85A30;border-color:rgba(216,90,48,.35)}
+.pd-filter-btn.active[data-type="防禦型"]{background:rgba(55,138,221,.12);color:var(--blue2);border-color:rgba(55,138,221,.35)}
+.pd-filter-btn.active[data-type="耐力型"]{background:rgba(29,158,117,.12);color:#5DCAA5;border-color:rgba(29,158,117,.35)}
+.pd-filter-btn.active[data-type="平衡型"]{background:rgba(216,160,48,.12);color:#D8A030;border-color:rgba(216,160,48,.35)}
+.pd-sort-select{
+  font-size:9px;padding:2px 6px;border-radius:6px;
+  border:.5px solid var(--bd2);background:var(--bg3);
+  color:var(--t3);cursor:pointer;outline:none;
+  margin-left:auto;flex-shrink:0;
+  transition:border-color .15s;
+}
+.pd-sort-select:hover,.pd-sort-select:focus{border-color:var(--blue3);color:var(--t2)}
+.pd-empty{padding:14px;text-align:center;font-size:11px;color:var(--t3)}
+.part-dropdown-inner{max-height:200px;overflow-y:auto}
 .part-dropdown-inner::-webkit-scrollbar{width:3px}
 .part-dropdown-inner::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+
 .pd-item{display:flex;align-items:center;padding:9px 12px;cursor:pointer;border-bottom:.5px solid var(--bd);transition:background .1s;gap:8px}
 .pd-item:last-child{border-bottom:none}
 .pd-item:hover{background:rgba(55,138,221,.07)}
@@ -126,56 +156,17 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .pd-weight{font-size:11px;font-weight:700;color:#B8C8DC;flex-shrink:0;white-space:nowrap;margin-right:4px}
 .pd-check{font-size:13px;color:var(--blue);display:none;flex-shrink:0}
 .pd-item.active .pd-check{display:block}
-.pd-empty{padding:12px;text-align:center;font-size:11px;color:var(--t3)}
 .btn-shopee-part{display:flex;align-items:center;justify-content:center;width:36px;border-radius:8px;border:.5px solid rgba(238,77,45,.3);background:var(--shopee-bg);color:var(--shopee);cursor:pointer;transition:all .15s;flex-shrink:0;font-size:16px}
 .btn-shopee-part:hover{background:rgba(238,77,45,.2);border-color:var(--shopee);transform:scale(1.05)}
 @keyframes shopee-pulse{0%,100%{box-shadow:0 0 0 0 rgba(238,77,45,.4)}50%{box-shadow:0 0 0 4px rgba(238,77,45,0)}}
 .btn-shopee-part{animation:shopee-pulse 2.8s ease-in-out infinite}
-
-/* ★ 軸心篩選工具列 */
-.bit-toolbar{
-  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
-  padding:7px 10px 6px;
-  border-bottom:.5px solid var(--bd);
-  background:var(--bg4);
-  border-radius:8px 8px 0 0;
-}
-.bit-filter-btns{display:flex;gap:4px;flex-wrap:wrap;flex:1}
-.bit-filter-btn{
-  font-size:9px;padding:2px 8px;border-radius:20px;
-  border:.5px solid var(--bd2);background:transparent;color:var(--t3);
-  cursor:pointer;transition:all .15s;white-space:nowrap;
-}
-.bit-filter-btn:hover{color:var(--t2);border-color:var(--bd2)}
-.bit-filter-btn.active{color:var(--t1);border-color:transparent}
-.bit-filter-btn[data-type="全部"].active{background:var(--bg3);color:var(--t2)}
-.bit-filter-btn[data-type="攻擊型"].active{background:rgba(216,90,48,.15);color:#D85A30;border-color:rgba(216,90,48,.35)}
-.bit-filter-btn[data-type="防禦型"].active{background:rgba(55,138,221,.15);color:var(--blue2);border-color:rgba(55,138,221,.35)}
-.bit-filter-btn[data-type="耐力型"].active{background:rgba(29,158,117,.15);color:#5DCAA5;border-color:rgba(29,158,117,.35)}
-.bit-filter-btn[data-type="平衡型"].active{background:rgba(216,160,48,.15);color:#D8A030;border-color:rgba(216,160,48,.35)}
-.bit-sort-select{
-  font-size:9px;padding:2px 6px 2px 8px;
-  border:.5px solid var(--bd2);border-radius:6px;
-  background:var(--bg3);color:var(--t3);
-  cursor:pointer;outline:none;appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24'%3E%3Cpath fill='%235a5a70' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 4px center;
-  padding-right:18px;
-  transition:border-color .15s,color .15s;
-  flex-shrink:0;
-}
-.bit-sort-select:hover{border-color:var(--blue3);color:var(--t2)}
-/* 工具列存在時，dropdown 上圓角去掉 */
-.part-dropdown.has-toolbar .bit-toolbar{border-radius:0}
-.part-dropdown.has-toolbar{border-radius:0 0 10px 10px;top:calc(100% + 4px)}
-
 .stats-card{background:var(--bg4);border:.5px solid var(--bd);border-radius:10px;padding:10px;margin-top:10px}
 .sg5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-bottom:8px}
 .sb{background:var(--bg3);border-radius:7px;border:.5px solid var(--bd);padding:6px 5px 5px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;transition:border-color .3s,background .3s}
 .sl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;line-height:1}
 .sv{font-size:15px;font-weight:700;line-height:1.1;transition:color .3s,text-shadow .3s}
 .sbar-wrap{width:100%;height:3px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-top:1px}
-.sbar{height:3px;border-radius:3px;transition:width .4s cubic-bezier(.25,.8,.25,1),box-shadow .4s;width:0}
+.sbar{height:3px;border-radius:3px;transition:width .4s cubic-bezier(.25,.8,.25,1);width:0}
 .sb.limitbreak{border-color:#FF4500aa;background:rgba(255,69,0,.08)}
 .sv.limitbreak{color:#FF4500!important;text-shadow:0 0 8px #FF4500cc,0 0 16px #FF450066}
 .sbar.limitbreak{box-shadow:0 0 6px currentColor}
@@ -268,6 +259,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 .social-links{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .social-btn{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:var(--bg3);border:.5px solid var(--bd2);color:var(--t3);cursor:pointer;text-decoration:none;transition:color .15s,border-color .15s,background .15s;flex-shrink:0}
 .social-btn:hover{color:var(--t1);background:var(--bg4)}
+.social-btn.ig:hover{color:#E1306C}
 .social-btn svg{width:14px;height:14px;fill:currentColor}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-overlay.open{display:flex}
@@ -309,7 +301,6 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
   .parts-scroll-area{overflow:visible;max-height:none;padding:0 12px 16px}
   .part-dropdown{right:0}.footer-links-inline{display:none}
   .social-links{display:none}
-  .bit-toolbar{flex-direction:column;align-items:flex-start;gap:5px}
 }
 </style>
 
@@ -384,7 +375,10 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
           <div class="divid"></div>
           <div class="combo-bottom">
             <div class="combo-detail-row"><div class="combo-name" id="mob-combo-name">—</div><div class="height-tag"><i class="ti ti-ruler"></i><span id="mob-height-val">— mm</span></div></div>
-            <div class="combo-score-row"><div class="mrow" id="mob-mrow"></div><div class="score-wrap"><div class="sbadge" id="mob-sbadge">—</div><div class="score-info">?<div class="score-tooltip"><strong>評分機制說明</strong><br>依配置「型態」動態調整五屬性權重；屬性超過100視為「極限突破」可額外加分；總重量超過 40g 也會獲得加分。滿分錨定在 95~100 分。</div></div></div></div>
+            <div class="combo-score-row">
+              <div class="mrow" id="mob-mrow"></div>
+              <div class="score-wrap"><div class="sbadge" id="mob-sbadge">—</div><div class="score-info">?<div class="score-tooltip"><strong>評分機制說明</strong><br>依配置「型態」動態調整五屬性權重；屬性超過100為「極限突破」可額外加分；總重量超過 40g 也會獲得加分。</div></div></div>
+            </div>
           </div>
         </div>
       </div>
@@ -405,7 +399,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
               <div class="part-dropdown" id="dd-sets"><div class="part-dropdown-inner" id="ddi-sets"></div></div>
             </div>
 
-            <!-- 戰刃 -->
+            <!-- 戰刃（★ 含工具列）-->
             <div class="part-group" id="pg-blade">
               <div class="part-group-label"><i class="ti ti-sword"></i>戰刃 Blade</div>
               <div class="part-trigger-row">
@@ -416,7 +410,21 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
                 </div>
                 <button class="btn-shopee-part" onclick="shopeeOpenPart('blade')">🛒</button>
               </div>
-              <div class="part-dropdown" id="dd-blade"><div class="part-dropdown-inner" id="ddi-blade"></div></div>
+              <div class="part-dropdown" id="dd-blade">
+                <div class="pd-toolbar" id="toolbar-blade">
+                  <button class="pd-filter-btn active" data-type="全部"   onclick="setFilter('blade','全部',this)">全部</button>
+                  <button class="pd-filter-btn"        data-type="攻擊型" onclick="setFilter('blade','攻擊型',this)">攻擊型</button>
+                  <button class="pd-filter-btn"        data-type="防禦型" onclick="setFilter('blade','防禦型',this)">防禦型</button>
+                  <button class="pd-filter-btn"        data-type="耐力型" onclick="setFilter('blade','耐力型',this)">耐力型</button>
+                  <button class="pd-filter-btn"        data-type="平衡型" onclick="setFilter('blade','平衡型',this)">平衡型</button>
+                  <select class="pd-sort-select" id="sort-blade" onchange="setSort('blade',this.value)">
+                    <option value="default">預設排序</option>
+                    <option value="heavy">重量：由重到輕</option>
+                    <option value="light">重量：由輕到重</option>
+                  </select>
+                </div>
+                <div class="part-dropdown-inner" id="ddi-blade"></div>
+              </div>
             </div>
 
             <!-- 固鎖輪盤 -->
@@ -433,7 +441,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
               <div class="part-dropdown" id="dd-ratchet"><div class="part-dropdown-inner" id="ddi-ratchet"></div></div>
             </div>
 
-            <!-- ★ 軸心（含篩選工具列）-->
+            <!-- 軸心（★ 含工具列）-->
             <div class="part-group" id="pg-bit">
               <div class="part-group-label"><i class="ti ti-point"></i>軸心 Bit</div>
               <div class="part-trigger-row">
@@ -444,20 +452,17 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
                 </div>
                 <button class="btn-shopee-part" onclick="shopeeOpenPart('bit')">🛒</button>
               </div>
-              <div class="part-dropdown has-toolbar" id="dd-bit">
-                <!-- 工具列：篩選 + 排序 -->
-                <div class="bit-toolbar">
-                  <div class="bit-filter-btns" id="bit-filter-btns">
-                    <button class="bit-filter-btn active" data-type="全部"   onclick="setBitFilter('全部',this)">全部</button>
-                    <button class="bit-filter-btn"        data-type="攻擊型" onclick="setBitFilter('攻擊型',this)">攻擊型</button>
-                    <button class="bit-filter-btn"        data-type="防禦型" onclick="setBitFilter('防禦型',this)">防禦型</button>
-                    <button class="bit-filter-btn"        data-type="耐力型" onclick="setBitFilter('耐力型',this)">耐力型</button>
-                    <button class="bit-filter-btn"        data-type="平衡型" onclick="setBitFilter('平衡型',this)">平衡型</button>
-                  </div>
-                  <select class="bit-sort-select" id="bit-sort-select" onchange="setBitSort(this.value)">
+              <div class="part-dropdown" id="dd-bit">
+                <div class="pd-toolbar" id="toolbar-bit">
+                  <button class="pd-filter-btn active" data-type="全部"   onclick="setFilter('bit','全部',this)">全部</button>
+                  <button class="pd-filter-btn"        data-type="攻擊型" onclick="setFilter('bit','攻擊型',this)">攻擊型</button>
+                  <button class="pd-filter-btn"        data-type="防禦型" onclick="setFilter('bit','防禦型',this)">防禦型</button>
+                  <button class="pd-filter-btn"        data-type="耐力型" onclick="setFilter('bit','耐力型',this)">耐力型</button>
+                  <button class="pd-filter-btn"        data-type="平衡型" onclick="setFilter('bit','平衡型',this)">平衡型</button>
+                  <select class="pd-sort-select" id="sort-bit" onchange="setSort('bit',this.value)">
                     <option value="default">預設排序</option>
-                    <option value="desc">重量：由重到輕</option>
-                    <option value="asc">重量：由輕到重</option>
+                    <option value="heavy">重量：由重到輕</option>
+                    <option value="light">重量：由輕到重</option>
                   </select>
                 </div>
                 <div class="part-dropdown-inner" id="ddi-bit"></div>
@@ -476,10 +481,12 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
               <div class="divid"></div>
               <div class="combo-bottom">
                 <div class="combo-detail-row"><div class="combo-name" id="combo-name">—</div><div class="height-tag"><i class="ti ti-ruler"></i><span id="height-val">— mm</span></div></div>
-                <div class="combo-score-row"><div class="mrow" id="mrow"></div><div class="score-wrap"><div class="sbadge" id="sbadge">—</div><div class="score-info">?<div class="score-tooltip"><strong>評分機制說明</strong><br>依配置「型態」（攻擊/防禦/耐力/平衡）動態調整五屬性權重；屬性超過100視為「極限突破」可額外加分；總重量超過 40g 也會獲得加分。滿分錨定在 95~100 分。</div></div></div></div>
+                <div class="combo-score-row">
+                  <div class="mrow" id="mrow"></div>
+                  <div class="score-wrap"><div class="sbadge" id="sbadge">—</div><div class="score-info">?<div class="score-tooltip"><strong>評分機制說明</strong><br>依配置「型態」（攻擊/防禦/耐力/平衡）動態調整五屬性權重；屬性超過100視為「極限突破」可額外加分；總重量超過 40g 也會獲得加分。滿分錨定在 95~100 分。</div></div></div>
+                </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -495,12 +502,12 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
         <div class="sdiv">版本記錄</div>
         <div class="cl-card">
           <div class="cl-title"><i class="ti ti-git-branch"></i>更新日誌</div>
-          <div class="cl-item"><span class="cl-ver">v3.3</span><div class="cl-txt">軸心下拉新增篩選標籤（全部/攻擊型/防禦型/耐力型/平衡型）與重量排序（預設/由重到輕/由輕到重），即時過濾</div></div>
+          <div class="cl-item"><span class="cl-ver">v3.3</span><div class="cl-txt">戰刃與軸心下拉選單內建篩選工具列（類型篩選 + 重量排序）；sets 獨立 type 欄位</div></div>
           <div class="cl-item"><span class="cl-ver">v3.2</span><div class="cl-txt">頁尾加入 Threads 和 IG 社群 Icon</div></div>
-          <div class="cl-item"><span class="cl-ver">v3.1</span><div class="cl-txt">手機版神配置計算機排版：雷達圖 → 屬性數值 → 套組/零件選單</div></div>
+          <div class="cl-item"><span class="cl-ver">v3.1</span><div class="cl-txt">手機版神配置計算機排版：雷達圖 → 五屬性數值 → 套組/零件選單</div></div>
           <div class="cl-item"><span class="cl-ver">v3.0</span><div class="cl-txt">資料庫大幅擴充：6支戰刃、5種固鎖輪盤、8種軸心、8組官方套組</div></div>
           <div class="cl-item"><span class="cl-ver">v2.3</span><div class="cl-txt">屬性卡新增視覺化進度條，顏色與各屬性一致</div></div>
-          <div class="cl-item"><span class="cl-ver">v1.9</span><div class="cl-txt">賽事中心依日期自動分類；評分Badge旁說明提示</div></div>
+          <div class="cl-item"><span class="cl-ver">v2.2</span><div class="cl-txt">雷達圖文字重疊修正：屬性標籤與數值上下分離</div></div>
           <div class="cl-item"><span class="cl-ver">v1.0</span><div class="cl-txt">雷達圖五角形、動態刻度、極限突破特效</div></div>
         </div>
         <div class="sdiv" style="margin-top:10px">即將推出</div>
@@ -591,10 +598,10 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
     <div class="footer-bottom">
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
         <div class="social-links">
-          <a class="social-btn" href="https://www.threads.com/@ghub.official.tw?xmt=AQG0LNZr01qnnG2B817629GDNUpm7-_-RrINjvpIGeH82s0" target="_blank" rel="noopener noreferrer" title="Threads">
+          <a class="social-btn threads" href="https://www.threads.com/@ghub.official.tw?xmt=AQG0LNZr01qnnG2B817629GDNUpm7-_-RrINjvpIGeH82s0" target="_blank" rel="noopener noreferrer" title="Threads">
             <svg viewBox="0 0 192 192"><path d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.244-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.453-15.153 9.899-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.206 17.11 97.015 16.94c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.202 1.205 97.144 1h-.29c-28.006.205-49.567 9.68-64.104 28.172C20.05 45.84 13.938 68.84 13.7 96.04l-.002.96.002.96c.238 27.2 6.35 50.2 18.85 66.868 14.537 18.492 36.098 27.967 64.104 28.172h.29c24.958-.174 42.826-6.713 57.37-21.256 18.964-18.952 18.517-42.653 12.222-57.332-4.537-10.574-13.194-19.212-24.999-24.414zM96.99 121.63c-10.438.587-21.283-4.098-21.834-14.136-.407-7.638 5.43-16.166 23.008-17.197 2.013-.116 3.994-.173 5.952-.173 6.047 0 11.714.594 16.898 1.744-1.925 24.005-13.513 29.207-24.024 29.762z"/></svg>
           </a>
-          <a class="social-btn" href="https://www.instagram.com/ghub.official.tw/" target="_blank" rel="noopener noreferrer" title="Instagram">
+          <a class="social-btn ig" href="https://www.instagram.com/ghub.official.tw/" target="_blank" rel="noopener noreferrer" title="Instagram">
             <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
           </a>
         </div>
@@ -606,88 +613,97 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 </footer>
 </div>
 
-<div class="modal-overlay" id="modal-privacy" onclick="closeModalOutside(event,'modal-privacy')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-lock"></i>隱私權政策</div><button class="modal-close" onclick="closeModal('modal-privacy')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-shield"></i>資料收集與使用</div><p>本站承諾保護使用者的個人資料，絕不外洩給第三方。</p></div></div></div>
+<div class="modal-overlay" id="modal-privacy" onclick="closeModalOutside(event,'modal-privacy')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-lock"></i>隱私權政策</div><button class="modal-close" onclick="closeModal('modal-privacy')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-shield"></i>資料收集</div><p>本站承諾保護使用者的個人資料，絕不外洩給第三方。</p></div></div></div>
 <div class="modal-overlay" id="modal-terms" onclick="closeModalOutside(event,'modal-terms')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-file-text"></i>服務條款</div><button class="modal-close" onclick="closeModal('modal-terms')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-info-circle"></i>服務範圍</div><p>本站提供之數據計算與查詢服務僅供參考，與 TAKARA TOMY 無關。</p></div></div></div>
-<div class="modal-overlay" id="modal-refund" onclick="closeModalOutside(event,'modal-refund')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-refresh"></i>退換貨及退款流程</div><button class="modal-close" onclick="closeModal('modal-refund')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-package"></i>服務性質</div><p>本站提供之服務為「無形數位數據服務」，服務即時交付。若因系統錯誤無法正常使用，請聯繫我們安排退款。</p></div></div></div>
+<div class="modal-overlay" id="modal-refund" onclick="closeModalOutside(event,'modal-refund')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-refresh"></i>退款流程</div><button class="modal-close" onclick="closeModal('modal-refund')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-package"></i>服務性質</div><p>本站提供之服務為「無形數位數據服務」，服務即時交付。若因系統錯誤無法正常使用，請聯繫我們安排退款。</p></div></div></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="beyblade_data.js"></script>
 <script>
+
 function typeBadgeHtml(t,s=9){const c=TYPE_COLOR[t]||"#9090a8";return t?`<span style="font-size:${s}px;padding:1px 6px;border-radius:20px;color:${c};background:${c}18;border:.5px solid ${c}44;white-space:nowrap;flex-shrink:0">${t}</span>`:"";}
 function versStr(a){if(!a||!a.length)return"";return a.length<=5?a.join("　"):a.slice(0,4).join("　")+" …";}
-function getSetType(set){const bl=BEYBLADE_DATABASE.parts.blades[set.components.blade];return bl?bl.type:"平衡型";}
+
+/* ══ 篩選 / 排序狀態（blade 和 bit 各自獨立）══ */
+const filterState={blade:{type:"全部",sort:"default"},bit:{type:"全部",sort:"default"}};
+
+function setFilter(partType, typeVal, btn){
+  filterState[partType].type=typeVal;
+  document.querySelectorAll(`#toolbar-${partType} .pd-filter-btn`).forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  renderFilteredList(partType);
+}
+function setSort(partType, val){
+  filterState[partType].sort=val;
+  renderFilteredList(partType);
+}
+
+/* ★ 統一的帶篩選列表渲染函式（blade / bit 共用）*/
+function renderFilteredList(partType){
+  const dbKey=partType==="blade"?"blades":"bits";
+  const parts=BEYBLADE_DATABASE.parts[dbKey];
+  const inner=document.getElementById("ddi-"+partType);
+  inner.innerHTML="";
+  const {type:fType,sort:fSort}=filterState[partType];
+  let entries=Object.entries(parts).filter(([,p])=>fType==="全部"||p.type===fType);
+  if(fSort==="heavy") entries.sort((a,b)=>b[1].weight-a[1].weight);
+  else if(fSort==="light") entries.sort((a,b)=>a[1].weight-b[1].weight);
+  if(!entries.length){inner.innerHTML=`<div class="pd-empty">此類型無零件資料</div>`;return;}
+  entries.forEach(([key,p])=>{
+    const div=document.createElement("div");div.className="pd-item";div.dataset.key=key;
+    if(partType==="blade"){
+      div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div>${p.versions&&p.versions.length?`<div class="pd-ver">${versStr(p.versions)}</div>`:""}</div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;
+    } else {
+      div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;
+    }
+    div.addEventListener("click",()=>{
+      selSet=null;
+      document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.remove("active"));
+      document.getElementById("disp-sets-name").textContent="請選擇套組";
+      document.getElementById("disp-sets-type").style.display="none";
+      document.getElementById("disp-sets-ver").textContent="—";
+      selectPart(partType,key);closeAllDD();
+    });
+    inner.appendChild(div);
+  });
+  /* 更新 active 標記 */
+  const curSel=partType==="blade"?selBlade:selBit;
+  if(curSel) inner.querySelectorAll(".pd-item").forEach(el=>el.classList.toggle("active",el.dataset.key===curSel._key));
+}
+
 const TYPE_WEIGHTS={"攻擊型":{atk:.35,def:.10,sta:.15,accel:.25,endurance:.15},"防禦型":{atk:.10,def:.35,sta:.15,accel:.10,endurance:.30},"耐力型":{atk:.10,def:.15,sta:.35,accel:.10,endurance:.30},"平衡型":{atk:.22,def:.22,sta:.22,accel:.17,endurance:.17}};
 function calcScore(atk,def,sta,accel,endurance,w,type){const wt=TYPE_WEIGHTS[type]||TYPE_WEIGHTS["平衡型"];const v={atk,def,sta,accel,endurance};let raw=0,lb=0;for(const k of Object.keys(wt)){raw+=Math.min(v[k],100)*wt[k];if(v[k]>100)lb+=Math.min((v[k]-100)*.10,3);}return Math.min(Math.round((raw/100)*87+lb+Math.min(Math.max(w-40,0)*.3,6)+3),100);}
 function shopeeOpen(url){window.open((url&&url!=="")?url:"https://shopee.tw/search?keyword=戰鬥陀螺X","_blank");}
 function shopeeOpenPart(type){const pm={blade:selBlade,ratchet:selRatchet,bit:selBit};const p=pm[type];shopeeOpen(p?p.shopeeUrl:"");}
 function shopeeOpenSet(){shopeeOpen(selSet?selSet.shopeeUrl:"");}
-
-/* ══ 軸心篩選 / 排序 狀態 ══ */
-let bitFilterType="全部";
-let bitSortMode="default";  /* default | asc | desc */
-
-/* 原始 key 順序備存（預設排序用）*/
-const BIT_KEYS_DEFAULT=Object.keys(BEYBLADE_DATABASE.parts.bits);
-
-function setBitFilter(type,btn){
-  bitFilterType=type;
-  document.querySelectorAll(".bit-filter-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  renderBitDropdown();
-}
-function setBitSort(val){
-  bitSortMode=val;
-  renderBitDropdown();
-}
-
-/* ★ 軸心下拉獨立渲染，支援篩選＋排序 */
-function renderBitDropdown(){
-  const inner=document.getElementById("ddi-bit");inner.innerHTML="";
-  let entries=BIT_KEYS_DEFAULT.map(k=>([k,BEYBLADE_DATABASE.parts.bits[k]]));
-  /* 篩選 */
-  if(bitFilterType!=="全部") entries=entries.filter(([,p])=>p.type===bitFilterType);
-  /* 排序 */
-  if(bitSortMode==="desc") entries.sort((a,b)=>b[1].weight-a[1].weight);
-  else if(bitSortMode==="asc") entries.sort((a,b)=>a[1].weight-b[1].weight);
-  /* 無結果 */
-  if(!entries.length){inner.innerHTML=`<div class="pd-empty">沒有符合「${bitFilterType}」的軸心</div>`;return;}
-  entries.forEach(([key,p])=>{
-    const div=document.createElement("div");div.className="pd-item";div.dataset.key=key;
-    if(selBit&&selBit._key===key) div.classList.add("active");
-    div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;
-    div.addEventListener("click",()=>{
-      selSet=null;document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.remove("active"));
-      document.getElementById("disp-sets-name").textContent="請選擇套組";
-      document.getElementById("disp-sets-type").style.display="none";
-      document.getElementById("disp-sets-ver").textContent="—";
-      selectPart("bit",key);closeAllDD();
-    });
-    inner.appendChild(div);
-  });
-}
-
 const ALL_DD=["sets","blade","ratchet","bit"];
 function toggleDD(type){const dd=document.getElementById("dd-"+type),arr=document.getElementById("arr-"+type),trig=document.getElementById("trig-"+type);const wo=dd.classList.contains("open");closeAllDD();if(!wo){dd.classList.add("open");arr.classList.add("open");trig.classList.add("open");}}
 function closeAllDD(){ALL_DD.forEach(t=>{const dd=document.getElementById("dd-"+t),arr=document.getElementById("arr-"+t),trig=document.getElementById("trig-"+t);if(dd)dd.classList.remove("open");if(arr)arr.classList.remove("open");if(trig)trig.classList.remove("open");});}
-document.addEventListener("click",e=>{if(!e.target.closest(".part-group")&&!e.target.closest(".bit-toolbar"))closeAllDD();});
+/* 點擊工具列不關閉下拉 */
+document.addEventListener("click",e=>{
+  if(e.target.closest(".pd-toolbar"))return;
+  if(!e.target.closest(".part-group"))closeAllDD();
+});
 
 let selSet=null;
-function buildSetsDropdown(){const inner=document.getElementById("ddi-sets");inner.innerHTML="";BEYBLADE_DATABASE.sets.forEach((set,idx)=>{const setType=getSetType(set);const div=document.createElement("div");div.className="pd-item";div.dataset.idx=idx;div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${set.name}</span>${typeBadgeHtml(setType)}</div>${set.versions&&set.versions.length?`<div class="pd-ver">${versStr(set.versions)}</div>`:""}</div><i class="ti ti-check pd-check"></i>`;div.addEventListener("click",()=>{applySet(idx);closeAllDD();});inner.appendChild(div);});}
-function applySet(idx){const set=BEYBLADE_DATABASE.sets[idx];if(!set)return;selSet=set;const setType=getSetType(set);const tc=TYPE_COLOR[setType]||"#9090a8";document.getElementById("disp-sets-name").textContent=set.name;const tEl=document.getElementById("disp-sets-type");tEl.textContent=setType;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;document.getElementById("disp-sets-ver").textContent=set.versions&&set.versions.length?versStr(set.versions):"";document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.toggle("active",parseInt(el.dataset.idx)===idx));selectPart("blade",set.components.blade);selectPart("ratchet",set.components.ratchet);selectPart("bit",set.components.bit);}
+function buildSetsDropdown(){const inner=document.getElementById("ddi-sets");inner.innerHTML="";BEYBLADE_DATABASE.sets.forEach((set,idx)=>{const setType=set.type||"平衡型";const div=document.createElement("div");div.className="pd-item";div.dataset.idx=idx;div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${set.name}</span>${typeBadgeHtml(setType)}</div>${set.versions&&set.versions.length?`<div class="pd-ver">${versStr(set.versions)}</div>`:""}</div><i class="ti ti-check pd-check"></i>`;div.addEventListener("click",()=>{applySet(idx);closeAllDD();});inner.appendChild(div);});}
+function applySet(idx){const set=BEYBLADE_DATABASE.sets[idx];if(!set)return;selSet=set;const setType=set.type||"平衡型";const tc=TYPE_COLOR[setType]||"#9090a8";document.getElementById("disp-sets-name").textContent=set.name;const tEl=document.getElementById("disp-sets-type");tEl.textContent=setType;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;document.getElementById("disp-sets-ver").textContent=set.versions&&set.versions.length?versStr(set.versions):"";document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.toggle("active",parseInt(el.dataset.idx)===idx));selectPart("blade",set.components.blade);selectPart("ratchet",set.components.ratchet);selectPart("bit",set.components.bit);}
 let selBlade=null,selRatchet=null,selBit=null;
-function buildPartDropdown(type){
-  if(type==="bit"){renderBitDropdown();return;} /* 軸心用獨立方法 */
-  const map={blade:"blades",ratchet:"ratchets"};const parts=BEYBLADE_DATABASE.parts[map[type]];const inner=document.getElementById("ddi-"+type);inner.innerHTML="";
-  Object.entries(parts).forEach(([key,p])=>{const div=document.createElement("div");div.className="pd-item";div.dataset.key=key;if(type==="blade"){div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div>${p.versions&&p.versions.length?`<div class="pd-ver">${versStr(p.versions)}</div>`:""}</div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;}else{div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span></div><div class="pd-ver" style="color:var(--t3)">高度 ${p.height} mm</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;}div.addEventListener("click",()=>{selSet=null;document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.remove("active"));document.getElementById("disp-sets-name").textContent="請選擇套組";document.getElementById("disp-sets-type").style.display="none";document.getElementById("disp-sets-ver").textContent="—";selectPart(type,key);closeAllDD();});inner.appendChild(div);});
+function buildRatchetDropdown(){const inner=document.getElementById("ddi-ratchet");inner.innerHTML="";Object.entries(BEYBLADE_DATABASE.parts.ratchets).forEach(([key,p])=>{const div=document.createElement("div");div.className="pd-item";div.dataset.key=key;div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span></div><div class="pd-ver" style="color:var(--t3)">高度 ${p.height} mm</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;div.addEventListener("click",()=>{selSet=null;document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.remove("active"));document.getElementById("disp-sets-name").textContent="請選擇套組";document.getElementById("disp-sets-type").style.display="none";document.getElementById("disp-sets-ver").textContent="—";selectPart("ratchet",key);closeAllDD();});inner.appendChild(div);});}
+function selectPart(type,key){
+  const map={blade:"blades",ratchet:"ratchets",bit:"bits"};
+  const p=BEYBLADE_DATABASE.parts[map[type]][key];if(!p)return;
+  const obj={_key:key,...p};
+  if(type==="blade")selBlade=obj;if(type==="ratchet")selRatchet=obj;if(type==="bit")selBit=obj;
+  const tc=TYPE_COLOR[p.type]||"";
+  if(type==="blade"){document.getElementById("disp-blade-name").textContent=p.name;const tEl=document.getElementById("disp-blade-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";document.getElementById("disp-blade-ver").textContent=versStr(p.versions)||"";document.getElementById("disp-blade-weight").textContent=p.weight+"g";renderFilteredList("blade");}
+  else if(type==="ratchet"){document.getElementById("disp-ratchet-name").textContent=p.name;document.getElementById("disp-ratchet-meta").textContent=`高度 ${p.height} mm`;document.getElementById("disp-ratchet-weight").textContent=p.weight+"g";}
+  else{document.getElementById("disp-bit-name").textContent=p.name;const tEl=document.getElementById("disp-bit-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";document.getElementById("disp-bit-weight").textContent=p.weight+"g";renderFilteredList("bit");}
+  document.querySelectorAll(`#ddi-${type} .pd-item`).forEach(el=>el.classList.toggle("active",el.dataset.key===key));
+  updateStats();
 }
-function selectPart(type,key){const map={blade:"blades",ratchet:"ratchets",bit:"bits"};const p=BEYBLADE_DATABASE.parts[map[type]][key];if(!p)return;const obj={_key:key,...p};if(type==="blade")selBlade=obj;if(type==="ratchet")selRatchet=obj;if(type==="bit")selBit=obj;const tc=TYPE_COLOR[p.type]||"";if(type==="blade"){document.getElementById("disp-blade-name").textContent=p.name;const tEl=document.getElementById("disp-blade-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";document.getElementById("disp-blade-ver").textContent=versStr(p.versions)||"";document.getElementById("disp-blade-weight").textContent=p.weight+"g";}else if(type==="ratchet"){document.getElementById("disp-ratchet-name").textContent=p.name;document.getElementById("disp-ratchet-meta").textContent=`高度 ${p.height} mm`;document.getElementById("disp-ratchet-weight").textContent=p.weight+"g";}else{document.getElementById("disp-bit-name").textContent=p.name;const tEl=document.getElementById("disp-bit-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";document.getElementById("disp-bit-weight").textContent=p.weight+"g";}
-  /* 選中狀態同步到下拉列表 */
-  if(type==="bit") renderBitDropdown();
-  else document.querySelectorAll(`#ddi-${type} .pd-item`).forEach(el=>el.classList.toggle("active",el.dataset.key===key));
-  updateStats();}
 
 /* 雷達圖 */
-
 const AXES=[{key:"atk",label:"攻擊",color:"#D85A30"},{key:"def",label:"防禦",color:"#378ADD"},{key:"endurance",label:"耐久度",color:"#D85070"},{key:"accel",label:"加速",color:"#D8A030"},{key:"sta",label:"耐力",color:"#1D9E75"}];
 const N=5,STEPS=5;let rCvs=null,rCtx=null,rSize=0,rCX=0,rCY=0,rMax=0;
 let rVals={atk:0,def:0,sta:0,accel:0,endurance:0},rTarget={atk:0,def:0,sta:0,accel:0,endurance:0},rScale=100,rScaleTarget=100;
@@ -799,5 +815,5 @@ function renderEvents(tab){const list=EVT[tab];document.getElementById("count-up
 function switchTab(tab,el){curTab=tab;document.querySelectorAll(".etab").forEach(b=>b.classList.remove("active"));el.classList.add("active");renderEvents(tab);if(lmap)renderMapMarkers(tab);}
 function goto(page,el){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("page-"+page).classList.add("active");document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));document.querySelectorAll("[data-m]").forEach(b=>b.classList.remove("active"));const ids={home:"nb-home",bey:"nb-bey",cl:"nb-cl"};if(ids[page])document.getElementById(ids[page]).classList.add("active");document.querySelectorAll(`[data-m="${{home:"home",bey:"bey",cl:"cl"}[page]}"]`).forEach(b=>b.classList.add("active"));if(page==="home"){setTimeout(()=>{initMap();if(lmap)lmap.invalidateSize();},80);}if(page==="bey"){setTimeout(resizeRadar,50);}}
 function toggleMob(){const menu=document.getElementById("mob-menu");const btn=document.getElementById("hamburger-btn");const isOpen=menu.classList.toggle("open");btn.classList.toggle("open",isOpen);btn.setAttribute("aria-expanded",isOpen);btn.setAttribute("aria-label",isOpen?"關閉選單":"開啟選單");}
-EVT=classifyEvents();renderEvents("upcoming");setTimeout(()=>initMap(),200);initRadar();buildSetsDropdown();buildPartDropdown("blade");buildPartDropdown("ratchet");buildPartDropdown("bit");applySet(0);window.addEventListener("resize",()=>resizeRadar());
+EVT=classifyEvents();renderEvents("upcoming");setTimeout(()=>initMap(),200);initRadar();buildSetsDropdown();renderFilteredList("blade");buildRatchetDropdown();renderFilteredList("bit");applySet(0);window.addEventListener("resize",()=>resizeRadar());
 </script>
