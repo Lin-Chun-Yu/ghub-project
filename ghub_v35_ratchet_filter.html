@@ -1,0 +1,771 @@
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0a0f;--bg2:#111118;--bg3:#18181f;--bg4:#1e1e28;--bd:#2a2a38;--bd2:#363648;--t1:#f0f0f8;--t2:#9090a8;--t3:#5a5a70;--blue:#378ADD;--blue2:#85B7EB;--blue3:#0C447C;--shopee:#EE4D2D;--shopee2:#FF6B4A;--shopee-bg:rgba(238,77,45,.1)}
+body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
+.shell{display:flex;flex-direction:column;height:720px}
+.navbar{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:52px;background:var(--bg2);border-bottom:.5px solid var(--bd2);flex-shrink:0;position:sticky;top:0;z-index:200}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-name{font-size:15px;font-weight:500;color:var(--t1);letter-spacing:.04em}
+.brand-sub{font-size:9px;color:var(--t3);letter-spacing:.06em;text-transform:uppercase}
+.nav-links{display:flex;gap:2px}
+.nav-item{display:flex;align-items:center;gap:5px;padding:6px 11px;border-radius:8px;cursor:pointer;font-size:12px;color:var(--t2);border:none;background:transparent;transition:all .15s;white-space:nowrap}
+.nav-item i{font-size:14px}
+.nav-item:hover{background:var(--bg3);color:var(--t1)}
+.nav-item.active{background:rgba(55,138,221,.12);color:var(--blue2)}
+.nav-item.active i{color:var(--blue)}
+.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:40px;height:40px;padding:8px;background:transparent;border:1.5px solid var(--bd2);border-radius:8px;cursor:pointer;flex-shrink:0;transition:background .15s,border-color .15s}
+.hamburger:hover{background:rgba(55,138,221,.12);border-color:var(--blue3)}
+.hamburger span{display:block;width:18px;height:2px;background:#f0f0f8;border-radius:2px;transition:all .2s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mob-menu{display:none;flex-direction:column;gap:2px;background:var(--bg2);border-bottom:.5px solid var(--bd2);padding:8px 12px 12px;position:sticky;top:52px;z-index:199}
+.mob-menu.open{display:flex}
+.mob-menu .nav-item{width:100%;padding:10px 12px;justify-content:flex-start}
+.content{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.page{display:none;flex-direction:column;flex:1;overflow:hidden}
+.page.active{display:flex}
+.home-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);flex:1;overflow:hidden}
+.map-col{display:flex;flex-direction:column;border-right:.5px solid var(--bd)}
+.map-hdr{padding:11px 14px 9px;border-bottom:.5px solid var(--bd);flex-shrink:0}
+.map-hdr h3{font-size:13px;font-weight:500;color:var(--t1);display:flex;align-items:center;gap:6px}
+.map-hdr h3 i{color:var(--blue);font-size:14px}
+.map-sub{font-size:10px;color:var(--t3);margin-top:2px}
+#leaflet-map{flex:1;min-height:0}
+.events-col{display:flex;flex-direction:column;overflow:hidden}
+.etabs{display:flex;border-bottom:.5px solid var(--bd);flex-shrink:0}
+.etab{flex:1;padding:11px 0;font-size:12px;text-align:center;cursor:pointer;color:var(--t3);border:none;background:transparent;border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:4px}
+.etab i{font-size:13px}
+.etab.active{color:var(--blue2);border-bottom-color:var(--blue)}
+.etab-count{font-size:9px;background:var(--bg4);border:.5px solid var(--bd2);border-radius:20px;padding:1px 6px;color:var(--t3)}
+.etab.active .etab-count{color:var(--blue2);border-color:rgba(55,138,221,.3)}
+.elist{flex:1;overflow-y:auto;padding:10px}
+.elist::-webkit-scrollbar{width:3px}
+.elist::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+.ecard{background:var(--bg3);border:.5px solid var(--bd);border-radius:10px;padding:11px;margin-bottom:7px}
+.ecard.upcoming{border-left:2px solid var(--blue)}
+.ecard.past{border-left:2px solid var(--t3)}
+.etop{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px}
+.ename{font-size:12px;font-weight:500;color:var(--t1);line-height:1.3}
+.ebadge{font-size:10px;padding:2px 7px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.badge-open{background:rgba(29,158,117,.15);color:#5DCAA5;border:.5px solid rgba(29,158,117,.3)}
+.badge-soon{background:rgba(55,138,221,.15);color:var(--blue2);border:.5px solid rgba(55,138,221,.3)}
+.badge-past{background:rgba(90,90,112,.2);color:var(--t3);border:.5px solid var(--bd)}
+.emeta{display:flex;gap:10px;font-size:10px;color:var(--t3)}
+.emeta span{display:flex;align-items:center;gap:3px}
+.emeta i{font-size:11px}
+.elist-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:40px 20px;color:var(--t3);text-align:center}
+.elist-empty i{font-size:28px;color:var(--bd2)}
+.elist-empty span{font-size:12px}
+.bey-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.bey-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);flex:1;overflow:hidden;min-height:0}
+.col-radar{background:var(--bg3);border-right:.5px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;gap:10px;overflow:hidden}
+.radar-legend{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 8px;width:100%;max-width:300px;flex-shrink:0;padding:0 4px}
+.rl-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t2)}
+.rl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.radar-scale-badge{font-size:9px;color:var(--t3);display:flex;align-items:center;gap:4px;flex-shrink:0}
+.radar-scale-badge.overscale{color:#D8A030}
+.col-right{display:flex;flex-direction:column;overflow:hidden;min-height:0}
+.parts-panel{display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0}
+.parts-scroll-area{flex:1;overflow-y:auto;padding:0 12px 12px;min-height:0}
+.parts-scroll-area::-webkit-scrollbar{width:3px}
+.parts-scroll-area::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+.part-group{margin-bottom:10px;position:relative}
+.part-group:last-child{margin-bottom:0}
+.part-group-label{font-size:9px;font-weight:500;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.part-group-label i{font-size:11px;color:var(--blue)}
+.part-trigger-row{display:flex;align-items:stretch;gap:5px}
+.part-select-trigger{flex:1;display:flex;align-items:center;padding:8px 10px;background:var(--bg4);border:.5px solid var(--bd2);border-radius:8px;cursor:pointer;transition:border-color .15s;user-select:none;min-width:0;gap:8px}
+.part-select-trigger:hover,.part-select-trigger.open{border-color:var(--blue3)}
+.pst-main{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.pst-toprow{display:flex;align-items:center;gap:5px;min-width:0}
+.pst-name{font-size:12px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pst-type{font-size:9px;padding:1px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.pst-ver{font-size:9px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pst-meta{font-size:10px;color:var(--t3)}
+.pst-weight{font-size:12px;font-weight:700;color:#B8C8DC;flex-shrink:0;white-space:nowrap}
+.pst-arrow{color:var(--t3);font-size:13px;transition:transform .2s;flex-shrink:0}
+.pst-arrow.open{transform:rotate(180deg)}
+.part-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:46px;z-index:300;background:var(--bg3);border:.5px solid var(--bd2);border-radius:10px;overflow:hidden;display:none;box-shadow:0 8px 28px rgba(0,0,0,.7)}
+.part-dropdown.open{display:block}
+.pd-toolbar{display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:7px 10px;background:var(--bg4);border-bottom:.5px solid var(--bd);flex-shrink:0}
+.pd-filter-btn{font-size:9px;padding:2px 8px;border-radius:20px;border:.5px solid var(--bd2);background:transparent;color:var(--t3);cursor:pointer;transition:all .15s;white-space:nowrap}
+.pd-filter-btn:hover{color:var(--t2)}
+.pd-filter-btn.active{background:rgba(55,138,221,.12);color:var(--blue2);border-color:rgba(55,138,221,.35)}
+/* 戰刃 / 軸心 type 色 */
+.pd-filter-btn.active[data-type="攻擊型"]{background:rgba(216,90,48,.12);color:#D85A30;border-color:rgba(216,90,48,.35)}
+.pd-filter-btn.active[data-type="防禦型"]{background:rgba(55,138,221,.12);color:var(--blue2);border-color:rgba(55,138,221,.35)}
+.pd-filter-btn.active[data-type="耐力型"]{background:rgba(29,158,117,.12);color:#5DCAA5;border-color:rgba(29,158,117,.35)}
+.pd-filter-btn.active[data-type="平衡型"]{background:rgba(216,160,48,.12);color:#D8A030;border-color:rgba(216,160,48,.35)}
+.pd-sort-select{font-size:9px;padding:2px 6px;border-radius:6px;border:.5px solid var(--bd2);background:var(--bg3);color:var(--t3);cursor:pointer;outline:none;margin-left:auto;flex-shrink:0;transition:border-color .15s}
+.pd-sort-select:hover,.pd-sort-select:focus{border-color:var(--blue3);color:var(--t2)}
+.pd-empty{padding:14px;text-align:center;font-size:11px;color:var(--t3)}
+.part-dropdown-inner{max-height:200px;overflow-y:auto}
+.part-dropdown-inner::-webkit-scrollbar{width:3px}
+.part-dropdown-inner::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+.pd-item{display:flex;align-items:center;padding:9px 12px;cursor:pointer;border-bottom:.5px solid var(--bd);transition:background .1s;gap:8px}
+.pd-item:last-child{border-bottom:none}
+.pd-item:hover{background:rgba(55,138,221,.07)}
+.pd-item.active{background:rgba(55,138,221,.1)}
+.pd-main{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.pd-toprow{display:flex;align-items:center;gap:5px;min-width:0}
+.pd-name{font-size:12px;font-weight:500;color:var(--t1)}
+.pd-ver{font-size:9px;color:var(--t3)}
+.pd-weight{font-size:11px;font-weight:700;color:#B8C8DC;flex-shrink:0;white-space:nowrap;margin-right:4px}
+.pd-check{font-size:13px;color:var(--blue);display:none;flex-shrink:0}
+.pd-item.active .pd-check{display:block}
+.btn-shopee-part{display:flex;align-items:center;justify-content:center;width:36px;border-radius:8px;border:.5px solid rgba(238,77,45,.3);background:var(--shopee-bg);color:var(--shopee);cursor:pointer;transition:all .15s;flex-shrink:0;font-size:16px}
+.btn-shopee-part:hover{background:rgba(238,77,45,.2);border-color:var(--shopee);transform:scale(1.05)}
+@keyframes shopee-pulse{0%,100%{box-shadow:0 0 0 0 rgba(238,77,45,.4)}50%{box-shadow:0 0 0 4px rgba(238,77,45,0)}}
+.btn-shopee-part{animation:shopee-pulse 2.8s ease-in-out infinite}
+.stats-card{background:var(--bg4);border:.5px solid var(--bd);border-radius:10px;padding:10px;margin-top:10px}
+.sg5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-bottom:8px}
+.sb{background:var(--bg3);border-radius:7px;border:.5px solid var(--bd);padding:6px 5px 5px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;transition:border-color .3s,background .3s}
+.sl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;line-height:1}
+.sv{font-size:15px;font-weight:700;line-height:1.1;transition:color .3s,text-shadow .3s}
+.sbar-wrap{width:100%;height:3px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-top:1px}
+.sbar{height:3px;border-radius:3px;transition:width .4s cubic-bezier(.25,.8,.25,1);width:0}
+.sb.limitbreak{border-color:#FF4500aa;background:rgba(255,69,0,.08)}
+.sv.limitbreak{color:#FF4500!important;text-shadow:0 0 8px #FF4500cc,0 0 16px #FF450066}
+.sbar.limitbreak{box-shadow:0 0 6px currentColor}
+.divid{height:.5px;background:var(--bd);margin:6px 0}
+.combo-bottom{display:flex;flex-direction:column;gap:5px}
+.combo-detail-row{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.combo-name{font-size:10px;font-weight:500;color:var(--t1);line-height:1.4;flex:1;min-width:0}
+.height-tag{display:flex;align-items:center;gap:4px;font-size:10px;font-weight:500;padding:3px 8px;border-radius:20px;background:rgba(155,111,216,.12);color:#C49EF0;border:.5px solid rgba(155,111,216,.3);white-space:nowrap;flex-shrink:0}
+.height-tag i{font-size:11px}
+.combo-score-row{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.mrow{display:flex;gap:4px;flex-wrap:wrap}
+.mp{font-size:9px;padding:2px 7px;border-radius:20px;background:var(--bg3);color:var(--t2);border:.5px solid var(--bd)}
+.score-wrap{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.sbadge{font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;background:var(--bg3);border:.5px solid var(--bd2);white-space:nowrap}
+.sbadge.limitbreak-score{border-color:#FF4500aa!important;text-shadow:0 0 6px #FF450099}
+.score-info{position:relative;display:flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--bg3);border:.5px solid var(--bd2);color:var(--t3);font-size:10px;font-weight:600;cursor:help;flex-shrink:0;transition:all .15s}
+.score-info:hover{color:var(--blue2);border-color:var(--blue3);background:rgba(55,138,221,.1)}
+.score-tooltip{position:absolute;bottom:calc(100% + 8px);right:0;width:230px;background:var(--bg3);border:.5px solid var(--bd2);border-radius:10px;padding:10px 12px;font-size:10px;line-height:1.6;color:var(--t2);text-align:left;white-space:normal;box-shadow:0 8px 24px rgba(0,0,0,.6);opacity:0;visibility:hidden;transform:translateY(4px);transition:opacity .15s,transform .15s;z-index:400}
+.score-tooltip strong{color:var(--t1);font-weight:600}
+.score-tooltip::after{content:"";position:absolute;top:100%;right:5px;border:6px solid transparent;border-top-color:var(--bd2)}
+.score-info:hover .score-tooltip{opacity:1;visibility:visible;transform:translateY(0)}
+.stats-card-mobile-wrapper{display:none}
+.cl-wrap{flex:1;overflow-y:auto;padding:16px}
+.cl-wrap::-webkit-scrollbar{width:3px}
+.cl-wrap::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+.cl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.cl-card{background:var(--bg3);border:.5px solid var(--bd);border-radius:12px;padding:14px}
+.cl-title{font-size:13px;font-weight:500;color:var(--t1);display:flex;align-items:center;gap:7px;margin-bottom:9px}
+.cl-title i{font-size:15px;color:var(--blue)}
+.cl-item{display:flex;gap:7px;padding:5px 0;border-bottom:.5px solid var(--bd);align-items:flex-start}
+.cl-item:last-child{border-bottom:none}
+.cl-ver{font-size:10px;padding:2px 6px;border-radius:20px;background:rgba(55,138,221,.15);color:var(--blue2);border:.5px solid rgba(55,138,221,.25);white-space:nowrap;margin-top:1px}
+.cl-txt{font-size:11px;color:var(--t2);line-height:1.5;flex:1}
+.fb-card{background:var(--bg3);border:.5px solid var(--bd);border-radius:12px;padding:14px}
+.fb-title{font-size:13px;font-weight:500;color:var(--t1);margin-bottom:4px;display:flex;align-items:center;gap:7px}
+.fb-title i{font-size:15px;color:#5DCAA5}
+.fb-subtitle{font-size:10px;color:var(--t3);margin-bottom:10px;display:flex;align-items:center;gap:4px}
+.rating-row{display:flex;gap:6px;margin-bottom:10px}
+.rating-btn{flex:1;padding:6px 4px;border-radius:8px;border:.5px solid var(--bd2);background:var(--bg4);font-size:14px;cursor:pointer;transition:all .15s;text-align:center}
+.rating-btn:hover{background:var(--bg3);transform:scale(1.08)}
+.rating-btn.selected{border-color:currentColor;background:transparent}
+.cat-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.cat-btn{font-size:10px;padding:3px 9px;border-radius:20px;border:.5px solid var(--bd2);background:transparent;color:var(--t3);cursor:pointer;transition:all .15s}
+.cat-btn:hover{color:var(--t2)}
+.cat-btn.selected{background:rgba(55,138,221,.12);color:var(--blue2);border-color:rgba(55,138,221,.3)}
+textarea.fb-in{width:100%;background:var(--bg4);border:.5px solid var(--bd2);border-radius:8px;color:var(--t1);font-size:12px;padding:9px;resize:none;height:72px;font-family:var(--font-sans);transition:border-color .15s}
+textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
+.char-count{font-size:10px;color:var(--t3);text-align:right;margin-top:3px}
+.submit-row{display:flex;gap:8px;margin-top:8px;align-items:center}
+.btn-p{padding:6px 14px;border-radius:8px;border:none;font-size:12px;cursor:pointer;background:var(--blue3);color:var(--blue2);transition:all .15s;display:flex;align-items:center;gap:5px}
+.btn-p:hover{opacity:.85}
+.btn-p:disabled{opacity:.4;cursor:not-allowed}
+.fb-status{font-size:11px;margin-top:8px;padding:8px 10px;border-radius:8px;display:none;align-items:center;gap:6px}
+.fb-status.success{background:rgba(29,158,117,.12);color:#5DCAA5;border:.5px solid rgba(29,158,117,.25)}
+.fb-status.error{background:rgba(163,45,45,.12);color:#F09595;border:.5px solid rgba(163,45,45,.25)}
+.fb-history{margin-top:10px;border-top:.5px solid var(--bd);padding-top:10px}
+.fb-history-title{font-size:10px;color:var(--t3);margin-bottom:6px;display:flex;align-items:center;gap:4px}
+.fb-history-item{background:var(--bg4);border:.5px solid var(--bd);border-radius:7px;padding:7px 9px;margin-bottom:5px;font-size:11px;color:var(--t2);line-height:1.5}
+.fb-history-meta{font-size:9px;color:var(--t3);margin-top:3px;display:flex;gap:8px}
+.btn-kofi{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:10px;border-radius:10px;border:none;cursor:pointer;background:#FF5E5B;color:#fff;font-size:13px;font-weight:500;transition:opacity .15s,transform .1s;text-decoration:none}
+.btn-kofi:hover{opacity:.88;transform:translateY(-1px)}
+.kofi-desc{font-size:10px;color:var(--t3);line-height:1.6;margin-bottom:10px}
+.kofi-meta{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.kofi-pill{font-size:9px;padding:2px 8px;border-radius:20px;background:var(--bg4);color:var(--t3);border:.5px solid var(--bd)}
+.sdiv{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;padding:5px 0 7px;margin-top:3px}
+.site-footer{background:var(--bg2);border-top:.5px solid var(--bd2);flex-shrink:0}
+.footer-toggle{display:flex;align-items:center;justify-content:space-between;padding:8px 20px;cursor:pointer;user-select:none;transition:background .15s}
+.footer-toggle:hover{background:var(--bg3)}
+.footer-toggle-left{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--t3)}
+.footer-toggle-left i{font-size:13px}
+.footer-toggle-right{display:flex;align-items:center;gap:12px}
+.footer-links-inline{display:flex;gap:14px}
+.footer-link-btn{font-size:10px;color:var(--t3);background:transparent;border:none;cursor:pointer;padding:0;transition:color .15s}
+.footer-link-btn:hover{color:var(--blue2)}
+.footer-chevron{font-size:14px;color:var(--t3);transition:transform .2s}
+.footer-chevron.open{transform:rotate(180deg)}
+.footer-body{display:none;border-top:.5px solid var(--bd);padding:14px 20px 12px}
+.footer-body.open{display:block}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px 24px;margin-bottom:12px}
+.footer-col-title{font-size:10px;font-weight:500;color:var(--t2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.footer-col-title i{font-size:12px;color:var(--blue)}
+.footer-col p,.footer-col li{font-size:10px;color:var(--t3);line-height:1.7}
+.footer-col ul{list-style:none;padding:0}
+.footer-divider{height:.5px;background:var(--bd);margin:10px 0}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:9px;color:var(--t3)}
+.copyright-bar{background:rgba(55,138,221,.05);border:.5px solid rgba(55,138,221,.12);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:10px;color:var(--t3);line-height:1.7}
+.copyright-bar strong{color:var(--t2)}
+.footer-modal-trigger{font-size:10px;color:var(--t3);background:transparent;border:none;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px}
+.footer-modal-trigger:hover{color:var(--blue2)}
+.social-links{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.social-btn{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:var(--bg3);border:.5px solid var(--bd2);color:var(--t3);cursor:pointer;text-decoration:none;transition:color .15s,border-color .15s,background .15s;flex-shrink:0}
+.social-btn:hover{color:var(--t1);background:var(--bg4)}
+.social-btn.ig:hover{color:#E1306C}
+.social-btn svg{width:14px;height:14px;fill:currentColor}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--bg3);border:.5px solid var(--bd2);border-radius:14px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto;padding:20px;box-shadow:0 16px 48px rgba(0,0,0,.6)}
+.modal-box::-webkit-scrollbar{width:3px}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.modal-title{font-size:14px;font-weight:500;color:var(--t1);display:flex;align-items:center;gap:7px}
+.modal-title i{font-size:16px;color:var(--blue)}
+.modal-close{background:transparent;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:0;line-height:1}
+.modal-close:hover{color:var(--t1)}
+.modal-section{margin-bottom:14px}
+.modal-section-title{font-size:11px;font-weight:500;color:var(--t2);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.modal-section-title i{font-size:13px;color:var(--blue2)}
+.modal-section p{font-size:11px;color:var(--t3);line-height:1.7}
+.leaflet-container{background:#0d0d14!important}
+.leaflet-tile-pane{filter:brightness(.55) saturate(.6) hue-rotate(180deg)}
+.leaflet-control-zoom a{background:var(--bg3)!important;color:var(--t1)!important;border-color:var(--bd2)!important}
+.leaflet-popup-content-wrapper{background:var(--bg3);border:.5px solid var(--bd2);border-radius:10px;color:var(--t1);box-shadow:0 4px 16px rgba(0,0,0,.5)}
+.leaflet-popup-tip{background:var(--bg3)}
+.leaflet-popup-content{margin:9px 13px;font-size:12px;font-family:var(--font-sans)}
+.pop-name{font-weight:500;font-size:13px;margin-bottom:3px}
+.pop-meta{font-size:10px;color:var(--t2);display:flex;flex-direction:column;gap:2px}
+@media(max-width:768px){
+  .shell{height:auto;min-height:100vh;max-height:none}
+  .content{overflow:visible}.page{overflow:visible}.page.active{display:flex}
+  .nav-links{display:none}.hamburger{display:flex}
+  .home-layout{display:flex;flex-direction:column;overflow:visible}
+  .map-col,.events-col{width:100%;flex:none}
+  .map-col{border-right:none;border-bottom:.5px solid var(--bd)}
+  #leaflet-map{height:240px;min-height:240px;flex:none;width:100%}
+  .elist{overflow:visible;max-height:none}
+  .bey-wrap{overflow:visible}.bey-layout{display:flex;flex-direction:column;overflow:visible}
+  .col-radar,.col-right{width:100%;flex:none}
+  .col-radar{border-right:none;border-bottom:.5px solid var(--bd);min-height:340px;padding:16px 10px;order:1}
+  #radar-canvas{max-width:300px;width:100%;height:auto}
+  .stats-card-mobile-wrapper{display:block;width:100%;order:2;padding:10px 12px;border-bottom:.5px solid var(--bd);background:var(--bg2)}
+  .stats-card-desktop{display:none}
+  .col-right{order:3;overflow:visible}.parts-panel{overflow:visible}
+  .parts-scroll-area{overflow:visible;max-height:none;padding:0 12px 16px}
+  .part-dropdown{right:0}.footer-links-inline{display:none}
+  .social-links{display:none}
+}
+</style>
+
+<div class="shell">
+<nav class="navbar">
+  <div class="brand">
+    <svg width="32" height="32" viewBox="0 0 34 34" fill="none">
+      <rect width="34" height="34" rx="8" fill="#0C447C"/>
+      <circle cx="17" cy="17" r="10" stroke="#378ADD" stroke-width="1.5" fill="none"/>
+      <circle cx="17" cy="17" r="5.5" stroke="#85B7EB" stroke-width="1" fill="none"/>
+      <line x1="17" y1="7" x2="17" y2="27" stroke="#378ADD" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="7" y1="17" x2="27" y2="17" stroke="#378ADD" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="9.9" y1="9.9" x2="24.1" y2="24.1" stroke="#85B7EB" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.6"/>
+      <line x1="24.1" y1="9.9" x2="9.9" y2="24.1" stroke="#85B7EB" stroke-width="0.8" stroke-linecap="round" stroke-opacity="0.6"/>
+      <circle cx="17" cy="17" r="2.5" fill="#85B7EB"/>
+      <polygon points="17,3 18.2,6.5 17,6 15.8,6.5" fill="#FAC775" opacity="0.9"/>
+    </svg>
+    <div><div class="brand-name">G-Hub</div><div class="brand-sub">戰鬥陀螺 X 台灣</div></div>
+  </div>
+  <div class="nav-links">
+    <button class="nav-item active" onclick="goto('home',this)" id="nb-home"><i class="ti ti-map-2"></i>賽事中心</button>
+    <button class="nav-item" onclick="goto('bey',this)" id="nb-bey"><i class="ti ti-tornado"></i>神配置計算機</button>
+    <button class="nav-item" onclick="goto('cl',this)" id="nb-cl"><i class="ti ti-notes"></i>更新日誌</button>
+  </div>
+  <button class="hamburger" id="hamburger-btn" onclick="toggleMob()" aria-label="開啟選單" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mob-menu" id="mob-menu">
+  <button class="nav-item active" onclick="goto('home',this);toggleMob()" data-m="home"><i class="ti ti-map-2"></i>賽事中心</button>
+  <button class="nav-item" onclick="goto('bey',this);toggleMob()" data-m="bey"><i class="ti ti-tornado"></i>神配置計算機</button>
+  <button class="nav-item" onclick="goto('cl',this);toggleMob()" data-m="cl"><i class="ti ti-notes"></i>更新日誌</button>
+</div>
+
+<div class="content">
+
+<!-- 賽事中心 -->
+<div class="page active" id="page-home">
+  <div class="home-layout">
+    <div class="map-col">
+      <div class="map-hdr"><h3><i class="ti ti-map-pin"></i>台灣賽事地圖</h3><div class="map-sub">點擊標記查看賽事詳情</div></div>
+      <div id="leaflet-map"></div>
+    </div>
+    <div class="events-col">
+      <div class="etabs">
+        <button class="etab active" onclick="switchTab('upcoming',this)"><i class="ti ti-calendar-event"></i>近期賽事<span class="etab-count" id="count-upcoming">0</span></button>
+        <button class="etab" onclick="switchTab('past',this)"><i class="ti ti-history"></i>歷史賽事<span class="etab-count" id="count-past">0</span></button>
+      </div>
+      <div class="elist" id="elist"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 神配置計算機 -->
+<div class="page" id="page-bey">
+  <div class="bey-wrap">
+    <div class="bey-layout">
+      <div class="col-radar">
+        <canvas id="radar-canvas"></canvas>
+        <div class="radar-legend" id="radar-legend"></div>
+        <div class="radar-scale-badge" id="radar-scale-badge"><i class="ti ti-chart-radar"></i><span id="radar-scale-label">刻度上限：100</span></div>
+      </div>
+      <div class="stats-card-mobile-wrapper">
+        <div class="stats-card">
+          <div class="sg5">
+            <div class="sb" id="mob-sb-atk"><div class="sl">攻擊</div><div class="sv" id="mob-v-atk">—</div><div class="sbar-wrap"><div class="sbar" id="mob-bar-atk"></div></div></div>
+            <div class="sb" id="mob-sb-def"><div class="sl">防禦</div><div class="sv" id="mob-v-def">—</div><div class="sbar-wrap"><div class="sbar" id="mob-bar-def"></div></div></div>
+            <div class="sb" id="mob-sb-sta"><div class="sl">耐力</div><div class="sv" id="mob-v-sta">—</div><div class="sbar-wrap"><div class="sbar" id="mob-bar-sta"></div></div></div>
+            <div class="sb" id="mob-sb-accel"><div class="sl">加速</div><div class="sv" id="mob-v-accel">—</div><div class="sbar-wrap"><div class="sbar" id="mob-bar-accel"></div></div></div>
+            <div class="sb" id="mob-sb-end"><div class="sl">耐久度</div><div class="sv" id="mob-v-end">—</div><div class="sbar-wrap"><div class="sbar" id="mob-bar-end"></div></div></div>
+          </div>
+          <div class="divid"></div>
+          <div class="combo-bottom">
+            <div class="combo-detail-row"><div class="combo-name" id="mob-combo-name">—</div><div class="height-tag"><i class="ti ti-ruler"></i><span id="mob-height-val">— mm</span></div></div>
+            <div class="combo-score-row">
+              <div class="mrow" id="mob-mrow"></div>
+              <div class="score-wrap"><div class="sbadge" id="mob-sbadge">—</div><div class="score-info">?<div class="score-tooltip"><strong>評分機制說明</strong><br>依配置「型態」動態調整五屬性權重；屬性超過100為「極限突破」可額外加分；總重量超過 40g 也會獲得加分。</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-right">
+        <div class="parts-panel">
+          <div class="parts-scroll-area">
+
+            <!-- 套組 -->
+            <div class="part-group" id="pg-sets">
+              <div class="part-group-label"><i class="ti ti-package"></i>官方套組</div>
+              <div class="part-trigger-row">
+                <div class="part-select-trigger" id="trig-sets" onclick="toggleDD('sets')">
+                  <div class="pst-main"><div class="pst-toprow"><span class="pst-name" id="disp-sets-name">請選擇套組</span><span class="pst-type" id="disp-sets-type" style="display:none"></span></div><div class="pst-ver" id="disp-sets-ver" style="color:var(--t3)">—</div></div>
+                  <i class="ti ti-chevron-down pst-arrow" id="arr-sets"></i>
+                </div>
+                <button class="btn-shopee-part" onclick="shopeeOpenSet()">🛒</button>
+              </div>
+              <div class="part-dropdown" id="dd-sets"><div class="part-dropdown-inner" id="ddi-sets"></div></div>
+            </div>
+
+            <!-- 戰刃（含工具列）-->
+            <div class="part-group" id="pg-blade">
+              <div class="part-group-label"><i class="ti ti-sword"></i>戰刃 Blade</div>
+              <div class="part-trigger-row">
+                <div class="part-select-trigger" id="trig-blade" onclick="toggleDD('blade')">
+                  <div class="pst-main"><div class="pst-toprow"><span class="pst-name" id="disp-blade-name">—</span><span class="pst-type" id="disp-blade-type" style="display:none"></span></div><div class="pst-ver" id="disp-blade-ver">—</div></div>
+                  <span class="pst-weight" id="disp-blade-weight"></span>
+                  <i class="ti ti-chevron-down pst-arrow" id="arr-blade"></i>
+                </div>
+                <button class="btn-shopee-part" onclick="shopeeOpenPart('blade')">🛒</button>
+              </div>
+              <div class="part-dropdown" id="dd-blade">
+                <div class="pd-toolbar" id="toolbar-blade">
+                  <button class="pd-filter-btn active" data-type="全部"   onclick="setFilter('blade','全部',this)">全部</button>
+                  <button class="pd-filter-btn"        data-type="攻擊型" onclick="setFilter('blade','攻擊型',this)">攻擊型</button>
+                  <button class="pd-filter-btn"        data-type="防禦型" onclick="setFilter('blade','防禦型',this)">防禦型</button>
+                  <button class="pd-filter-btn"        data-type="耐力型" onclick="setFilter('blade','耐力型',this)">耐力型</button>
+                  <button class="pd-filter-btn"        data-type="平衡型" onclick="setFilter('blade','平衡型',this)">平衡型</button>
+                  <select class="pd-sort-select" id="sort-blade" onchange="setSort('blade',this.value)">
+                    <option value="default">預設排序</option>
+                    <option value="heavy">重量：由重到輕</option>
+                    <option value="light">重量：由輕到重</option>
+                  </select>
+                </div>
+                <div class="part-dropdown-inner" id="ddi-blade"></div>
+              </div>
+            </div>
+
+            <!-- 固鎖輪盤（★ 含工具列：側數篩選 + 重量排序）-->
+            <div class="part-group" id="pg-ratchet">
+              <div class="part-group-label"><i class="ti ti-circle-dashed"></i>固鎖輪盤 Ratchet</div>
+              <div class="part-trigger-row">
+                <div class="part-select-trigger" id="trig-ratchet" onclick="toggleDD('ratchet')">
+                  <div class="pst-main"><div class="pst-toprow"><span class="pst-name" id="disp-ratchet-name">—</span></div><div class="pst-meta" id="disp-ratchet-meta">—</div></div>
+                  <span class="pst-weight" id="disp-ratchet-weight"></span>
+                  <i class="ti ti-chevron-down pst-arrow" id="arr-ratchet"></i>
+                </div>
+                <button class="btn-shopee-part" onclick="shopeeOpenPart('ratchet')">🛒</button>
+              </div>
+              <div class="part-dropdown" id="dd-ratchet">
+                <div class="pd-toolbar" id="toolbar-ratchet">
+                  <button class="pd-filter-btn active" data-prongs="全部" onclick="setFilter('ratchet','全部',this)">全部</button>
+                  <button class="pd-filter-btn"        data-prongs="1"    onclick="setFilter('ratchet','1',this)">1 側</button>
+                  <button class="pd-filter-btn"        data-prongs="2"    onclick="setFilter('ratchet','2',this)">2 側</button>
+                  <button class="pd-filter-btn"        data-prongs="3"    onclick="setFilter('ratchet','3',this)">3 側</button>
+                  <button class="pd-filter-btn"        data-prongs="4"    onclick="setFilter('ratchet','4',this)">4 側</button>
+                  <button class="pd-filter-btn"        data-prongs="5"    onclick="setFilter('ratchet','5',this)">5 側</button>
+                  <select class="pd-sort-select" id="sort-ratchet" onchange="setSort('ratchet',this.value)">
+                    <option value="default">預設排序</option>
+                    <option value="heavy">重量：由重到輕</option>
+                    <option value="light">重量：由輕到重</option>
+                  </select>
+                </div>
+                <div class="part-dropdown-inner" id="ddi-ratchet"></div>
+              </div>
+            </div>
+
+            <!-- 軸心（含工具列）-->
+            <div class="part-group" id="pg-bit">
+              <div class="part-group-label"><i class="ti ti-point"></i>軸心 Bit</div>
+              <div class="part-trigger-row">
+                <div class="part-select-trigger" id="trig-bit" onclick="toggleDD('bit')">
+                  <div class="pst-main"><div class="pst-toprow"><span class="pst-name" id="disp-bit-name">—</span><span class="pst-type" id="disp-bit-type" style="display:none"></span></div></div>
+                  <span class="pst-weight" id="disp-bit-weight"></span>
+                  <i class="ti ti-chevron-down pst-arrow" id="arr-bit"></i>
+                </div>
+                <button class="btn-shopee-part" onclick="shopeeOpenPart('bit')">🛒</button>
+              </div>
+              <div class="part-dropdown" id="dd-bit">
+                <div class="pd-toolbar" id="toolbar-bit">
+                  <button class="pd-filter-btn active" data-type="全部"   onclick="setFilter('bit','全部',this)">全部</button>
+                  <button class="pd-filter-btn"        data-type="攻擊型" onclick="setFilter('bit','攻擊型',this)">攻擊型</button>
+                  <button class="pd-filter-btn"        data-type="防禦型" onclick="setFilter('bit','防禦型',this)">防禦型</button>
+                  <button class="pd-filter-btn"        data-type="耐力型" onclick="setFilter('bit','耐力型',this)">耐力型</button>
+                  <button class="pd-filter-btn"        data-type="平衡型" onclick="setFilter('bit','平衡型',this)">平衡型</button>
+                  <select class="pd-sort-select" id="sort-bit" onchange="setSort('bit',this.value)">
+                    <option value="default">預設排序</option>
+                    <option value="heavy">重量：由重到輕</option>
+                    <option value="light">重量：由輕到重</option>
+                  </select>
+                </div>
+                <div class="part-dropdown-inner" id="ddi-bit"></div>
+              </div>
+            </div>
+
+            <!-- 桌面版屬性卡 -->
+            <div class="stats-card stats-card-desktop">
+              <div class="sg5">
+                <div class="sb" id="sb-atk"><div class="sl">攻擊</div><div class="sv" id="v-atk">—</div><div class="sbar-wrap"><div class="sbar" id="bar-atk"></div></div></div>
+                <div class="sb" id="sb-def"><div class="sl">防禦</div><div class="sv" id="v-def">—</div><div class="sbar-wrap"><div class="sbar" id="bar-def"></div></div></div>
+                <div class="sb" id="sb-sta"><div class="sl">耐力</div><div class="sv" id="v-sta">—</div><div class="sbar-wrap"><div class="sbar" id="bar-sta"></div></div></div>
+                <div class="sb" id="sb-accel"><div class="sl">加速</div><div class="sv" id="v-accel">—</div><div class="sbar-wrap"><div class="sbar" id="bar-accel"></div></div></div>
+                <div class="sb" id="sb-end"><div class="sl">耐久度</div><div class="sv" id="v-end">—</div><div class="sbar-wrap"><div class="sbar" id="bar-end"></div></div></div>
+              </div>
+              <div class="divid"></div>
+              <div class="combo-bottom">
+                <div class="combo-detail-row"><div class="combo-name" id="combo-name">—</div><div class="height-tag"><i class="ti ti-ruler"></i><span id="height-val">— mm</span></div></div>
+                <div class="combo-score-row">
+                  <div class="mrow" id="mrow"></div>
+                  <div class="score-wrap"><div class="sbadge" id="sbadge">—</div><div class="score-info">?<div class="score-tooltip"><strong>評分機制說明</strong><br>依配置「型態」（攻擊/防禦/耐力/平衡）動態調整五屬性權重；屬性超過100視為「極限突破」可額外加分；總重量超過 40g 也會獲得加分。滿分錨定在 95~100 分。</div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 更新日誌 -->
+<div class="page" id="page-cl">
+  <div class="cl-wrap">
+    <div class="cl-grid">
+      <div>
+        <div class="sdiv">版本記錄</div>
+        <div class="cl-card">
+          <div class="cl-title"><i class="ti ti-git-branch"></i>更新日誌</div>
+          <div class="cl-item"><span class="cl-ver">v3.5</span><div class="cl-txt">固鎖輪盤加入側數篩選（全部/1側/2側/3側/4側/5側）與重量排序；戰刃和軸心篩選移入下拉選單工具列</div></div>
+          <div class="cl-item"><span class="cl-ver">v3.4</span><div class="cl-txt">sets 獨立 type 欄位，官方套件型態與戰刃零件型態正式拆分</div></div>
+          <div class="cl-item"><span class="cl-ver">v3.2</span><div class="cl-txt">頁尾加入 Threads 和 IG 社群 Icon</div></div>
+          <div class="cl-item"><span class="cl-ver">v3.1</span><div class="cl-txt">手機版神配置計算機排版：雷達圖 → 五屬性數值 → 套組/零件選單</div></div>
+          <div class="cl-item"><span class="cl-ver">v3.0</span><div class="cl-txt">資料庫大幅擴充：6支戰刃、5種固鎖輪盤、8種軸心、8組官方套組</div></div>
+          <div class="cl-item"><span class="cl-ver">v2.3</span><div class="cl-txt">屬性卡新增視覺化進度條，顏色與各屬性一致</div></div>
+          <div class="cl-item"><span class="cl-ver">v1.0</span><div class="cl-txt">雷達圖五角形、動態刻度、極限突破特效</div></div>
+        </div>
+        <div class="sdiv" style="margin-top:10px">即將推出</div>
+        <div class="cl-card">
+          <div class="cl-title"><i class="ti ti-rocket"></i>開發中功能</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:.5px solid var(--bd)"><i class="ti ti-clock" style="font-size:12px;color:var(--t3)"></i><span style="font-size:11px;color:var(--t2)">剋制關係分析</span></div>
+            <div style="display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:.5px solid var(--bd)"><i class="ti ti-clock" style="font-size:12px;color:var(--t3)"></i><span style="font-size:11px;color:var(--t2)">AI 配置顧問（Claude API）</span></div>
+            <div style="display:flex;align-items:center;gap:7px;padding:5px 0"><i class="ti ti-clock" style="font-size:12px;color:var(--t3)"></i><span style="font-size:11px;color:var(--t2)">賽事報名 / 成績紀錄</span></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sdiv">快速工具</div>
+        <div class="cl-card" style="margin-bottom:10px">
+          <div class="cl-title"><i class="ti ti-tornado"></i>神配置計算機</div>
+          <p style="font-size:11px;color:var(--t2);line-height:1.6;margin-bottom:10px">選擇套組或自訂零件，五角雷達圖即時呈現屬性，還可直接連結蝦皮購買。</p>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:10px">
+            <div class="sb"><div class="sl">攻擊</div><div class="sv" style="color:#D85A30;font-size:14px" id="cl-atk">—</div></div>
+            <div class="sb"><div class="sl">防禦</div><div class="sv" style="color:#378ADD;font-size:14px" id="cl-def">—</div></div>
+            <div class="sb"><div class="sl">耐力</div><div class="sv" style="color:#1D9E75;font-size:14px" id="cl-sta">—</div></div>
+          </div>
+          <button class="btn-p" style="width:100%;justify-content:center" onclick="goto('bey',document.getElementById('nb-bey'))"><i class="ti ti-external-link"></i>開啟計算機</button>
+        </div>
+        <div class="sdiv">意見回饋</div>
+        <div class="fb-card">
+          <div class="fb-title"><i class="ti ti-message-circle"></i>回饋與建議</div>
+          <div class="fb-subtitle"><i class="ti ti-brand-google"></i>回饋將自動儲存至 Google Sheets</div>
+          <div style="font-size:10px;color:var(--t3);margin-bottom:5px">整體滿意度</div>
+          <div class="rating-row">
+            <button class="rating-btn" data-val="1" onclick="selectRating(this)">😞</button>
+            <button class="rating-btn" data-val="2" onclick="selectRating(this)">😐</button>
+            <button class="rating-btn" data-val="3" onclick="selectRating(this)">🙂</button>
+            <button class="rating-btn" data-val="4" onclick="selectRating(this)">😊</button>
+            <button class="rating-btn" data-val="5" onclick="selectRating(this)">🤩</button>
+          </div>
+          <div style="font-size:10px;color:var(--t3);margin-bottom:5px">回饋類型</div>
+          <div class="cat-row">
+            <button class="cat-btn" onclick="selectCat(this)">🐛 Bug 回報</button>
+            <button class="cat-btn" onclick="selectCat(this)">💡 功能建議</button>
+            <button class="cat-btn" onclick="selectCat(this)">🎮 零件資料</button>
+            <button class="cat-btn" onclick="selectCat(this)">📍 賽事資訊</button>
+            <button class="cat-btn" onclick="selectCat(this)">👍 正面回饋</button>
+          </div>
+          <textarea class="fb-in" id="fb-text" placeholder="詳細描述你的建議或遇到的問題…" maxlength="500" oninput="updateChar()"></textarea>
+          <div class="char-count"><span id="char-count">0</span> / 500</div>
+          <div class="submit-row">
+            <button class="btn-p" id="fb-submit-btn" onclick="submitFeedback()"><i class="ti ti-send"></i>送出回饋</button>
+            <span style="font-size:10px;color:var(--t3)">匿名發送・資料不外流</span>
+          </div>
+          <div class="fb-status success" id="fb-ok"><i class="ti ti-circle-check"></i>回饋已成功送出！感謝你的意見 🙏</div>
+          <div class="fb-status error" id="fb-err"><i class="ti ti-alert-circle"></i>送出失敗，請稍後再試。</div>
+          <div class="fb-history" id="fb-history" style="display:none"><div class="fb-history-title"><i class="ti ti-history" style="font-size:11px"></i>本次已送出</div><div id="fb-history-list"></div></div>
+        </div>
+        <div class="sdiv" style="margin-top:10px">請開發者喝咖啡</div>
+        <div class="fb-card">
+          <div class="fb-title"><i class="ti ti-coffee"></i>支持這個專案</div>
+          <p class="kofi-desc">G-Hub 是由玩家自主維護的免費工具，感謝你的支持！</p>
+          <a class="btn-kofi" href="https://ko-fi.com/miranda45" target="_blank" rel="noopener noreferrer"><span style="font-size:18px">☕</span>Buy me a coffee on Ko-fi</a>
+          <div class="kofi-meta"><span class="kofi-pill">🔒 安全付款</span><span class="kofi-pill">💝 完全自由意願</span><span class="kofi-pill">🚀 維持伺服器運作</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-toggle" onclick="toggleFooter()">
+    <div class="footer-toggle-left"><i class="ti ti-info-circle"></i><span>© 2026 G-Hub 數據站・玩家自主維護・非官方</span></div>
+    <div class="footer-toggle-right">
+      <div class="footer-links-inline">
+        <button class="footer-link-btn" onclick="openModal('privacy');event.stopPropagation()">隱私權政策</button>
+        <button class="footer-link-btn" onclick="openModal('terms');event.stopPropagation()">服務條款</button>
+        <button class="footer-link-btn" onclick="openModal('refund');event.stopPropagation()">退款流程</button>
+      </div>
+      <i class="ti ti-chevron-up footer-chevron" id="footer-chevron"></i>
+    </div>
+  </div>
+  <div class="footer-body" id="footer-body">
+    <div class="copyright-bar"><strong>⚠ 非官方免責聲明</strong><br>G-Hub 為非官方玩家粉絲網站，與 TAKARA TOMY 或任何官方機構無關聯。本站所有陀螺相關圖片、名稱、商標之著作權歸原廠商所有，僅供玩家交流參考使用，不作任何商業用途。</div>
+    <div class="footer-grid">
+      <div class="footer-col"><div class="footer-col-title"><i class="ti ti-building"></i>關於我們</div><p>G-Hub 數據站為玩家提供專業的戰鬥陀螺數據查詢與配置計算服務，由玩家社群自主維護。</p></div>
+      <div class="footer-col"><div class="footer-col-title"><i class="ti ti-heart"></i>贊助說明</div><p>贊助本站為自由意願，款項將全數用於維持 G-Hub 伺服器運作與軟體開發費用。</p></div>
+      <div class="footer-col"><div class="footer-col-title"><i class="ti ti-shield-check"></i>法律資訊</div><ul style="display:flex;flex-direction:column;gap:4px"><li><button class="footer-modal-trigger" onclick="openModal('privacy')">隱私權政策</button></li><li><button class="footer-modal-trigger" onclick="openModal('terms')">服務條款</button></li><li><button class="footer-modal-trigger" onclick="openModal('refund')">退換貨及退款流程</button></li></ul></div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <div class="social-links">
+          <a class="social-btn threads" href="https://www.threads.com/@ghub.official.tw?xmt=AQG0LNZr01qnnG2B817629GDNUpm7-_-RrINjvpIGeH82s0" target="_blank" rel="noopener noreferrer" title="Threads">
+            <svg viewBox="0 0 192 192"><path d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.244-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.453-15.153 9.899-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.206 17.11 97.015 16.94c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.202 1.205 97.144 1h-.29c-28.006.205-49.567 9.68-64.104 28.172C20.05 45.84 13.938 68.84 13.7 96.04l-.002.96.002.96c.238 27.2 6.35 50.2 18.85 66.868 14.537 18.492 36.098 27.967 64.104 28.172h.29c24.958-.174 42.826-6.713 57.37-21.256 18.964-18.952 18.517-42.653 12.222-57.332-4.537-10.574-13.194-19.212-24.999-24.414zM96.99 121.63c-10.438.587-21.283-4.098-21.834-14.136-.407-7.638 5.43-16.166 23.008-17.197 2.013-.116 3.994-.173 5.952-.173 6.047 0 11.714.594 16.898 1.744-1.925 24.005-13.513 29.207-24.024 29.762z"/></svg>
+          </a>
+          <a class="social-btn ig" href="https://www.instagram.com/ghub.official.tw/" target="_blank" rel="noopener noreferrer" title="Instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+          </a>
+        </div>
+        <span>© 2026 G-Hub 數據站 ── 非官方粉絲站，圖片版權歸 TAKARA TOMY 所有，僅供交流使用。</span>
+      </div>
+      <span>Made with ❤ for Beyblade X players in Taiwan</span>
+    </div>
+  </div>
+</footer>
+</div>
+
+<div class="modal-overlay" id="modal-privacy" onclick="closeModalOutside(event,'modal-privacy')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-lock"></i>隱私權政策</div><button class="modal-close" onclick="closeModal('modal-privacy')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-shield"></i>資料收集</div><p>本站承諾保護使用者的個人資料，絕不外洩給第三方。</p></div></div></div>
+<div class="modal-overlay" id="modal-terms" onclick="closeModalOutside(event,'modal-terms')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-file-text"></i>服務條款</div><button class="modal-close" onclick="closeModal('modal-terms')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-info-circle"></i>服務範圍</div><p>本站提供之數據計算與查詢服務僅供參考，與 TAKARA TOMY 無關。</p></div></div></div>
+<div class="modal-overlay" id="modal-refund" onclick="closeModalOutside(event,'modal-refund')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-refresh"></i>退款流程</div><button class="modal-close" onclick="closeModal('modal-refund')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-package"></i>服務性質</div><p>本站提供之服務為「無形數位數據服務」，服務即時交付。若因系統錯誤無法正常使用，請聯繫我們安排退款。</p></div></div></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ══════════════════════════════════════════════
+   BEYBLADE_DATABASE  v3.0.2
+   ★ ratchets 加入 prongs（側數）欄位
+   ══════════════════════════════════════════════ */
+const BEYBLADE_DATABASE={parts:{blades:{"Dran_Sword_v1":{name:"蒼龍神劍",type:"攻擊型",weight:35.1,shopeeUrl:"https://s.shopee.tw/2qSDoE4DbQ",stats:{atk:55,def:25,sta:20},versions:["BX-01","BX-07","BX-14-03","BX-17-01","BX-22"]},"Dran_Sword_v2":{name:"蒼龍神劍 (特別版)",type:"攻擊型",weight:35.1,shopeeUrl:"https://s.shopee.tw/2qSDoE4DbQ",stats:{atk:60,def:25,sta:30},versions:["BXC-00-01","BXC-00-02","BXC-00-03","BXC-04","BXG-25-01","BXG-12-04","BXG-18","BXG-52"]},"Hells_Scythe":{name:"地獄鐮刃",type:"攻擊型",weight:38.9,shopeeUrl:"https://s.shopee.tw/2qSDoE4DbQ",stats:{atk:65,def:20,sta:15},versions:["BX-09","BX-16","BX-19"]},"Knight_Shield":{name:"騎士鋼盾",type:"防禦型",weight:39.2,shopeeUrl:"https://s.shopee.tw/2qSDoE4DbQ",stats:{atk:20,def:65,sta:35},versions:["BX-10","BX-18"]},"Leon_Claw":{name:"獅王利爪",type:"攻擊型",weight:36.5,shopeeUrl:"https://s.shopee.tw/2qSDoE4DbQ",stats:{atk:60,def:20,sta:20},versions:["BX-05","BX-13"]},"Cobalt_Drake":{name:"鈷藍天龍",type:"耐力型",weight:37.0,shopeeUrl:"https://s.shopee.tw/2qSDoE4DbQ",stats:{atk:20,def:30,sta:60},versions:["BX-11"]}},
+ratchets:{
+  "1-60":{name:"1-60",prongs:1,height:60,weight:6.0,shopeeUrl:"https://s.shopee.tw/2LVxCJQYp3",stats:{atk:17,def:9,sta:4}},
+  "1-80":{name:"1-80",prongs:1,height:80,weight:6.7,shopeeUrl:"https://s.shopee.tw/2BCX00RCA2",stats:{atk:17,def:4,sta:9}},
+  "3-60":{name:"3-60",prongs:3,height:60,weight:6.4,shopeeUrl:"https://s.shopee.tw/2LVxCJQYp3",stats:{atk:15,def:9,sta:6}},
+  "3-80":{name:"3-80",prongs:3,height:80,weight:7.0,shopeeUrl:"https://s.shopee.tw/2BCX00RCA2",stats:{atk:13,def:7,sta:10}},
+  "4-60":{name:"4-60",prongs:4,height:60,weight:6.4,shopeeUrl:"https://s.shopee.tw/2LVxCJQYp3",stats:{atk:11,def:13,sta:6}}
+},
+bits:{Accel:{name:"A 加速軸心",type:"攻擊型",weight:2.6,shopeeUrl:"https://s.shopee.tw/40e9bdi6DI",stats:{atk:40,def:10,sta:10,accel:40,endurance:80}},Ball:{name:"B 球狀軸心",type:"耐力型",weight:2.1,shopeeUrl:"https://s.shopee.tw/4AxZnwhSsL",stats:{atk:15,def:25,sta:50,accel:10,endurance:30}},Flat:{name:"F 平底軸心",type:"攻擊型",weight:2.15,shopeeUrl:"https://s.shopee.tw/40e9bdi6DI",stats:{atk:40,def:15,sta:10,accel:35,endurance:80}},Low_Flat:{name:"LF 低平底軸心",type:"攻擊型",weight:2.3,shopeeUrl:"https://s.shopee.tw/40e9bdi6DI",stats:{atk:45,def:10,sta:10,accel:40,endurance:70}},Needle:{name:"N 針狀軸心",type:"耐力型",weight:2.0,shopeeUrl:"https://s.shopee.tw/4AxZnwhSsL",stats:{atk:10,def:20,sta:60,accel:5,endurance:40}},Point:{name:"P 尖底軸心",type:"攻擊型",weight:2.2,shopeeUrl:"https://s.shopee.tw/40e9bdi6DI",stats:{atk:45,def:10,sta:15,accel:35,endurance:70}},Rush:{name:"R 衝刺軸心",type:"攻擊型",weight:2.5,shopeeUrl:"https://s.shopee.tw/40e9bdi6DI",stats:{atk:50,def:8,sta:8,accel:45,endurance:65}},Disc_Ball:{name:"DB 圓盤球狀軸",type:"耐力型",weight:3.1,shopeeUrl:"https://s.shopee.tw/4AxZnwhSsL",stats:{atk:15,def:20,sta:55,accel:10,endurance:30}}}},
+sets:[{name:"蒼龍神劍 3-60F",type:"攻擊型",shopeeUrl:"https://s.shopee.tw/8ATiXKOiqK",components:{blade:"Dran_Sword_v1",ratchet:"3-60",bit:"Flat"},versions:["BX-01","BX-07","BX-17-01","BX-22"]},{name:"蒼龍神劍 3-60B",type:"平衡型",shopeeUrl:"https://s.shopee.tw/8ATiXKOiqK",components:{blade:"Dran_Sword_v1",ratchet:"3-60",bit:"Ball"},versions:["BX-14-03"]},{name:"蒼龍神劍 4-60F (特別版)",type:"攻擊型",shopeeUrl:"https://s.shopee.tw/8ATiXKOiqK",components:{blade:"Dran_Sword_v2",ratchet:"4-60",bit:"Flat"},versions:["BXC-00-01","BXC-00-02","BXC-00-03","BXG-25-01","BXG-12-04","BXG-52"]},{name:"地獄鐮刃 1-60R",type:"攻擊型",shopeeUrl:"https://s.shopee.tw/8ATiXKOiqK",components:{blade:"Hells_Scythe",ratchet:"1-60",bit:"Rush"},versions:["BX-09","BX-16"]},{name:"騎士鋼盾 4-60B",type:"防禦型",shopeeUrl:"https://s.shopee.tw/8ATiXKOiqK",components:{blade:"Knight_Shield",ratchet:"4-60",bit:"Ball"},versions:["BX-10","BX-18"]},{name:"獅王利爪 3-60F",type:"攻擊型",shopeeUrl:"https://s.shopee.tw/8ATiXKOiqK",components:{blade:"Leon_Claw",ratchet:"3-60",bit:"Flat"},versions:["BX-05","BX-13"]},{name:"鈷藍天龍 1-80N",type:"耐力型",shopeeUrl:"https://s.shopee.tw/8ATiXKOiqK",components:{blade:"Cobalt_Drake",ratchet:"1-80",bit:"Needle"},versions:["BX-11"]},{name:"地獄鐮刃 3-80LF",type:"平衡型",shopeeUrl:"https://s.shopee.tw/8ATiXKOiqK",components:{blade:"Hells_Scythe",ratchet:"3-80",bit:"Low_Flat"},versions:["BX-19"]}]};
+
+const TYPE_COLOR={"攻擊型":"#D85A30","平衡型":"#D8A030","耐力型":"#1D9E75","防禦型":"#378ADD"};
+function typeBadgeHtml(t,s=9){const c=TYPE_COLOR[t]||"#9090a8";return t?`<span style="font-size:${s}px;padding:1px 6px;border-radius:20px;color:${c};background:${c}18;border:.5px solid ${c}44;white-space:nowrap;flex-shrink:0">${t}</span>`:"";}
+function versStr(a){if(!a||!a.length)return"";return a.length<=5?a.join("　"):a.slice(0,4).join("　")+" …";}
+
+/* ══ 篩選 / 排序狀態（三個下拉各自獨立）══ */
+const filterState={
+  blade:{val:"全部",sort:"default"},
+  ratchet:{val:"全部",sort:"default"},
+  bit:{val:"全部",sort:"default"}
+};
+
+function setFilter(partType,val,btn){
+  filterState[partType].val=val;
+  document.querySelectorAll(`#toolbar-${partType} .pd-filter-btn`).forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  renderFilteredList(partType);
+}
+function setSort(partType,val){
+  filterState[partType].sort=val;
+  renderFilteredList(partType);
+}
+
+/* ★ 統一渲染函式：blade / ratchet / bit 共用 */
+function renderFilteredList(partType){
+  const dbKey={blade:"blades",ratchet:"ratchets",bit:"bits"}[partType];
+  const parts=BEYBLADE_DATABASE.parts[dbKey];
+  const inner=document.getElementById("ddi-"+partType);
+  inner.innerHTML="";
+  const {val:fVal,sort:fSort}=filterState[partType];
+
+  let entries=Object.entries(parts).filter(([,p])=>{
+    if(partType==="ratchet"){
+      return fVal==="全部"||(p.prongs===parseInt(fVal));
+    }
+    return fVal==="全部"||p.type===fVal;
+  });
+  if(fSort==="heavy") entries.sort((a,b)=>b[1].weight-a[1].weight);
+  else if(fSort==="light") entries.sort((a,b)=>a[1].weight-b[1].weight);
+
+  if(!entries.length){inner.innerHTML=`<div class="pd-empty">此條件無零件資料</div>`;return;}
+
+  const curSel={blade:selBlade,ratchet:selRatchet,bit:selBit}[partType];
+
+  entries.forEach(([key,p])=>{
+    const div=document.createElement("div");div.className="pd-item";div.dataset.key=key;
+    if(partType==="blade"){
+      div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div>${p.versions&&p.versions.length?`<div class="pd-ver">${versStr(p.versions)}</div>`:""}</div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;
+    } else if(partType==="ratchet"){
+      /* ★ 固鎖輪盤：顯示側數 badge + 高度 */
+      const prongColor=["","#C49EF0","#5DCAA5","#378ADD","#D8A030","#D85A30"][p.prongs]||"#9090a8";
+      const prongBadge=`<span style="font-size:9px;padding:1px 6px;border-radius:20px;color:${prongColor};background:${prongColor}18;border:.5px solid ${prongColor}44;white-space:nowrap;flex-shrink:0">${p.prongs} 側</span>`;
+      div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${prongBadge}</div><div class="pd-ver" style="color:var(--t3)">高度 ${p.height} mm</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;
+    } else {
+      div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;
+    }
+    div.addEventListener("click",()=>{
+      selSet=null;
+      document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.remove("active"));
+      document.getElementById("disp-sets-name").textContent="請選擇套組";
+      document.getElementById("disp-sets-type").style.display="none";
+      document.getElementById("disp-sets-ver").textContent="—";
+      selectPart(partType,key);closeAllDD();
+    });
+    if(curSel&&curSel._key===key)div.classList.add("active");
+    inner.appendChild(div);
+  });
+}
+
+const TYPE_WEIGHTS={"攻擊型":{atk:.35,def:.10,sta:.15,accel:.25,endurance:.15},"防禦型":{atk:.10,def:.35,sta:.15,accel:.10,endurance:.30},"耐力型":{atk:.10,def:.15,sta:.35,accel:.10,endurance:.30},"平衡型":{atk:.22,def:.22,sta:.22,accel:.17,endurance:.17}};
+function calcScore(atk,def,sta,accel,endurance,w,type){const wt=TYPE_WEIGHTS[type]||TYPE_WEIGHTS["平衡型"];const v={atk,def,sta,accel,endurance};let raw=0,lb=0;for(const k of Object.keys(wt)){raw+=Math.min(v[k],100)*wt[k];if(v[k]>100)lb+=Math.min((v[k]-100)*.10,3);}return Math.min(Math.round((raw/100)*87+lb+Math.min(Math.max(w-40,0)*.3,6)+3),100);}
+function shopeeOpen(url){window.open((url&&url!=="")?url:"https://shopee.tw/search?keyword=戰鬥陀螺X","_blank");}
+function shopeeOpenPart(type){const pm={blade:selBlade,ratchet:selRatchet,bit:selBit};const p=pm[type];shopeeOpen(p?p.shopeeUrl:"");}
+function shopeeOpenSet(){shopeeOpen(selSet?selSet.shopeeUrl:"");}
+const ALL_DD=["sets","blade","ratchet","bit"];
+function toggleDD(type){const dd=document.getElementById("dd-"+type),arr=document.getElementById("arr-"+type),trig=document.getElementById("trig-"+type);const wo=dd.classList.contains("open");closeAllDD();if(!wo){dd.classList.add("open");arr.classList.add("open");trig.classList.add("open");}}
+function closeAllDD(){ALL_DD.forEach(t=>{const dd=document.getElementById("dd-"+t),arr=document.getElementById("arr-"+t),trig=document.getElementById("trig-"+t);if(dd)dd.classList.remove("open");if(arr)arr.classList.remove("open");if(trig)trig.classList.remove("open");});}
+document.addEventListener("click",e=>{
+  if(e.target.closest(".pd-toolbar"))return;
+  if(!e.target.closest(".part-group"))closeAllDD();
+});
+
+let selSet=null;
+function buildSetsDropdown(){const inner=document.getElementById("ddi-sets");inner.innerHTML="";BEYBLADE_DATABASE.sets.forEach((set,idx)=>{const setType=set.type||"平衡型";const div=document.createElement("div");div.className="pd-item";div.dataset.idx=idx;div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${set.name}</span>${typeBadgeHtml(setType)}</div>${set.versions&&set.versions.length?`<div class="pd-ver">${versStr(set.versions)}</div>`:""}</div><i class="ti ti-check pd-check"></i>`;div.addEventListener("click",()=>{applySet(idx);closeAllDD();});inner.appendChild(div);});}
+function applySet(idx){const set=BEYBLADE_DATABASE.sets[idx];if(!set)return;selSet=set;const setType=set.type||"平衡型";const tc=TYPE_COLOR[setType]||"#9090a8";document.getElementById("disp-sets-name").textContent=set.name;const tEl=document.getElementById("disp-sets-type");tEl.textContent=setType;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;document.getElementById("disp-sets-ver").textContent=set.versions&&set.versions.length?versStr(set.versions):"";document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.toggle("active",parseInt(el.dataset.idx)===idx));selectPart("blade",set.components.blade);selectPart("ratchet",set.components.ratchet);selectPart("bit",set.components.bit);}
+
+let selBlade=null,selRatchet=null,selBit=null;
+function selectPart(type,key){
+  const map={blade:"blades",ratchet:"ratchets",bit:"bits"};
+  const p=BEYBLADE_DATABASE.parts[map[type]][key];if(!p)return;
+  const obj={_key:key,...p};
+  if(type==="blade")selBlade=obj;if(type==="ratchet")selRatchet=obj;if(type==="bit")selBit=obj;
+  const tc=TYPE_COLOR[p.type]||"";
+  if(type==="blade"){
+    document.getElementById("disp-blade-name").textContent=p.name;
+    const tEl=document.getElementById("disp-blade-type");
+    if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";
+    document.getElementById("disp-blade-ver").textContent=versStr(p.versions)||"";
+    document.getElementById("disp-blade-weight").textContent=p.weight+"g";
+    renderFilteredList("blade");
+  } else if(type==="ratchet"){
+    document.getElementById("disp-ratchet-name").textContent=p.name;
+    document.getElementById("disp-ratchet-meta").textContent=`${p.prongs} 側・高度 ${p.height} mm`;
+    document.getElementById("disp-ratchet-weight").textContent=p.weight+"g";
+    renderFilteredList("ratchet");
+  } else {
+    document.getElementById("disp-bit-name").textContent=p.name;
+    const tEl=document.getElementById("disp-bit-type");
+    if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";
+    document.getElementById("disp-bit-weight").textContent=p.weight+"g";
+    renderFilteredList("bit");
+  }
+  document.querySelectorAll(`#ddi-${type} .pd-item`).forEach(el=>el.classList.toggle("active",el.dataset.key===key));
+  updateStats();
+}
+
+/* 雷達圖 */
+const AXES=[{key:"atk",label:"攻擊",color:"#D85A30"},{key:"def",label:"防禦",color:"#378ADD"},{key:"endurance",label:"耐久度",color:"#D85070"},{key:"accel",label:"加速",color:"#D8A030"},{key:"sta",label:"耐力",color:"#1D9E75"}];
+const N=5,STEPS=5;let rCvs=null,rCtx=null,rSize=0,rCX=0,rCY=0,rMax=0;
+let rVals={atk:0,def:0,sta:0,accel:0,endurance:0},rTarget={atk:0,def:0,sta:0,accel:0,endurance:0},rScale=100,rScaleTarget=100;
+function calcScale(v){const m=Math.max(...Object.values(v));return m<=100?100:Math.ceil(m/20)*20;}
+function resizeRadar(){const col=document.querySelector(".col-radar");if(!col||!rCvs)return;const isMobile=window.innerWidth<=768;const availW=col.offsetWidth-24;const availH=isMobile?Math.min(availW,300):(col.offsetHeight-78);rSize=Math.max(160,Math.min(availW,availH));rCvs.width=rCvs.height=rSize;rCX=rSize/2;rCY=rSize/2;rMax=rSize*.30;}
+function initRadar(){rCvs=document.getElementById("radar-canvas");rCtx=rCvs.getContext("2d");document.getElementById("radar-legend").innerHTML=[{label:"攻擊",color:"#D85A30"},{label:"防禦",color:"#378ADD"},{label:"耐力",color:"#1D9E75"},{label:"加速",color:"#D8A030"},{label:"耐久度",color:"#D85070"}].map(a=>`<div class="rl-item"><div class="rl-dot" style="background:${a.color}"></div><span>${a.label}</span></div>`).join("");resizeRadar();radarLoop();}
+function radarLoop(){AXES.forEach(a=>{const d=rTarget[a.key]-rVals[a.key];rVals[a.key]+=Math.abs(d)>.15?d*.12:d;});const sd=rScaleTarget-rScale;rScale+=Math.abs(sd)>.15?sd*.12:sd;if(rCtx)drawRadar();requestAnimationFrame(radarLoop);}
+function pt(idx,val){const a=(idx/N)*Math.PI*2-Math.PI/2,r=(val/rScale)*rMax;return{x:rCX+Math.cos(a)*r,y:rCY+Math.sin(a)*r};}
+function gpt(idx,step){const a=(idx/N)*Math.PI*2-Math.PI/2,r=(step/STEPS)*rMax;return{x:rCX+Math.cos(a)*r,y:rCY+Math.sin(a)*r};}
+function axisTextAlign(a){const cos=Math.cos(a);return cos>0.3?"left":cos<-0.3?"right":"center";}
+function axisTextBaseline(a){const sin=Math.sin(a);return sin<-0.3?"bottom":sin>0.3?"top":"middle";}
+function drawRadar(){const c=rCtx;c.clearRect(0,0,rSize,rSize);const isOver=rScaleTarget>100;for(let s=1;s<=STEPS;s++){c.beginPath();for(let i=0;i<N;i++){const p=gpt(i,s);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}c.closePath();if(s<STEPS){c.fillStyle="rgba(24,24,31,0.55)";c.fill();}if(s===STEPS&&isOver){c.strokeStyle="#FF450066";c.lineWidth=1.2;c.setLineDash([4,3]);c.stroke();c.setLineDash([]);}else{c.strokeStyle=s===STEPS?"#363648aa":"#2a2a3866";c.lineWidth=s===STEPS?1:.6;c.stroke();}}c.save();c.font="9px sans-serif";c.fillStyle=isOver?"#D8A030":"#5a5a70";c.textAlign="center";c.textBaseline="middle";const tp=gpt(0,STEPS);c.fillText(Math.round(rScale),tp.x,tp.y-10);c.restore();for(let i=0;i<N;i++){const o=gpt(i,STEPS);c.beginPath();c.moveTo(rCX,rCY);c.lineTo(o.x,o.y);c.strokeStyle="#2a2a3888";c.lineWidth=.7;c.stroke();}c.beginPath();for(let i=0;i<N;i++){const p=pt(i,rVals[AXES[i].key]);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}c.closePath();if(isOver){const g=c.createRadialGradient(rCX,rCY,0,rCX,rCY,rMax);g.addColorStop(0,"rgba(255,69,0,0.35)");g.addColorStop(.5,"rgba(138,43,226,0.2)");g.addColorStop(1,"rgba(138,43,226,0.05)");c.fillStyle=g;c.fill();c.strokeStyle="rgba(255,100,50,0.85)";c.lineWidth=2;c.stroke();}else{const g=c.createRadialGradient(rCX,rCY,0,rCX,rCY,rMax);g.addColorStop(0,"rgba(55,138,221,0.42)");g.addColorStop(1,"rgba(55,138,221,0.08)");c.fillStyle=g;c.fill();c.strokeStyle="rgba(133,183,235,0.75)";c.lineWidth=1.8;c.stroke();}const LABEL_R=rMax+18,VAL_R=rMax+32;for(let i=0;i<N;i++){const ax=AXES[i];const angle=(i/N)*Math.PI*2-Math.PI/2;const rv=Math.round(rTarget[ax.key]);const dp=pt(i,rVals[ax.key]);c.beginPath();c.arc(dp.x,dp.y,4.5,0,Math.PI*2);c.fillStyle=rv>100?"#FF4500":ax.color;c.fill();c.strokeStyle="#0a0a0f88";c.lineWidth=1.5;c.stroke();if(rv>100){c.beginPath();c.arc(dp.x,dp.y,7,0,Math.PI*2);c.strokeStyle="#FF450055";c.lineWidth=2;c.stroke();}const ta=axisTextAlign(angle),tb=axisTextBaseline(angle);const lx=rCX+Math.cos(angle)*LABEL_R,ly=rCY+Math.sin(angle)*LABEL_R;c.save();c.font="10px sans-serif";c.fillStyle="#9090a8";c.textAlign=ta;c.textBaseline=tb;c.fillText(ax.label,lx,ly);c.restore();const vx=rCX+Math.cos(angle)*VAL_R,vy=rCY+Math.sin(angle)*VAL_R;c.save();c.font="bold 13px sans-serif";c.fillStyle=rv>100?"#FF4500":ax.color;c.textAlign=ta;c.textBaseline=tb;if(rv>100){c.shadowColor="#FF4500";c.shadowBlur=8;}c.fillText(rv,vx,vy);c.shadowBlur=0;c.restore();}}
+const STAT_META={atk:{color:"#D85A30",desk:{sv:"v-atk",sb:"sb-atk",bar:"bar-atk"},mob:{sv:"mob-v-atk",sb:"mob-sb-atk",bar:"mob-bar-atk"}},def:{color:"#378ADD",desk:{sv:"v-def",sb:"sb-def",bar:"bar-def"},mob:{sv:"mob-v-def",sb:"mob-sb-def",bar:"mob-bar-def"}},sta:{color:"#1D9E75",desk:{sv:"v-sta",sb:"sb-sta",bar:"bar-sta"},mob:{sv:"mob-v-sta",sb:"mob-sb-sta",bar:"mob-bar-sta"}},accel:{color:"#D8A030",desk:{sv:"v-accel",sb:"sb-accel",bar:"bar-accel"},mob:{sv:"mob-v-accel",sb:"mob-sb-accel",bar:"mob-bar-accel"}},endurance:{color:"#D85070",desk:{sv:"v-end",sb:"sb-end",bar:"bar-end"},mob:{sv:"mob-v-end",sb:"mob-sb-end",bar:"mob-bar-end"}}};
+function applyStatUI(ids,v,color,lb){const svEl=document.getElementById(ids.sv),sbEl=document.getElementById(ids.sb),barEl=document.getElementById(ids.bar);if(!svEl||!sbEl||!barEl)return;svEl.textContent=v;sbEl.classList.toggle("limitbreak",lb);svEl.classList.toggle("limitbreak",lb);if(!lb)svEl.style.color=color;const pct=Math.min(v/100,1)*100;barEl.style.width=pct+"%";barEl.style.background=lb?"#FF4500":color;barEl.classList.toggle("limitbreak",lb);if(lb)barEl.style.color="#FF4500";}
+function updateStats(){if(!selBlade||!selRatchet||!selBit)return;const b=selBlade.stats,r=selRatchet.stats,bt=selBit.stats;const atk=(b.atk||0)+(r.atk||0)+(bt.atk||0);const def=(b.def||0)+(r.def||0)+(bt.def||0);const sta=(b.sta||0)+(r.sta||0)+(bt.sta||0);const accel=(b.accel||0)+(r.accel||0)+(bt.accel||0);const endurance=(b.endurance||0)+(r.endurance||0)+(bt.endurance||0);const height=selRatchet.height||60;const totalWeight=parseFloat(((selBlade.weight||0)+(selRatchet.weight||0)+(selBit.weight||0)).toFixed(2));const vals={atk,def,sta,accel,endurance};const ns=calcScale(vals);rScaleTarget=ns;rTarget={...vals};const isOver=ns>100;document.getElementById("radar-scale-label").textContent=isOver?`極限突破！刻度上限：${ns}`:`刻度上限：100`;document.getElementById("radar-scale-badge").classList.toggle("overscale",isOver);Object.entries(vals).forEach(([k,v])=>{const m=STAT_META[k];if(!m)return;const lb=v>100;applyStatUI(m.desk,v,m.color,lb);applyStatUI(m.mob,v,m.color,lb);});const comboText=selSet?`${selSet.name}  /  ${selBlade.name} ・ ${selRatchet.name} ・ ${selBit.name}`:`${selBlade.name} / ${selRatchet.name} / ${selBit.name}`;const heightText=height+" mm";const mrowHtml=`<span class="mp">⚖ ${totalWeight}g</span>`;const max=Math.max(atk,def,sta);let type="平衡型",tc="#BA7517";if(max===atk&&atk-def>15&&atk-sta>15){type="攻擊型";tc="#D85A30";}else if(max===def&&def-atk>15&&def-sta>15){type="防禦型";tc="#378ADD";}else if(max===sta&&sta-atk>15&&sta-def>15){type="耐力型";tc="#1D9E75";}const score=calcScore(atk,def,sta,accel,endurance,totalWeight,type);const badgeText=`${score} 分・${type}`;const dn=document.getElementById("combo-name");if(dn)dn.textContent=comboText;const dh=document.getElementById("height-val");if(dh)dh.textContent=heightText;const dm=document.getElementById("mrow");if(dm)dm.innerHTML=mrowHtml;const dsb=document.getElementById("sbadge");if(dsb){dsb.textContent=badgeText;dsb.style.color=tc;dsb.style.borderColor=tc+"44";dsb.classList.toggle("limitbreak-score",isOver);}const mn=document.getElementById("mob-combo-name");if(mn)mn.textContent=comboText;const mh=document.getElementById("mob-height-val");if(mh)mh.textContent=heightText;const mm=document.getElementById("mob-mrow");if(mm)mm.innerHTML=mrowHtml;const msb=document.getElementById("mob-sbadge");if(msb){msb.textContent=badgeText;msb.style.color=tc;msb.style.borderColor=tc+"44";msb.classList.toggle("limitbreak-score",isOver);}document.getElementById("cl-atk").textContent=atk;document.getElementById("cl-def").textContent=def;document.getElementById("cl-sta").textContent=sta;}
+let footerOpen=false;
+function toggleFooter(){footerOpen=!footerOpen;document.getElementById("footer-body").classList.toggle("open",footerOpen);document.getElementById("footer-chevron").classList.toggle("open",footerOpen);}
+function openModal(id){document.getElementById("modal-"+id).classList.add("open");}
+function closeModal(id){document.getElementById(id).classList.remove("open");}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll(".modal-overlay.open").forEach(m=>closeModal(m.id));});
+const FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLSfOET3LO_fbMNnPVmx_dNSt4IfbdxrmPtAueEJxtJ8BaFICYg/formResponse";
+const ENTRY_ID="entry.1318000550";
+const handleFeedbackSubmit=async(msg)=>{const fd=new FormData();fd.append(ENTRY_ID,msg);try{await fetch(FORM_URL,{method:"POST",mode:"no-cors",body:fd});return true;}catch(e){return false;}};
+let selectedRating=0,selectedCat="",fbHistory=[];
+function selectRating(btn){document.querySelectorAll(".rating-btn").forEach(b=>{b.classList.remove("selected");b.style.cssText="";});btn.classList.add("selected");const c=["","#D85A30","#D8A030","#D8D030","#1D9E75","#5DCAA5"];const v=parseInt(btn.dataset.val);selectedRating=v;btn.style.color=c[v];btn.style.borderColor=c[v]+"88";btn.style.background=c[v]+"18";}
+function selectCat(btn){document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("selected"));btn.classList.add("selected");selectedCat=btn.textContent.trim();}
+function updateChar(){document.getElementById("char-count").textContent=document.getElementById("fb-text").value.length;}
+async function submitFeedback(){const txt=document.getElementById("fb-text").value.trim();if(!txt){document.getElementById("fb-text").style.borderColor="#A32D2D";setTimeout(()=>document.getElementById("fb-text").style.borderColor="",1500);return;}const btn=document.getElementById("fb-submit-btn");btn.disabled=true;btn.innerHTML='<i class="ti ti-loader-2"></i>送出中…';const r=selectedRating?`[滿意度: ${"⭐".repeat(selectedRating)}]`:"";const ct=selectedCat?`[${selectedCat}]`:"";const ok=await handleFeedbackSubmit([r,ct,txt].filter(Boolean).join(" "));btn.disabled=false;btn.innerHTML='<i class="ti ti-send"></i>送出回饋';if(ok){const el=document.getElementById("fb-ok");el.style.display="flex";setTimeout(()=>el.style.display="none",4000);const now=new Date();fbHistory.push({msg:txt,rating:selectedRating,cat:selectedCat,time:`${now.getHours().toString().padStart(2,"0")}:${now.getMinutes().toString().padStart(2,"0")}`});renderFbHistory();document.getElementById("fb-text").value="";document.getElementById("char-count").textContent="0";document.querySelectorAll(".rating-btn").forEach(b=>{b.classList.remove("selected");b.style.cssText="";});document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("selected"));selectedRating=0;selectedCat="";}else{const el=document.getElementById("fb-err");el.style.display="flex";setTimeout(()=>el.style.display="none",4000);}}
+function renderFbHistory(){if(!fbHistory.length)return;document.getElementById("fb-history").style.display="block";const c=["","#D85A30","#D8A030","#D8D030","#1D9E75","#5DCAA5"];document.getElementById("fb-history-list").innerHTML=fbHistory.slice(-3).reverse().map(h=>`<div class="fb-history-item">${h.msg.length>60?h.msg.slice(0,60)+"…":h.msg}<div class="fb-history-meta">${h.rating?`<span style="color:${c[h.rating]}">${"⭐".repeat(h.rating)}</span>`:""}${h.cat?`<span>${h.cat}</span>`:""}<span>${h.time}</span></div></div>`).join("");}
+const EVT_RAW=[{name:"2026 台北 BeyBlade X 公開賽",date:"2026/06/15",loc:"台北・中正區",lat:25.042,lng:121.517},{name:"台中夏季個人賽",date:"2026/06/22",loc:"台中・西屯區",lat:24.173,lng:120.641},{name:"北部青少年聯賽 Q2",date:"2026/07/05",loc:"台北・內湖區",lat:25.082,lng:121.584},{name:"花蓮盃邀請賽",date:"2026/07/18",loc:"花蓮・壽豐鄉",lat:23.852,lng:121.524},{name:"台南南部錦標賽",date:"2026/08/03",loc:"台南・東區",lat:22.999,lng:120.212},{name:"2026 台灣冠軍賽（春季）",date:"2026/04/20",loc:"台北・信義區",lat:25.033,lng:121.563},{name:"高雄城市盃",date:"2026/03/30",loc:"高雄・三民區",lat:22.638,lng:120.303},{name:"台中春季友誼賽",date:"2026/03/08",loc:"台中・北屯區",lat:24.187,lng:120.688},{name:"全台青少年聯賽 Q1",date:"2026/02/14",loc:"台北・大安區",lat:25.026,lng:121.543}];
+const TODAY=new Date();TODAY.setHours(0,0,0,0);
+function parseEventDate(str){const[y,m,d]=str.split("/").map(Number);return new Date(y,m-1,d);}
+function classifyEvents(){const upcoming=[],past=[];EVT_RAW.forEach(e=>{const ed=parseEventDate(e.date);const diff=Math.round((ed-TODAY)/86400000);let item={...e,_diffDays:diff};if(ed.getTime()<TODAY.getTime()){item.badge="badge-past";item.bt="已結束";past.push(item);}else{if(diff===0){item.badge="badge-open";item.bt="今天開賽";}else if(diff<=7){item.badge="badge-soon";item.bt="即將開始";}else{item.badge="badge-open";item.bt="報名中";}upcoming.push(item);}});upcoming.sort((a,b)=>a._diffDays-b._diffDays);past.sort((a,b)=>b._diffDays-a._diffDays);return{upcoming,past};}
+let EVT={upcoming:[],past:[]};let curTab="upcoming",lmap=null,mapMarkers=[];
+function makeIcon(c){return L.divIcon({html:`<svg width="22" height="28" viewBox="0 0 22 28"><path d="M11 0C4.9 0 0 4.9 0 11c0 6.6 11 17 11 17S22 17.6 22 11C22 4.9 17.1 0 11 0z" fill="${c}"/><circle cx="11" cy="11" r="4.5" fill="white" opacity="0.9"/></svg>`,iconSize:[22,28],iconAnchor:[11,28],popupAnchor:[0,-28],className:""});}
+function renderMapMarkers(tab){mapMarkers.forEach(m=>m.remove());mapMarkers=[];EVT[tab].forEach(e=>{const col=tab==="upcoming"?"#378ADD":"#5a5a70";const m=L.marker([e.lat,e.lng],{icon:makeIcon(col)}).addTo(lmap).bindPopup(`<div class="pop-name">${e.name}</div><div class="pop-meta"><span>${e.date}</span><span>${e.loc}</span></div>`);mapMarkers.push(m);});}
+function initMap(){if(lmap)return;lmap=L.map("leaflet-map",{center:[23.8,121.0],zoom:7});L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:'© <a href="https://www.openstreetmap.org/copyright" style="color:#85B7EB">OpenStreetMap</a>',maxZoom:18}).addTo(lmap);renderMapMarkers("upcoming");}
+function renderEvents(tab){const list=EVT[tab];document.getElementById("count-upcoming").textContent=EVT.upcoming.length;document.getElementById("count-past").textContent=EVT.past.length;if(!list.length){document.getElementById("elist").innerHTML=`<div class="elist-empty"><i class="ti ti-calendar-off"></i><span>${tab==="upcoming"?"目前沒有近期賽事":"目前沒有歷史賽事紀錄"}</span></div>`;return;}document.getElementById("elist").innerHTML=list.map(e=>`<div class="ecard ${tab}"><div class="etop"><div class="ename">${e.name}</div><span class="ebadge ${e.badge}">${e.bt}</span></div><div class="emeta"><span><i class="ti ti-calendar"></i>${e.date}</span><span><i class="ti ti-map-pin"></i>${e.loc}</span></div></div>`).join("");}
+function switchTab(tab,el){curTab=tab;document.querySelectorAll(".etab").forEach(b=>b.classList.remove("active"));el.classList.add("active");renderEvents(tab);if(lmap)renderMapMarkers(tab);}
+function goto(page,el){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("page-"+page).classList.add("active");document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));document.querySelectorAll("[data-m]").forEach(b=>b.classList.remove("active"));const ids={home:"nb-home",bey:"nb-bey",cl:"nb-cl"};if(ids[page])document.getElementById(ids[page]).classList.add("active");document.querySelectorAll(`[data-m="${{home:"home",bey:"bey",cl:"cl"}[page]}"]`).forEach(b=>b.classList.add("active"));if(page==="home"){setTimeout(()=>{initMap();if(lmap)lmap.invalidateSize();},80);}if(page==="bey"){setTimeout(resizeRadar,50);}}
+function toggleMob(){const menu=document.getElementById("mob-menu");const btn=document.getElementById("hamburger-btn");const isOpen=menu.classList.toggle("open");btn.classList.toggle("open",isOpen);btn.setAttribute("aria-expanded",isOpen);btn.setAttribute("aria-label",isOpen?"關閉選單":"開啟選單");}
+EVT=classifyEvents();renderEvents("upcoming");setTimeout(()=>initMap(),200);initRadar();buildSetsDropdown();renderFilteredList("blade");renderFilteredList("ratchet");renderFilteredList("bit");applySet(0);window.addEventListener("resize",()=>resizeRadar());
+</script>
