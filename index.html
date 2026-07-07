@@ -109,42 +109,22 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .pst-weight{font-size:12px;font-weight:700;color:#B8C8DC;flex-shrink:0;white-space:nowrap}
 .pst-arrow{color:var(--t3);font-size:13px;transition:transform .2s;flex-shrink:0}
 .pst-arrow.open{transform:rotate(180deg)}
-
-/* ══ 下拉選單（含工具列）══ */
 .part-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:46px;z-index:300;background:var(--bg3);border:.5px solid var(--bd2);border-radius:10px;overflow:hidden;display:none;box-shadow:0 8px 28px rgba(0,0,0,.7)}
 .part-dropdown.open{display:block}
-/* ★ 工具列：固定在下拉頂部，不隨列表捲動 */
-.pd-toolbar{
-  display:flex;align-items:center;gap:5px;flex-wrap:wrap;
-  padding:7px 10px;
-  background:var(--bg4);
-  border-bottom:.5px solid var(--bd);
-  flex-shrink:0;
-}
-.pd-filter-btn{
-  font-size:9px;padding:2px 8px;border-radius:20px;
-  border:.5px solid var(--bd2);background:transparent;
-  color:var(--t3);cursor:pointer;transition:all .15s;white-space:nowrap;
-}
+.pd-toolbar{display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:7px 10px;background:var(--bg4);border-bottom:.5px solid var(--bd);flex-shrink:0}
+.pd-filter-btn{font-size:9px;padding:2px 8px;border-radius:20px;border:.5px solid var(--bd2);background:transparent;color:var(--t3);cursor:pointer;transition:all .15s;white-space:nowrap}
 .pd-filter-btn:hover{color:var(--t2)}
 .pd-filter-btn.active{background:rgba(55,138,221,.12);color:var(--blue2);border-color:rgba(55,138,221,.35)}
 .pd-filter-btn.active[data-type="攻擊型"]{background:rgba(216,90,48,.12);color:#D85A30;border-color:rgba(216,90,48,.35)}
 .pd-filter-btn.active[data-type="防禦型"]{background:rgba(55,138,221,.12);color:var(--blue2);border-color:rgba(55,138,221,.35)}
 .pd-filter-btn.active[data-type="耐力型"]{background:rgba(29,158,117,.12);color:#5DCAA5;border-color:rgba(29,158,117,.35)}
 .pd-filter-btn.active[data-type="平衡型"]{background:rgba(216,160,48,.12);color:#D8A030;border-color:rgba(216,160,48,.35)}
-.pd-sort-select{
-  font-size:9px;padding:2px 6px;border-radius:6px;
-  border:.5px solid var(--bd2);background:var(--bg3);
-  color:var(--t3);cursor:pointer;outline:none;
-  margin-left:auto;flex-shrink:0;
-  transition:border-color .15s;
-}
+.pd-sort-select{font-size:9px;padding:2px 6px;border-radius:6px;border:.5px solid var(--bd2);background:var(--bg3);color:var(--t3);cursor:pointer;outline:none;margin-left:auto;flex-shrink:0;transition:border-color .15s}
 .pd-sort-select:hover,.pd-sort-select:focus{border-color:var(--blue3);color:var(--t2)}
 .pd-empty{padding:14px;text-align:center;font-size:11px;color:var(--t3)}
 .part-dropdown-inner{max-height:200px;overflow-y:auto}
 .part-dropdown-inner::-webkit-scrollbar{width:3px}
 .part-dropdown-inner::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
-
 .pd-item{display:flex;align-items:center;padding:9px 12px;cursor:pointer;border-bottom:.5px solid var(--bd);transition:background .1s;gap:8px}
 .pd-item:last-child{border-bottom:none}
 .pd-item:hover{background:rgba(55,138,221,.07)}
@@ -336,7 +316,6 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 </div>
 
 <div class="content">
-
 <!-- 賽事中心 -->
 <div class="page active" id="page-home">
   <div class="home-layout">
@@ -399,7 +378,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
               <div class="part-dropdown" id="dd-sets"><div class="part-dropdown-inner" id="ddi-sets"></div></div>
             </div>
 
-            <!-- 戰刃（★ 含工具列）-->
+            <!-- 戰刃 -->
             <div class="part-group" id="pg-blade">
               <div class="part-group-label"><i class="ti ti-sword"></i>戰刃 Blade</div>
               <div class="part-trigger-row">
@@ -427,7 +406,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
               </div>
             </div>
 
-            <!-- 固鎖輪盤 -->
+            <!-- 固鎖輪盤（★ 側數分組篩選，純前端 key 解析）-->
             <div class="part-group" id="pg-ratchet">
               <div class="part-group-label"><i class="ti ti-circle-dashed"></i>固鎖輪盤 Ratchet</div>
               <div class="part-trigger-row">
@@ -438,10 +417,24 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
                 </div>
                 <button class="btn-shopee-part" onclick="shopeeOpenPart('ratchet')">🛒</button>
               </div>
-              <div class="part-dropdown" id="dd-ratchet"><div class="part-dropdown-inner" id="ddi-ratchet"></div></div>
+              <div class="part-dropdown" id="dd-ratchet">
+                <div class="pd-toolbar" id="toolbar-ratchet">
+                  <button class="pd-filter-btn active" data-rg="全部"  onclick="setFilter('ratchet','全部',this)">全部</button>
+                  <button class="pd-filter-btn"        data-rg="1~3"   onclick="setFilter('ratchet','1~3',this)">1～3 側</button>
+                  <button class="pd-filter-btn"        data-rg="4~5"   onclick="setFilter('ratchet','4~5',this)">4～5 側</button>
+                  <button class="pd-filter-btn"        data-rg="6~9"   onclick="setFilter('ratchet','6~9',this)">6～9 側</button>
+                  <button class="pd-filter-btn"        data-rg="other" onclick="setFilter('ratchet','other',this)">其他</button>
+                  <select class="pd-sort-select" id="sort-ratchet" onchange="setSort('ratchet',this.value)">
+                    <option value="default">預設排序</option>
+                    <option value="heavy">重量：由重到輕</option>
+                    <option value="light">重量：由輕到重</option>
+                  </select>
+                </div>
+                <div class="part-dropdown-inner" id="ddi-ratchet"></div>
+              </div>
             </div>
 
-            <!-- 軸心（★ 含工具列）-->
+            <!-- 軸心 -->
             <div class="part-group" id="pg-bit">
               <div class="part-group-label"><i class="ti ti-point"></i>軸心 Bit</div>
               <div class="part-trigger-row">
@@ -502,12 +495,12 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
         <div class="sdiv">版本記錄</div>
         <div class="cl-card">
           <div class="cl-title"><i class="ti ti-git-branch"></i>更新日誌</div>
-          <div class="cl-item"><span class="cl-ver">v3.3</span><div class="cl-txt">戰刃與軸心下拉選單內建篩選工具列（類型篩選 + 重量排序）；sets 獨立 type 欄位</div></div>
+          <div class="cl-item"><span class="cl-ver">v3.5</span><div class="cl-txt">固鎖輪盤篩選改為前端 key 解析分組（1~3側 / 4~5側 / 6~9側 / 其他），不更動後端資料結構；戰刃、軸心篩選工具列維持不變</div></div>
+          <div class="cl-item"><span class="cl-ver">v3.4</span><div class="cl-txt">sets 獨立 type 欄位，官方套件型態與戰刃零件型態正式拆分</div></div>
           <div class="cl-item"><span class="cl-ver">v3.2</span><div class="cl-txt">頁尾加入 Threads 和 IG 社群 Icon</div></div>
           <div class="cl-item"><span class="cl-ver">v3.1</span><div class="cl-txt">手機版神配置計算機排版：雷達圖 → 五屬性數值 → 套組/零件選單</div></div>
           <div class="cl-item"><span class="cl-ver">v3.0</span><div class="cl-txt">資料庫大幅擴充：6支戰刃、5種固鎖輪盤、8種軸心、8組官方套組</div></div>
           <div class="cl-item"><span class="cl-ver">v2.3</span><div class="cl-txt">屬性卡新增視覺化進度條，顏色與各屬性一致</div></div>
-          <div class="cl-item"><span class="cl-ver">v2.2</span><div class="cl-txt">雷達圖文字重疊修正：屬性標籤與數值上下分離</div></div>
           <div class="cl-item"><span class="cl-ver">v1.0</span><div class="cl-txt">雷達圖五角形、動態刻度、極限突破特效</div></div>
         </div>
         <div class="sdiv" style="margin-top:10px">即將推出</div>
@@ -620,39 +613,81 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="beyblade_data.js"></script>
 <script>
-
 function typeBadgeHtml(t,s=9){const c=TYPE_COLOR[t]||"#9090a8";return t?`<span style="font-size:${s}px;padding:1px 6px;border-radius:20px;color:${c};background:${c}18;border:.5px solid ${c}44;white-space:nowrap;flex-shrink:0">${t}</span>`:"";}
 function versStr(a){if(!a||!a.length)return"";return a.length<=5?a.join("　"):a.slice(0,4).join("　")+" …";}
 
-/* ══ 篩選 / 排序狀態（blade 和 bit 各自獨立）══ */
-const filterState={blade:{type:"全部",sort:"default"},bit:{type:"全部",sort:"default"}};
+/* ══ ★ 前端解析 ratchet key，決定所屬分組 ══
+   規則：
+   - 取 key 中第一個 "-" 前的字串作為側數部分（prefix）
+   - 若 prefix 為純數字：
+       1~3 → "1~3"
+       4~5 → "4~5"
+       6~9 → "6~9"
+       0   → "other"
+   - 若 prefix 含英文字母（如 "M"）→ "other"
+   ══════════════════════════════════════════════ */
+function getRatchetGroup(key){
+  const prefix=key.split("-")[0];          // "3", "M", "0" …
+  if(!/^\d+$/.test(prefix)) return "other"; // 含英文字母 → 其他
+  const n=parseInt(prefix,10);
+  if(n===0) return "other";
+  if(n>=1&&n<=3) return "1~3";
+  if(n>=4&&n<=5) return "4~5";
+  if(n>=6&&n<=9) return "6~9";
+  return "other";
+}
 
-function setFilter(partType, typeVal, btn){
-  filterState[partType].type=typeVal;
+/* ══ 篩選 / 排序狀態 ══ */
+const filterState={
+  blade:{val:"全部",sort:"default"},
+  ratchet:{val:"全部",sort:"default"},
+  bit:{val:"全部",sort:"default"}
+};
+function setFilter(partType,val,btn){
+  filterState[partType].val=val;
   document.querySelectorAll(`#toolbar-${partType} .pd-filter-btn`).forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
   renderFilteredList(partType);
 }
-function setSort(partType, val){
+function setSort(partType,val){
   filterState[partType].sort=val;
   renderFilteredList(partType);
 }
 
-/* ★ 統一的帶篩選列表渲染函式（blade / bit 共用）*/
+/* ══ 統一渲染函式 ══ */
 function renderFilteredList(partType){
-  const dbKey=partType==="blade"?"blades":"bits";
+  const dbKey={blade:"blades",ratchet:"ratchets",bit:"bits"}[partType];
   const parts=BEYBLADE_DATABASE.parts[dbKey];
   const inner=document.getElementById("ddi-"+partType);
   inner.innerHTML="";
-  const {type:fType,sort:fSort}=filterState[partType];
-  let entries=Object.entries(parts).filter(([,p])=>fType==="全部"||p.type===fType);
+  const{val:fVal,sort:fSort}=filterState[partType];
+
+  let entries=Object.entries(parts).filter(([key,p])=>{
+    if(partType==="ratchet"){
+      if(fVal==="全部") return true;
+      return getRatchetGroup(key)===fVal;
+    }
+    return fVal==="全部"||p.type===fVal;
+  });
   if(fSort==="heavy") entries.sort((a,b)=>b[1].weight-a[1].weight);
   else if(fSort==="light") entries.sort((a,b)=>a[1].weight-b[1].weight);
-  if(!entries.length){inner.innerHTML=`<div class="pd-empty">此類型無零件資料</div>`;return;}
+
+  if(!entries.length){inner.innerHTML=`<div class="pd-empty">此條件無零件資料</div>`;return;}
+  const curSel={blade:selBlade,ratchet:selRatchet,bit:selBit}[partType];
+
   entries.forEach(([key,p])=>{
     const div=document.createElement("div");div.className="pd-item";div.dataset.key=key;
     if(partType==="blade"){
       div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div>${p.versions&&p.versions.length?`<div class="pd-ver">${versStr(p.versions)}</div>`:""}</div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;
+    } else if(partType==="ratchet"){
+      /* ★ 側數 badge 由 key 解析而來，不讀 prongs 欄位 */
+      const grp=getRatchetGroup(key);
+      const grpColors={"1~3":"#5DCAA5","4~5":"#D8A030","6~9":"#378ADD","other":"#C49EF0"};
+      const gc=grpColors[grp]||"#9090a8";
+      const prefixLabel=key.split("-")[0];
+      const prongLabel=/^\d+$/.test(prefixLabel)&&parseInt(prefixLabel)>0?`${prefixLabel} 側`:"特殊";
+      const prongBadge=`<span style="font-size:9px;padding:1px 6px;border-radius:20px;color:${gc};background:${gc}18;border:.5px solid ${gc}44;white-space:nowrap;flex-shrink:0">${prongLabel}</span>`;
+      div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${prongBadge}</div><div class="pd-ver" style="color:var(--t3)">高度 ${p.height} mm</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;
     } else {
       div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;
     }
@@ -664,11 +699,9 @@ function renderFilteredList(partType){
       document.getElementById("disp-sets-ver").textContent="—";
       selectPart(partType,key);closeAllDD();
     });
+    if(curSel&&curSel._key===key)div.classList.add("active");
     inner.appendChild(div);
   });
-  /* 更新 active 標記 */
-  const curSel=partType==="blade"?selBlade:selBit;
-  if(curSel) inner.querySelectorAll(".pd-item").forEach(el=>el.classList.toggle("active",el.dataset.key===curSel._key));
 }
 
 const TYPE_WEIGHTS={"攻擊型":{atk:.35,def:.10,sta:.15,accel:.25,endurance:.15},"防禦型":{atk:.10,def:.35,sta:.15,accel:.10,endurance:.30},"耐力型":{atk:.10,def:.15,sta:.35,accel:.10,endurance:.30},"平衡型":{atk:.22,def:.22,sta:.22,accel:.17,endurance:.17}};
@@ -679,7 +712,6 @@ function shopeeOpenSet(){shopeeOpen(selSet?selSet.shopeeUrl:"");}
 const ALL_DD=["sets","blade","ratchet","bit"];
 function toggleDD(type){const dd=document.getElementById("dd-"+type),arr=document.getElementById("arr-"+type),trig=document.getElementById("trig-"+type);const wo=dd.classList.contains("open");closeAllDD();if(!wo){dd.classList.add("open");arr.classList.add("open");trig.classList.add("open");}}
 function closeAllDD(){ALL_DD.forEach(t=>{const dd=document.getElementById("dd-"+t),arr=document.getElementById("arr-"+t),trig=document.getElementById("trig-"+t);if(dd)dd.classList.remove("open");if(arr)arr.classList.remove("open");if(trig)trig.classList.remove("open");});}
-/* 點擊工具列不關閉下拉 */
 document.addEventListener("click",e=>{
   if(e.target.closest(".pd-toolbar"))return;
   if(!e.target.closest(".part-group"))closeAllDD();
@@ -688,17 +720,36 @@ document.addEventListener("click",e=>{
 let selSet=null;
 function buildSetsDropdown(){const inner=document.getElementById("ddi-sets");inner.innerHTML="";BEYBLADE_DATABASE.sets.forEach((set,idx)=>{const setType=set.type||"平衡型";const div=document.createElement("div");div.className="pd-item";div.dataset.idx=idx;div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${set.name}</span>${typeBadgeHtml(setType)}</div>${set.versions&&set.versions.length?`<div class="pd-ver">${versStr(set.versions)}</div>`:""}</div><i class="ti ti-check pd-check"></i>`;div.addEventListener("click",()=>{applySet(idx);closeAllDD();});inner.appendChild(div);});}
 function applySet(idx){const set=BEYBLADE_DATABASE.sets[idx];if(!set)return;selSet=set;const setType=set.type||"平衡型";const tc=TYPE_COLOR[setType]||"#9090a8";document.getElementById("disp-sets-name").textContent=set.name;const tEl=document.getElementById("disp-sets-type");tEl.textContent=setType;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;document.getElementById("disp-sets-ver").textContent=set.versions&&set.versions.length?versStr(set.versions):"";document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.toggle("active",parseInt(el.dataset.idx)===idx));selectPart("blade",set.components.blade);selectPart("ratchet",set.components.ratchet);selectPart("bit",set.components.bit);}
+
 let selBlade=null,selRatchet=null,selBit=null;
-function buildRatchetDropdown(){const inner=document.getElementById("ddi-ratchet");inner.innerHTML="";Object.entries(BEYBLADE_DATABASE.parts.ratchets).forEach(([key,p])=>{const div=document.createElement("div");div.className="pd-item";div.dataset.key=key;div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span></div><div class="pd-ver" style="color:var(--t3)">高度 ${p.height} mm</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;div.addEventListener("click",()=>{selSet=null;document.querySelectorAll("#ddi-sets .pd-item").forEach(el=>el.classList.remove("active"));document.getElementById("disp-sets-name").textContent="請選擇套組";document.getElementById("disp-sets-type").style.display="none";document.getElementById("disp-sets-ver").textContent="—";selectPart("ratchet",key);closeAllDD();});inner.appendChild(div);});}
 function selectPart(type,key){
   const map={blade:"blades",ratchet:"ratchets",bit:"bits"};
   const p=BEYBLADE_DATABASE.parts[map[type]][key];if(!p)return;
   const obj={_key:key,...p};
   if(type==="blade")selBlade=obj;if(type==="ratchet")selRatchet=obj;if(type==="bit")selBit=obj;
   const tc=TYPE_COLOR[p.type]||"";
-  if(type==="blade"){document.getElementById("disp-blade-name").textContent=p.name;const tEl=document.getElementById("disp-blade-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";document.getElementById("disp-blade-ver").textContent=versStr(p.versions)||"";document.getElementById("disp-blade-weight").textContent=p.weight+"g";renderFilteredList("blade");}
-  else if(type==="ratchet"){document.getElementById("disp-ratchet-name").textContent=p.name;document.getElementById("disp-ratchet-meta").textContent=`高度 ${p.height} mm`;document.getElementById("disp-ratchet-weight").textContent=p.weight+"g";}
-  else{document.getElementById("disp-bit-name").textContent=p.name;const tEl=document.getElementById("disp-bit-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";document.getElementById("disp-bit-weight").textContent=p.weight+"g";renderFilteredList("bit");}
+  if(type==="blade"){
+    document.getElementById("disp-blade-name").textContent=p.name;
+    const tEl=document.getElementById("disp-blade-type");
+    if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";
+    document.getElementById("disp-blade-ver").textContent=versStr(p.versions)||"";
+    document.getElementById("disp-blade-weight").textContent=p.weight+"g";
+    renderFilteredList("blade");
+  } else if(type==="ratchet"){
+    /* ★ meta 顯示也用 key 解析側數 */
+    const pfx=key.split("-")[0];
+    const pLabel=/^\d+$/.test(pfx)&&parseInt(pfx)>0?`${pfx} 側`:"特殊";
+    document.getElementById("disp-ratchet-name").textContent=p.name;
+    document.getElementById("disp-ratchet-meta").textContent=`${pLabel}・高度 ${p.height} mm`;
+    document.getElementById("disp-ratchet-weight").textContent=p.weight+"g";
+    renderFilteredList("ratchet");
+  } else {
+    document.getElementById("disp-bit-name").textContent=p.name;
+    const tEl=document.getElementById("disp-bit-type");
+    if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";
+    document.getElementById("disp-bit-weight").textContent=p.weight+"g";
+    renderFilteredList("bit");
+  }
   document.querySelectorAll(`#ddi-${type} .pd-item`).forEach(el=>el.classList.toggle("active",el.dataset.key===key));
   updateStats();
 }
@@ -815,5 +866,5 @@ function renderEvents(tab){const list=EVT[tab];document.getElementById("count-up
 function switchTab(tab,el){curTab=tab;document.querySelectorAll(".etab").forEach(b=>b.classList.remove("active"));el.classList.add("active");renderEvents(tab);if(lmap)renderMapMarkers(tab);}
 function goto(page,el){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("page-"+page).classList.add("active");document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));document.querySelectorAll("[data-m]").forEach(b=>b.classList.remove("active"));const ids={home:"nb-home",bey:"nb-bey",cl:"nb-cl"};if(ids[page])document.getElementById(ids[page]).classList.add("active");document.querySelectorAll(`[data-m="${{home:"home",bey:"bey",cl:"cl"}[page]}"]`).forEach(b=>b.classList.add("active"));if(page==="home"){setTimeout(()=>{initMap();if(lmap)lmap.invalidateSize();},80);}if(page==="bey"){setTimeout(resizeRadar,50);}}
 function toggleMob(){const menu=document.getElementById("mob-menu");const btn=document.getElementById("hamburger-btn");const isOpen=menu.classList.toggle("open");btn.classList.toggle("open",isOpen);btn.setAttribute("aria-expanded",isOpen);btn.setAttribute("aria-label",isOpen?"關閉選單":"開啟選單");}
-EVT=classifyEvents();renderEvents("upcoming");setTimeout(()=>initMap(),200);initRadar();buildSetsDropdown();renderFilteredList("blade");buildRatchetDropdown();renderFilteredList("bit");applySet(0);window.addEventListener("resize",()=>resizeRadar());
+EVT=classifyEvents();renderEvents("upcoming");setTimeout(()=>initMap(),200);initRadar();buildSetsDropdown();renderFilteredList("blade");renderFilteredList("ratchet");renderFilteredList("bit");applySet(0);window.addEventListener("resize",()=>resizeRadar());
 </script>
