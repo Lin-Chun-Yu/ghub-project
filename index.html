@@ -1,22 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>G-Hub | 台灣戰鬥陀螺賽事、地圖、神器計算機</title>
-
     <meta name="description"
           content="G-Hub 提供台灣戰鬥陀螺賽事資訊、賽事地圖、神器計算機、更新日誌，未來將擴展全球賽事資訊。">
-
     <meta name="robots" content="index,follow">
-
     <link rel="canonical" href="https://ghubworld.com/">
-
     <link rel="icon" type="image/png" href="assets/logo.png">
     <link rel="apple-touch-icon" href="assets/logo.png">
-
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://ghubworld.com/">
@@ -25,7 +18,6 @@
           content="查詢台灣戰鬥陀螺賽事、賽事地圖、神器計算機與最新更新。">
     <meta property="og:image"
           content="https://ghubworld.com/assets/logo.png">
-
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="G-Hub | 台灣戰鬥陀螺賽事、地圖、神器計算機">
@@ -33,19 +25,15 @@
           content="查詢台灣戰鬥陀螺賽事、賽事地圖、神器計算機與最新更新。">
     <meta name="twitter:image"
           content="https://ghubworld.com/assets/logo.png">
-
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2EKSPQG5T2"></script>
-
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-2EKSPQG5T2');
     </script>
-
 </head>
-
 <body>
 <!-- 請勿動到上面的程式碼 -->
 
@@ -828,7 +816,6 @@ function selectCat(btn){document.querySelectorAll(".cat-btn").forEach(b=>b.class
 function updateChar(){document.getElementById("char-count").textContent=document.getElementById("fb-text").value.length;}
 async function submitFeedback(){const txt=document.getElementById("fb-text").value.trim();if(!txt){document.getElementById("fb-text").style.borderColor="#A32D2D";setTimeout(()=>document.getElementById("fb-text").style.borderColor="",1500);return;}const btn=document.getElementById("fb-submit-btn");btn.disabled=true;btn.innerHTML='<i class="ti ti-loader-2"></i>送出中…';const r=selectedRating?`[滿意度: ${"⭐".repeat(selectedRating)}]`:"";const ct=selectedCat?`[${selectedCat}]`:"";const ok=await handleFeedbackSubmit([r,ct,txt].filter(Boolean).join(" "));btn.disabled=false;btn.innerHTML='<i class="ti ti-send"></i>送出回饋';if(ok){const el=document.getElementById("fb-ok");el.style.display="flex";setTimeout(()=>el.style.display="none",4000);const now=new Date();fbHistory.push({msg:txt,rating:selectedRating,cat:selectedCat,time:`${now.getHours().toString().padStart(2,"0")}:${now.getMinutes().toString().padStart(2,"0")}`});renderFbHistory();document.getElementById("fb-text").value="";document.getElementById("char-count").textContent="0";document.querySelectorAll(".rating-btn").forEach(b=>{b.classList.remove("selected");b.style.cssText="";});document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("selected"));selectedRating=0;selectedCat="";}else{const el=document.getElementById("fb-err");el.style.display="flex";setTimeout(()=>el.style.display="none",4000);}}
 function renderFbHistory(){if(!fbHistory.length)return;document.getElementById("fb-history").style.display="block";const c=["","#D85A30","#D8A030","#D8D030","#1D9E75","#5DCAA5"];document.getElementById("fb-history-list").innerHTML=fbHistory.slice(-3).reverse().map(h=>`<div class="fb-history-item">${h.msg.length>60?h.msg.slice(0,60)+"…":h.msg}<div class="fb-history-meta">${h.rating?`<span style="color:${c[h.rating]}">${"⭐".repeat(h.rating)}</span>`:""}${h.cat?`<span>${h.cat}</span>`:""}<span>${h.time}</span></div></div>`).join("");}
-
 const TODAY=new Date();TODAY.setHours(0,0,0,0);
 function parseEventDate(str){const[y,m,d]=str.split("/").map(Number);return new Date(y,m-1,d);}
 function classifyEvents(){const upcoming=[],past=[];EVT_RAW.forEach(e=>{const ed=parseEventDate(e.date);const diff=Math.round((ed-TODAY)/86400000);let item={...e,_diffDays:diff};if(ed.getTime()<TODAY.getTime()){item.badge="badge-past";item.bt="已結束";past.push(item);}else{if(diff===0){item.badge="badge-open";item.bt="今天開賽";}else if(diff<=7){item.badge="badge-soon";item.bt="即將開始";}else{item.badge="badge-open";item.bt="報名中";}upcoming.push(item);}});upcoming.sort((a,b)=>a._diffDays-b._diffDays);past.sort((a,b)=>b._diffDays-a._diffDays);return{upcoming,past};}
