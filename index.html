@@ -37,6 +37,7 @@
 <body>
 <!-- 請勿動到上面的程式碼 -->
 
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -53,8 +54,7 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .nav-item:hover{background:var(--bg3);color:var(--t1)}
 .nav-item.active{background:rgba(55,138,221,.12);color:var(--blue2)}
 .nav-item.active i{color:var(--blue)}
-.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:40px;height:40px;padding:8px;background:transparent;border:1.5px solid var(--bd2);border-radius:8px;cursor:pointer;flex-shrink:0;transition:background .15s,border-color .15s}
-.hamburger:hover{background:rgba(55,138,221,.12);border-color:var(--blue3)}
+.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:40px;height:40px;padding:8px;background:transparent;border:1.5px solid var(--bd2);border-radius:8px;cursor:pointer;flex-shrink:0}
 .hamburger span{display:block;width:18px;height:2px;background:#f0f0f8;border-radius:2px;transition:all .2s}
 .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
@@ -195,6 +195,12 @@ body{background:var(--bg);font-family:var(--font-sans);color:var(--t1)}
 .score-tooltip strong{color:var(--t1);font-weight:600}
 .score-tooltip::after{content:"";position:absolute;top:100%;right:5px;border:6px solid transparent;border-top-color:var(--bd2)}
 .score-info:hover .score-tooltip{opacity:1;visibility:visible;transform:translateY(0)}
+
+/* ★ 分享按鈕 */
+.btn-share{display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;border:.5px solid rgba(55,138,221,.4);background:rgba(55,138,221,.08);color:var(--blue2);cursor:pointer;font-size:10px;font-weight:500;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.btn-share:hover{background:rgba(55,138,221,.16);border-color:var(--blue)}
+.btn-share span{font-size:12px;line-height:1}
+
 .stats-card-mobile-wrapper{display:none}
 .cl-wrap{flex:1;overflow-y:auto;padding:16px}
 .cl-wrap::-webkit-scrollbar{width:3px}
@@ -269,6 +275,8 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 .social-btn.ig:hover{color:#E1306C}
 .social-btn.fb:hover{color:#1877F2}
 .social-btn svg{width:14px;height:14px;fill:currentColor}
+
+/* ══ 通用 Modal ══ */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-overlay.open{display:flex}
 .modal-box{background:var(--bg3);border:.5px solid var(--bd2);border-radius:14px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto;padding:20px;box-shadow:0 16px 48px rgba(0,0,0,.6)}
@@ -282,6 +290,41 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 .modal-section-title{font-size:11px;font-weight:500;color:var(--t2);margin-bottom:5px;display:flex;align-items:center;gap:5px}
 .modal-section-title i{font-size:13px;color:var(--blue2)}
 .modal-section p{font-size:11px;color:var(--t3);line-height:1.7}
+
+/* ══ ★ 分享 Modal 專屬 ══ */
+.share-modal-box{max-width:420px}
+/* 卡片預覽 */
+.share-card-wrap{position:relative;width:100%;border-radius:10px;overflow:hidden;border:.5px solid var(--bd2);margin-bottom:12px;background:var(--bg)}
+#share-canvas{display:block;width:100%;height:auto}
+.share-card-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--t3);background:var(--bg);border-radius:10px}
+/* 操作按鈕列 */
+.share-actions{display:flex;flex-direction:column;gap:8px}
+.share-row{display:flex;gap:8px}
+.share-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 10px;border-radius:10px;border:.5px solid var(--bd2);background:var(--bg4);color:var(--t1);cursor:pointer;font-size:12px;font-weight:500;transition:all .15s;text-decoration:none}
+.share-btn:hover{background:var(--bg3);border-color:var(--blue3)}
+.share-btn.primary{background:var(--blue3);border-color:var(--blue);color:var(--blue2)}
+.share-btn.primary:hover{opacity:.85}
+.share-btn.copied{background:rgba(29,158,117,.15);border-color:rgba(29,158,117,.4);color:#5DCAA5}
+.share-btn-icon{font-size:16px;line-height:1}
+/* 社群分享列 */
+.share-social-row{display:flex;gap:7px}
+.share-social-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 6px;border-radius:10px;border:.5px solid var(--bd2);background:var(--bg4);cursor:pointer;transition:all .15s;font-size:10px;color:var(--t2);text-decoration:none}
+.share-social-btn:hover{background:var(--bg3)}
+.share-social-btn svg{width:22px;height:22px;fill:currentColor}
+.share-social-btn.threads:hover{color:#f0f0f8}
+.share-social-btn.line:hover{color:#06C755}
+.share-social-btn.fbsoc:hover{color:#1877F2}
+.share-social-btn.ig:hover{color:#E1306C}
+/* IG 提示 */
+.share-ig-hint{display:none;margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(225,48,108,.08);border:.5px solid rgba(225,48,108,.25);font-size:10px;color:#F0A8C0;line-height:1.6}
+/* 連結欄 */
+.share-link-row{display:flex;align-items:center;gap:6px;background:var(--bg4);border:.5px solid var(--bd2);border-radius:8px;padding:6px 10px}
+.share-link-text{flex:1;font-size:10px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:monospace}
+/* 手機原生分享 */
+.share-native-btn{display:none;width:100%;padding:10px;border-radius:10px;border:.5px solid rgba(55,138,221,.4);background:rgba(55,138,221,.08);color:var(--blue2);cursor:pointer;font-size:12px;font-weight:500;align-items:center;justify-content:center;gap:6px;margin-bottom:8px}
+.share-native-btn.show{display:flex}
+.share-section-label{font-size:9px;color:var(--t3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px}
+
 .leaflet-container{background:#0d0d14!important}
 .leaflet-tile-pane{filter:brightness(.55) saturate(.6) hue-rotate(180deg)}
 .leaflet-control-zoom a{background:var(--bg3)!important;color:var(--t1)!important;border-color:var(--bd2)!important}
@@ -389,20 +432,11 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
       <div class="col-right">
         <div class="parts-panel">
           <div class="parts-scroll-area">
-
-            <!-- ★ 官方套組：觸發列加上總重量 -->
             <div class="part-group" id="pg-sets">
               <div class="part-group-label"><i class="ti ti-package"></i>官方套組</div>
               <div class="part-trigger-row">
                 <div class="part-select-trigger" id="trig-sets" onclick="toggleDD('sets')">
-                  <div class="pst-main">
-                    <div class="pst-toprow">
-                      <span class="pst-name" id="disp-sets-name">請選擇套組</span>
-                      <span class="pst-type" id="disp-sets-type" style="display:none"></span>
-                    </div>
-                    <div class="pst-ver" id="disp-sets-ver" style="color:var(--t3)">—</div>
-                  </div>
-                  <!-- ★ 套組總重量（與戰刃/軸心同位置） -->
+                  <div class="pst-main"><div class="pst-toprow"><span class="pst-name" id="disp-sets-name">請選擇套組</span><span class="pst-type" id="disp-sets-type" style="display:none"></span></div><div class="pst-ver" id="disp-sets-ver" style="color:var(--t3)">—</div></div>
                   <span class="pst-weight" id="disp-sets-weight" style="display:none"></span>
                   <i class="ti ti-chevron-down pst-arrow" id="arr-sets"></i>
                 </div>
@@ -410,10 +444,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
               </div>
               <div class="part-dropdown" id="dd-sets">
                 <div class="pd-toolbar">
-                  <div class="pd-toolbar-search">
-                    <i class="ti ti-search"></i>
-                    <input class="pd-search-input" id="sets-search" type="text" placeholder="搜尋名稱或編號…" oninput="renderSetsDropdown()" autocomplete="off"/>
-                  </div>
+                  <div class="pd-toolbar-search"><i class="ti ti-search"></i><input class="pd-search-input" id="sets-search" type="text" placeholder="搜尋名稱或編號…" oninput="renderSetsDropdown()" autocomplete="off"/></div>
                   <div class="pd-toolbar-selects">
                     <div class="pd-select-group"><span class="pd-select-label">系列</span><select class="pd-toolbar-select" id="sets-series" onchange="renderSetsDropdown()"><option value="全部">全部</option><option value="BX">BX</option><option value="UX">UX</option><option value="CX">CX</option></select></div>
                     <div class="pd-select-group"><span class="pd-select-label">類型</span><select class="pd-toolbar-select" id="sets-type" onchange="renderSetsDropdown()"><option value="全部">全部</option><option value="攻擊型">攻擊型</option><option value="防禦型">防禦型</option><option value="耐力型">耐力型</option><option value="平衡型">平衡型</option></select></div>
@@ -423,8 +454,6 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
                 <div class="part-dropdown-inner" id="ddi-sets"></div>
               </div>
             </div>
-
-            <!-- 戰刃 -->
             <div class="part-group" id="pg-blade">
               <div class="part-group-label"><i class="ti ti-sword"></i>戰刃 Blade</div>
               <div class="part-trigger-row">
@@ -447,20 +476,11 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
                 <div class="part-dropdown-inner" id="ddi-blade"></div>
               </div>
             </div>
-
-            <!-- ★ 固鎖輪盤：觸發列名稱旁加側數 badge -->
             <div class="part-group" id="pg-ratchet">
               <div class="part-group-label"><i class="ti ti-circle-dashed"></i>固鎖輪盤 Ratchet</div>
               <div class="part-trigger-row">
                 <div class="part-select-trigger" id="trig-ratchet" onclick="toggleDD('ratchet')">
-                  <div class="pst-main">
-                    <div class="pst-toprow">
-                      <span class="pst-name" id="disp-ratchet-name">—</span>
-                      <!-- ★ 側數 badge，與戰刃型態 badge 同款 -->
-                      <span class="pst-type" id="disp-ratchet-prong" style="display:none"></span>
-                    </div>
-                    <div class="pst-meta" id="disp-ratchet-meta">—</div>
-                  </div>
+                  <div class="pst-main"><div class="pst-toprow"><span class="pst-name" id="disp-ratchet-name">—</span><span class="pst-type" id="disp-ratchet-prong" style="display:none"></span></div><div class="pst-meta" id="disp-ratchet-meta">—</div></div>
                   <span class="pst-weight" id="disp-ratchet-weight"></span>
                   <i class="ti ti-chevron-down pst-arrow" id="arr-ratchet"></i>
                 </div>
@@ -478,8 +498,6 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
                 <div class="part-dropdown-inner" id="ddi-ratchet"></div>
               </div>
             </div>
-
-            <!-- 軸心 -->
             <div class="part-group" id="pg-bit">
               <div class="part-group-label"><i class="ti ti-point"></i>軸心 Bit</div>
               <div class="part-trigger-row">
@@ -502,8 +520,7 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
                 <div class="part-dropdown-inner" id="ddi-bit"></div>
               </div>
             </div>
-
-            <!-- 桌面版屬性卡 -->
+            <!-- 桌面屬性卡 -->
             <div class="stats-card stats-card-desktop">
               <div class="sg5">
                 <div class="sb" id="sb-atk"><div class="sl">攻擊</div><div class="sv" id="v-atk">—</div><div class="sbar-wrap"><div class="sbar" id="bar-atk"></div></div></div>
@@ -515,7 +532,17 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
               <div class="divid"></div>
               <div class="combo-bottom">
                 <div class="combo-detail-row"><div class="combo-name" id="combo-name">—</div><div class="height-tag"><i class="ti ti-ruler"></i><span id="height-val">— mm</span></div></div>
-                <div class="combo-score-row"><div class="mrow" id="mrow"></div><div class="score-wrap"><div class="sbadge" id="sbadge">—</div><div class="score-info">?<div class="score-tooltip"><strong>評分機制說明</strong><br>依配置「型態」（攻擊/防禦/耐力/平衡）動態調整五屬性權重；屬性超過100視為「極限突破」可額外加分；總重量超過 40g 也會獲得加分。滿分錨定在 95~100 分。</div></div></div></div>
+                <div class="combo-score-row">
+                  <div class="mrow" id="mrow"></div>
+                  <div class="score-wrap">
+                    <div class="sbadge" id="sbadge">—</div>
+                    <!-- ★ 分享按鈕 -->
+                    <button class="btn-share" id="btn-share" onclick="openShareModal()" title="分享此配置">
+                      <span>📤</span> 分享
+                    </button>
+                    <div class="score-info">?<div class="score-tooltip"><strong>評分機制說明</strong><br>依配置「型態」（攻擊/防禦/耐力/平衡）動態調整五屬性權重；屬性超過100視為「極限突破」可額外加分；總重量超過 40g 也會獲得加分。滿分錨定在 95~100 分。</div></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -532,10 +559,11 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
       <div class="sdiv">版本記錄</div>
       <div class="cl-card">
         <div class="cl-title"><i class="ti ti-git-branch"></i>更新日誌</div>
-        <div class="cl-item"><span class="cl-ver">v3.5</span><div class="cl-txt">官方套組觸發列外顯總重量；固鎖輪盤觸發列名稱旁加側數 badge；系列篩選改為 BX / UX / CX；套組排序改為零件重量加總</div></div>
-        <div class="cl-item"><span class="cl-ver">v3.4</span><div class="cl-txt">sets 獨立 type 欄位；戰刃、軸心、固鎖輪盤下拉工具列篩選；頁尾 Facebook Icon</div></div>
+        <div class="cl-item"><span class="cl-ver">v3.6</span><div class="cl-txt">新增【📤 分享配置】功能：Canvas 卡片預覽下載、帶參數配置連結、Threads / LINE / FB / IG 四大社群直發、手機原生 Share API 支援</div></div>
+        <div class="cl-item"><span class="cl-ver">v3.5</span><div class="cl-txt">套組外顯重量、固鎖輪盤側數 badge、套組系列篩選改為 BX/UX/CX、排序改為零件重量加總</div></div>
+        <div class="cl-item"><span class="cl-ver">v3.4</span><div class="cl-txt">sets 獨立 type 欄位；工具列篩選；頁尾 FB Icon</div></div>
         <div class="cl-item"><span class="cl-ver">v3.2</span><div class="cl-txt">頁尾加入 Threads、IG 社群 Icon</div></div>
-        <div class="cl-item"><span class="cl-ver">v3.1</span><div class="cl-txt">手機版神配置計算機排版：雷達圖 → 五屬性數值 → 套組/零件選單</div></div>
+        <div class="cl-item"><span class="cl-ver">v3.1</span><div class="cl-txt">手機版神配置計算機排版優化</div></div>
         <div class="cl-item"><span class="cl-ver">v3.0</span><div class="cl-txt">資料庫大幅擴充：6支戰刃、5種固鎖輪盤、8種軸心、8組官方套組</div></div>
         <div class="cl-item"><span class="cl-ver">v1.0</span><div class="cl-txt">雷達圖五角形、動態刻度、極限突破特效</div></div>
       </div>
@@ -632,6 +660,72 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 </footer>
 </div>
 
+<!-- ★ 分享 Modal -->
+<div class="modal-overlay" id="modal-share" onclick="closeShareModalOutside(event)">
+  <div class="modal-box share-modal-box">
+    <div class="modal-header">
+      <div class="modal-title"><i class="ti ti-share"></i>分享配置</div>
+      <button class="modal-close" onclick="closeModal('modal-share')">✕</button>
+    </div>
+
+    <!-- 卡片預覽 -->
+    <div class="share-card-wrap">
+      <canvas id="share-canvas"></canvas>
+      <div class="share-card-loading" id="share-card-loading">⚙ 生成卡片中…</div>
+    </div>
+
+    <div class="share-actions">
+      <!-- 手機原生分享 -->
+      <button class="share-native-btn" id="share-native-btn" onclick="nativeShare()">
+        <span style="font-size:16px">📱</span> 使用手機分享選單
+      </button>
+
+      <!-- 下載 + 複製連結 -->
+      <div class="share-row">
+        <button class="share-btn primary" onclick="downloadCard()"><span class="share-btn-icon">⬇️</span> 下載圖片</button>
+        <button class="share-btn" id="copy-link-btn" onclick="copyShareLink()"><span class="share-btn-icon">🔗</span> 複製連結</button>
+      </div>
+
+      <!-- 連結預覽 -->
+      <div class="share-link-row">
+        <span class="share-link-text" id="share-link-preview">ghub.tw/?b=…</span>
+      </div>
+
+      <!-- 社群分享 -->
+      <div class="share-section-label">直接分享到社群</div>
+      <div class="share-social-row">
+        <!-- Threads -->
+        <a class="share-social-btn threads" id="share-threads" href="#" target="_blank" rel="noopener noreferrer" onclick="return openThreads()">
+          <svg viewBox="0 0 192 192"><path d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.244-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.453-15.153 9.899-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.605 96c.203-24.682 5.63-43.966 16.133-57.317C56.954 24.425 74.206 17.11 97.015 16.94c22.975.17 40.526 7.52 52.171 21.847 5.71 7.026 10.015 15.86 12.853 26.162l16.147-4.308c-3.44-12.68-8.853-23.606-16.219-32.668C147.036 10.646 125.202 1.205 97.144 1h-.29c-28.006.205-49.567 9.68-64.104 28.172C20.05 45.84 13.938 68.84 13.7 96.04l-.002.96.002.96c.238 27.2 6.35 50.2 18.85 66.868 14.537 18.492 36.098 27.967 64.104 28.172h.29c24.958-.174 42.826-6.713 57.37-21.256 18.964-18.952 18.517-42.653 12.222-57.332-4.537-10.574-13.194-19.212-24.999-24.414zM96.99 121.63c-10.438.587-21.283-4.098-21.834-14.136-.407-7.638 5.43-16.166 23.008-17.197 2.013-.116 3.994-.173 5.952-.173 6.047 0 11.714.594 16.898 1.744-1.925 24.005-13.513 29.207-24.024 29.762z"/></svg>
+          Threads
+        </a>
+        <!-- LINE -->
+        <a class="share-social-btn line" id="share-line" href="#" target="_blank" rel="noopener noreferrer" onclick="return openLine()">
+          <svg viewBox="0 0 24 24"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.346 0 .627.285.627.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+          LINE
+        </a>
+        <!-- FB -->
+        <a class="share-social-btn fbsoc" id="share-fbsoc" href="#" target="_blank" rel="noopener noreferrer" onclick="return openFBShare()">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.791-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.971h-1.513c-1.491 0-1.956.93-1.956 1.884v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+          Facebook
+        </a>
+        <!-- IG -->
+        <button class="share-social-btn ig" onclick="openIG()">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+          Instagram
+        </button>
+      </div>
+
+      <!-- IG 提示 -->
+      <div class="share-ig-hint" id="share-ig-hint">
+        📋 已複製分享文案！<br>
+        請下載上方圖片，然後開啟 Instagram 應用程式，在新貼文或限時動態中貼上文案並上傳圖片即可。
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 一般 Modal -->
 <div class="modal-overlay" id="modal-privacy" onclick="closeModalOutside(event,'modal-privacy')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-lock"></i>隱私權政策</div><button class="modal-close" onclick="closeModal('modal-privacy')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-shield"></i>資料收集</div><p>本站承諾保護使用者的個人資料，絕不外洩給第三方。</p></div></div></div>
 <div class="modal-overlay" id="modal-terms" onclick="closeModalOutside(event,'modal-terms')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-file-text"></i>服務條款</div><button class="modal-close" onclick="closeModal('modal-terms')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-info-circle"></i>服務範圍</div><p>本站提供之數據計算與查詢服務僅供參考，與 TAKARA TOMY 無關。</p></div></div></div>
 <div class="modal-overlay" id="modal-refund" onclick="closeModalOutside(event,'modal-refund')"><div class="modal-box"><div class="modal-header"><div class="modal-title"><i class="ti ti-refresh"></i>退款流程</div><button class="modal-close" onclick="closeModal('modal-refund')">✕</button></div><div class="modal-section"><div class="modal-section-title"><i class="ti ti-package"></i>服務性質</div><p>本站提供之服務為「無形數位數據服務」，服務即時交付。若因系統錯誤無法正常使用，請聯繫我們安排退款。</p></div></div></div>
@@ -645,66 +739,41 @@ textarea.fb-in:focus{outline:none;border-color:var(--blue3)}
 
 function typeBadgeHtml(t,s=9){const c=TYPE_COLOR[t]||"#9090a8";return t?`<span style="font-size:${s}px;padding:1px 6px;border-radius:20px;color:${c};background:${c}18;border:.5px solid ${c}44;white-space:nowrap;flex-shrink:0">${t}</span>`:"";}
 function versStr(a){if(!a||!a.length)return"";return a.length<=5?a.join("　"):a.slice(0,4).join("　")+" …";}
+function getRatchetGroup(key){const p=key.split("-")[0];if(!/^\d+$/.test(p))return"other";const n=parseInt(p,10);if(n===0)return"other";if(n<=3)return"1~3";if(n<=5)return"4~5";if(n<=9)return"6~9";return"other";}
+function getProngInfo(key){const pfx=key.split("-")[0];const grp=getRatchetGroup(key);const grpColors={"1~3":"#5DCAA5","4~5":"#D8A030","6~9":"#378ADD","other":"#C49EF0"};const label=/^\d+$/.test(pfx)&&parseInt(pfx)>0?`${pfx} 側`:"特殊";return{label,color:grpColors[grp]||"#9090a8"};}
+function getSetSeriesPrefixes(set){const s=new Set();(set.versions||[]).forEach(v=>{const m=v.match(/^(UX|CX|BX)/);if(m)s.add(m[1]);});return s;}
+function getSetTotalWeight(set){const bl=BEYBLADE_DATABASE.parts.blades[set.components.blade];const ra=BEYBLADE_DATABASE.parts.ratchets[set.components.ratchet];const bi=BEYBLADE_DATABASE.parts.bits[set.components.bit];return parseFloat((((bl?.weight||0)+(ra?.weight||0)+(bi?.weight||0)).toFixed(2)));}
 
-/* ★ 前端 key 解析：分組 & 側數標籤 */
-function getRatchetGroup(key){const prefix=key.split("-")[0];if(!/^\d+$/.test(prefix))return"other";const n=parseInt(prefix,10);if(n===0)return"other";if(n>=1&&n<=3)return"1~3";if(n>=4&&n<=5)return"4~5";if(n>=6&&n<=9)return"6~9";return"other";}
-/* ★ 從 key 取得側數顯示文字和顏色 */
-function getProngInfo(key){
-  const pfx=key.split("-")[0];
-  const grp=getRatchetGroup(key);
-  const grpColors={"1~3":"#5DCAA5","4~5":"#D8A030","6~9":"#378ADD","other":"#C49EF0"};
-  const label=/^\d+$/.test(pfx)&&parseInt(pfx)>0?`${pfx} 側`:"特殊";
-  const color=grpColors[grp]||"#9090a8";
-  return{label,color};
-}
-
-/* 套組系列篩選 */
-function getSetSeriesPrefixes(set){
-  const prefixes=new Set();
-  (set.versions||[]).forEach(v=>{const m=v.match(/^(UX|CX|BX)/);if(m)prefixes.add(m[1]);});
-  return prefixes;
-}
-/* ★ 套組零件總重量 */
-function getSetTotalWeight(set){
-  const bl=BEYBLADE_DATABASE.parts.blades[set.components.blade];
-  const ra=BEYBLADE_DATABASE.parts.ratchets[set.components.ratchet];
-  const bi=BEYBLADE_DATABASE.parts.bits[set.components.bit];
-  return parseFloat((((bl?.weight||0)+(ra?.weight||0)+(bi?.weight||0)).toFixed(2)));
-}
-
-/* 套組下拉渲染 */
+/* 套組下拉 */
 function renderSetsDropdown(){
   const inner=document.getElementById("ddi-sets");inner.innerHTML="";
   const query=(document.getElementById("sets-search")?.value||"").trim().toLowerCase();
-  const seriesFilter=document.getElementById("sets-series")?.value||"全部";
-  const typeFilter=document.getElementById("sets-type")?.value||"全部";
-  const sortMode=document.getElementById("sets-sort")?.value||"default";
+  const sf=document.getElementById("sets-series")?.value||"全部";
+  const tf=document.getElementById("sets-type")?.value||"全部";
+  const sm=document.getElementById("sets-sort")?.value||"default";
   let filtered=BEYBLADE_DATABASE.sets.filter(set=>{
-    if(seriesFilter!=="全部"){const sp=getSetSeriesPrefixes(set);if(!sp.has(seriesFilter))return false;}
-    if(typeFilter!=="全部"&&set.type!==typeFilter)return false;
+    if(sf!=="全部"){const sp=getSetSeriesPrefixes(set);if(!sp.has(sf))return false;}
+    if(tf!=="全部"&&set.type!==tf)return false;
     if(query){const nm=set.name.toLowerCase().includes(query);const vm=(set.versions||[]).some(v=>v.toLowerCase().includes(query));if(!nm&&!vm)return false;}
     return true;
   }).map(set=>({set,origIdx:BEYBLADE_DATABASE.sets.indexOf(set),w:getSetTotalWeight(set)}));
-  if(sortMode==="heavy")filtered.sort((a,b)=>b.w-a.w);
-  else if(sortMode==="light")filtered.sort((a,b)=>a.w-b.w);
+  if(sm==="heavy")filtered.sort((a,b)=>b.w-a.w);
+  else if(sm==="light")filtered.sort((a,b)=>a.w-b.w);
   if(!filtered.length){inner.innerHTML=`<div class="pd-empty">無符合條件的套組</div>`;return;}
   filtered.forEach(({set,origIdx,w})=>{
-    const setType=set.type||"平衡型";
-    const div=document.createElement("div");div.className="pd-item";div.dataset.idx=origIdx;
-    div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${set.name}</span>${typeBadgeHtml(setType)}</div>${set.versions&&set.versions.length?`<div class="pd-ver">${versStr(set.versions)}</div>`:""}</div><span class="pd-weight">${w}g</span><i class="ti ti-check pd-check"></i>`;
-    div.addEventListener("click",()=>{applySet(origIdx);closeAllDD();});
-    inner.appendChild(div);
+    const st=set.type||"平衡型";const div=document.createElement("div");div.className="pd-item";div.dataset.idx=origIdx;
+    div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${set.name}</span>${typeBadgeHtml(st)}</div>${set.versions?.length?`<div class="pd-ver">${versStr(set.versions)}</div>`:""}</div><span class="pd-weight">${w}g</span><i class="ti ti-check pd-check"></i>`;
+    div.addEventListener("click",()=>{applySet(origIdx);closeAllDD();});inner.appendChild(div);
   });
-  if(selSet){const curIdx=BEYBLADE_DATABASE.sets.indexOf(selSet);inner.querySelectorAll(".pd-item").forEach(el=>el.classList.toggle("active",parseInt(el.dataset.idx)===curIdx));}
+  if(selSet){const ci=BEYBLADE_DATABASE.sets.indexOf(selSet);inner.querySelectorAll(".pd-item").forEach(el=>el.classList.toggle("active",parseInt(el.dataset.idx)===ci));}
 }
 
 const filterState={blade:{val:"全部",sort:"default"},ratchet:{val:"全部",sort:"default"},bit:{val:"全部",sort:"default"}};
-function setFilter(partType,val,btn){filterState[partType].val=val;document.querySelectorAll(`#toolbar-${partType} .pd-filter-btn`).forEach(b=>b.classList.remove("active"));btn.classList.add("active");renderFilteredList(partType);}
-function setSort(partType,val){filterState[partType].sort=val;renderFilteredList(partType);}
+function setFilter(pt,val,btn){filterState[pt].val=val;document.querySelectorAll(`#toolbar-${pt} .pd-filter-btn`).forEach(b=>b.classList.remove("active"));btn.classList.add("active");renderFilteredList(pt);}
+function setSort(pt,val){filterState[pt].sort=val;renderFilteredList(pt);}
 function renderFilteredList(partType){
   const dbKey={blade:"blades",ratchet:"ratchets",bit:"bits"}[partType];
-  const parts=BEYBLADE_DATABASE.parts[dbKey];
-  const inner=document.getElementById("ddi-"+partType);inner.innerHTML="";
+  const parts=BEYBLADE_DATABASE.parts[dbKey];const inner=document.getElementById("ddi-"+partType);inner.innerHTML="";
   const{val:fVal,sort:fSort}=filterState[partType];
   let entries=Object.entries(parts).filter(([key,p])=>{if(partType==="ratchet")return fVal==="全部"||getRatchetGroup(key)===fVal;return fVal==="全部"||p.type===fVal;});
   if(fSort==="heavy")entries.sort((a,b)=>b[1].weight-a[1].weight);
@@ -713,18 +782,11 @@ function renderFilteredList(partType){
   const curSel={blade:selBlade,ratchet:selRatchet,bit:selBit}[partType];
   entries.forEach(([key,p])=>{
     const div=document.createElement("div");div.className="pd-item";div.dataset.key=key;
-    if(partType==="blade"){
-      div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div>${p.versions&&p.versions.length?`<div class="pd-ver">${versStr(p.versions)}</div>`:""}</div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;
-    } else if(partType==="ratchet"){
-      const{label,color}=getProngInfo(key);
-      const pBadge=`<span style="font-size:9px;padding:1px 6px;border-radius:20px;color:${color};background:${color}18;border:.5px solid ${color}44;white-space:nowrap;flex-shrink:0">${label}</span>`;
-      div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${pBadge}</div><div class="pd-ver" style="color:var(--t3)">高度 ${p.height} mm</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;
-    } else {
-      div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;
-    }
-    div.addEventListener("click",()=>{selSet=null;document.getElementById("disp-sets-name").textContent="請選擇套組";document.getElementById("disp-sets-type").style.display="none";document.getElementById("disp-sets-ver").textContent="—";const sw=document.getElementById("disp-sets-weight");if(sw)sw.style.display="none";selectPart(partType,key);closeAllDD();});
-    if(curSel&&curSel._key===key)div.classList.add("active");
-    inner.appendChild(div);
+    if(partType==="blade")div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div>${p.versions?.length?`<div class="pd-ver">${versStr(p.versions)}</div>`:""}</div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;
+    else if(partType==="ratchet"){const{label,color}=getProngInfo(key);const pB=`<span style="font-size:9px;padding:1px 6px;border-radius:20px;color:${color};background:${color}18;border:.5px solid ${color}44;white-space:nowrap;flex-shrink:0">${label}</span>`;div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${pB}</div><div class="pd-ver" style="color:var(--t3)">高度 ${p.height} mm</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;}
+    else div.innerHTML=`<div class="pd-main"><div class="pd-toprow"><span class="pd-name">${p.name}</span>${typeBadgeHtml(p.type)}</div></div><span class="pd-weight">${p.weight}g</span><i class="ti ti-check pd-check"></i>`;
+    div.addEventListener("click",()=>{selSet=null;document.getElementById("disp-sets-name").textContent="請選擇套組";document.getElementById("disp-sets-type").style.display="none";document.getElementById("disp-sets-ver").textContent="—";document.getElementById("disp-sets-weight").style.display="none";selectPart(partType,key);closeAllDD();});
+    if(curSel&&curSel._key===key)div.classList.add("active");inner.appendChild(div);
   });
 }
 
@@ -741,51 +803,28 @@ document.addEventListener("click",e=>{if(e.target.closest(".pd-toolbar")||e.targ
 let selSet=null;
 function applySet(idx){
   const set=BEYBLADE_DATABASE.sets[idx];if(!set)return;selSet=set;
-  const setType=set.type||"平衡型";const tc=TYPE_COLOR[setType]||"#9090a8";
+  const st=set.type||"平衡型";const tc=TYPE_COLOR[st]||"#9090a8";
   document.getElementById("disp-sets-name").textContent=set.name;
-  const tEl=document.getElementById("disp-sets-type");tEl.textContent=setType;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;
-  document.getElementById("disp-sets-ver").textContent=set.versions&&set.versions.length?versStr(set.versions):"";
-  /* ★ 外顯套組總重量 */
-  const totalW=getSetTotalWeight(set);
-  const swEl=document.getElementById("disp-sets-weight");
-  swEl.textContent=totalW+"g";swEl.style.display="";
+  const tEl=document.getElementById("disp-sets-type");tEl.textContent=st;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;
+  document.getElementById("disp-sets-ver").textContent=set.versions?.length?versStr(set.versions):"";
+  const sw=document.getElementById("disp-sets-weight");sw.textContent=getSetTotalWeight(set)+"g";sw.style.display="";
   renderSetsDropdown();
   selectPart("blade",set.components.blade);selectPart("ratchet",set.components.ratchet);selectPart("bit",set.components.bit);
 }
 
 let selBlade=null,selRatchet=null,selBit=null;
 function selectPart(type,key){
-  const map={blade:"blades",ratchet:"ratchets",bit:"bits"};
-  const p=BEYBLADE_DATABASE.parts[map[type]][key];if(!p)return;
-  const obj={_key:key,...p};
-  if(type==="blade")selBlade=obj;if(type==="ratchet")selRatchet=obj;if(type==="bit")selBit=obj;
+  const map={blade:"blades",ratchet:"ratchets",bit:"bits"};const p=BEYBLADE_DATABASE.parts[map[type]][key];if(!p)return;
+  const obj={_key:key,...p};if(type==="blade")selBlade=obj;if(type==="ratchet")selRatchet=obj;if(type==="bit")selBit=obj;
   const tc=TYPE_COLOR[p.type]||"";
-  if(type==="blade"){
-    document.getElementById("disp-blade-name").textContent=p.name;
-    const tEl=document.getElementById("disp-blade-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";
-    document.getElementById("disp-blade-ver").textContent=versStr(p.versions)||"";
-    document.getElementById("disp-blade-weight").textContent=p.weight+"g";
-    renderFilteredList("blade");
-  } else if(type==="ratchet"){
-    /* ★ 觸發列：名稱旁加側數 badge */
-    document.getElementById("disp-ratchet-name").textContent=p.name;
-    const{label,color}=getProngInfo(key);
-    const pEl=document.getElementById("disp-ratchet-prong");
-    pEl.textContent=label;
-    pEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${color};background:${color}18;border:.5px solid ${color}44;white-space:nowrap;flex-shrink:0`;
-    document.getElementById("disp-ratchet-meta").textContent=`高度 ${p.height} mm`;
-    document.getElementById("disp-ratchet-weight").textContent=p.weight+"g";
-    renderFilteredList("ratchet");
-  } else {
-    document.getElementById("disp-bit-name").textContent=p.name;
-    const tEl=document.getElementById("disp-bit-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";
-    document.getElementById("disp-bit-weight").textContent=p.weight+"g";
-    renderFilteredList("bit");
-  }
+  if(type==="blade"){document.getElementById("disp-blade-name").textContent=p.name;const tEl=document.getElementById("disp-blade-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";document.getElementById("disp-blade-ver").textContent=versStr(p.versions)||"";document.getElementById("disp-blade-weight").textContent=p.weight+"g";renderFilteredList("blade");}
+  else if(type==="ratchet"){document.getElementById("disp-ratchet-name").textContent=p.name;const{label,color}=getProngInfo(key);const pEl=document.getElementById("disp-ratchet-prong");pEl.textContent=label;pEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${color};background:${color}18;border:.5px solid ${color}44;white-space:nowrap;flex-shrink:0`;document.getElementById("disp-ratchet-meta").textContent=`高度 ${p.height} mm`;document.getElementById("disp-ratchet-weight").textContent=p.weight+"g";renderFilteredList("ratchet");}
+  else{document.getElementById("disp-bit-name").textContent=p.name;const tEl=document.getElementById("disp-bit-type");if(p.type){tEl.textContent=p.type;tEl.style.cssText=`display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;}else tEl.style.display="none";document.getElementById("disp-bit-weight").textContent=p.weight+"g";renderFilteredList("bit");}
   document.querySelectorAll(`#ddi-${type} .pd-item`).forEach(el=>el.classList.toggle("active",el.dataset.key===key));
   updateStats();
 }
 
+/* 雷達圖 */
 const AXES=[{key:"atk",label:"攻擊",color:"#D85A30"},{key:"def",label:"防禦",color:"#378ADD"},{key:"endurance",label:"耐久度",color:"#D85070"},{key:"accel",label:"加速",color:"#D8A030"},{key:"sta",label:"耐力",color:"#1D9E75"}];
 const N=5,STEPS=5;let rCvs=null,rCtx=null,rSize=0,rCX=0,rCY=0,rMax=0;
 let rVals={atk:0,def:0,sta:0,accel:0,endurance:0},rTarget={atk:0,def:0,sta:0,accel:0,endurance:0},rScale=100,rScaleTarget=100;
@@ -795,20 +834,167 @@ function initRadar(){rCvs=document.getElementById("radar-canvas");rCtx=rCvs.getC
 function radarLoop(){AXES.forEach(a=>{const d=rTarget[a.key]-rVals[a.key];rVals[a.key]+=Math.abs(d)>.15?d*.12:d;});const sd=rScaleTarget-rScale;rScale+=Math.abs(sd)>.15?sd*.12:sd;if(rCtx)drawRadar();requestAnimationFrame(radarLoop);}
 function pt(idx,val){const a=(idx/N)*Math.PI*2-Math.PI/2,r=(val/rScale)*rMax;return{x:rCX+Math.cos(a)*r,y:rCY+Math.sin(a)*r};}
 function gpt(idx,step){const a=(idx/N)*Math.PI*2-Math.PI/2,r=(step/STEPS)*rMax;return{x:rCX+Math.cos(a)*r,y:rCY+Math.sin(a)*r};}
-function axisTextAlign(a){const cos=Math.cos(a);return cos>0.3?"left":cos<-0.3?"right":"center";}
-function axisTextBaseline(a){const sin=Math.sin(a);return sin<-0.3?"bottom":sin>0.3?"top":"middle";}
+function axisTextAlign(a){return Math.cos(a)>0.3?"left":Math.cos(a)<-0.3?"right":"center";}
+function axisTextBaseline(a){return Math.sin(a)<-0.3?"bottom":Math.sin(a)>0.3?"top":"middle";}
 function drawRadar(){const c=rCtx;c.clearRect(0,0,rSize,rSize);const isOver=rScaleTarget>100;for(let s=1;s<=STEPS;s++){c.beginPath();for(let i=0;i<N;i++){const p=gpt(i,s);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}c.closePath();if(s<STEPS){c.fillStyle="rgba(24,24,31,0.55)";c.fill();}if(s===STEPS&&isOver){c.strokeStyle="#FF450066";c.lineWidth=1.2;c.setLineDash([4,3]);c.stroke();c.setLineDash([]);}else{c.strokeStyle=s===STEPS?"#363648aa":"#2a2a3866";c.lineWidth=s===STEPS?1:.6;c.stroke();}}c.save();c.font="9px sans-serif";c.fillStyle=isOver?"#D8A030":"#5a5a70";c.textAlign="center";c.textBaseline="middle";const tp=gpt(0,STEPS);c.fillText(Math.round(rScale),tp.x,tp.y-10);c.restore();for(let i=0;i<N;i++){const o=gpt(i,STEPS);c.beginPath();c.moveTo(rCX,rCY);c.lineTo(o.x,o.y);c.strokeStyle="#2a2a3888";c.lineWidth=.7;c.stroke();}c.beginPath();for(let i=0;i<N;i++){const p=pt(i,rVals[AXES[i].key]);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}c.closePath();if(isOver){const g=c.createRadialGradient(rCX,rCY,0,rCX,rCY,rMax);g.addColorStop(0,"rgba(255,69,0,0.35)");g.addColorStop(.5,"rgba(138,43,226,0.2)");g.addColorStop(1,"rgba(138,43,226,0.05)");c.fillStyle=g;c.fill();c.strokeStyle="rgba(255,100,50,0.85)";c.lineWidth=2;c.stroke();}else{const g=c.createRadialGradient(rCX,rCY,0,rCX,rCY,rMax);g.addColorStop(0,"rgba(55,138,221,0.42)");g.addColorStop(1,"rgba(55,138,221,0.08)");c.fillStyle=g;c.fill();c.strokeStyle="rgba(133,183,235,0.75)";c.lineWidth=1.8;c.stroke();}const LABEL_R=rMax+18,VAL_R=rMax+32;for(let i=0;i<N;i++){const ax=AXES[i];const angle=(i/N)*Math.PI*2-Math.PI/2;const rv=Math.round(rTarget[ax.key]);const dp=pt(i,rVals[ax.key]);c.beginPath();c.arc(dp.x,dp.y,4.5,0,Math.PI*2);c.fillStyle=rv>100?"#FF4500":ax.color;c.fill();c.strokeStyle="#0a0a0f88";c.lineWidth=1.5;c.stroke();if(rv>100){c.beginPath();c.arc(dp.x,dp.y,7,0,Math.PI*2);c.strokeStyle="#FF450055";c.lineWidth=2;c.stroke();}const ta=axisTextAlign(angle),tb=axisTextBaseline(angle);const lx=rCX+Math.cos(angle)*LABEL_R,ly=rCY+Math.sin(angle)*LABEL_R;c.save();c.font="10px sans-serif";c.fillStyle="#9090a8";c.textAlign=ta;c.textBaseline=tb;c.fillText(ax.label,lx,ly);c.restore();const vx=rCX+Math.cos(angle)*VAL_R,vy=rCY+Math.sin(angle)*VAL_R;c.save();c.font="bold 13px sans-serif";c.fillStyle=rv>100?"#FF4500":ax.color;c.textAlign=ta;c.textBaseline=tb;if(rv>100){c.shadowColor="#FF4500";c.shadowBlur=8;}c.fillText(rv,vx,vy);c.shadowBlur=0;c.restore();}}
+
 const STAT_META={atk:{color:"#D85A30",desk:{sv:"v-atk",sb:"sb-atk",bar:"bar-atk"},mob:{sv:"mob-v-atk",sb:"mob-sb-atk",bar:"mob-bar-atk"}},def:{color:"#378ADD",desk:{sv:"v-def",sb:"sb-def",bar:"bar-def"},mob:{sv:"mob-v-def",sb:"mob-sb-def",bar:"mob-bar-def"}},sta:{color:"#1D9E75",desk:{sv:"v-sta",sb:"sb-sta",bar:"bar-sta"},mob:{sv:"mob-v-sta",sb:"mob-sb-sta",bar:"mob-bar-sta"}},accel:{color:"#D8A030",desk:{sv:"v-accel",sb:"sb-accel",bar:"bar-accel"},mob:{sv:"mob-v-accel",sb:"mob-sb-accel",bar:"mob-bar-accel"}},endurance:{color:"#D85070",desk:{sv:"v-end",sb:"sb-end",bar:"bar-end"},mob:{sv:"mob-v-end",sb:"mob-sb-end",bar:"mob-bar-end"}}};
 function applyStatUI(ids,v,color,lb){const svEl=document.getElementById(ids.sv),sbEl=document.getElementById(ids.sb),barEl=document.getElementById(ids.bar);if(!svEl||!sbEl||!barEl)return;svEl.textContent=v;sbEl.classList.toggle("limitbreak",lb);svEl.classList.toggle("limitbreak",lb);if(!lb)svEl.style.color=color;const pct=Math.min(v/100,1)*100;barEl.style.width=pct+"%";barEl.style.background=lb?"#FF4500":color;barEl.classList.toggle("limitbreak",lb);if(lb)barEl.style.color="#FF4500";}
-function updateStats(){if(!selBlade||!selRatchet||!selBit)return;const b=selBlade.stats,r=selRatchet.stats,bt=selBit.stats;const atk=(b.atk||0)+(r.atk||0)+(bt.atk||0);const def=(b.def||0)+(r.def||0)+(bt.def||0);const sta=(b.sta||0)+(r.sta||0)+(bt.sta||0);const accel=(b.accel||0)+(r.accel||0)+(bt.accel||0);const endurance=(b.endurance||0)+(r.endurance||0)+(bt.endurance||0);const height=selRatchet.height||60;const totalWeight=parseFloat(((selBlade.weight||0)+(selRatchet.weight||0)+(selBit.weight||0)).toFixed(2));const vals={atk,def,sta,accel,endurance};const ns=calcScale(vals);rScaleTarget=ns;rTarget={...vals};const isOver=ns>100;document.getElementById("radar-scale-label").textContent=isOver?`極限突破！刻度上限：${ns}`:`刻度上限：100`;document.getElementById("radar-scale-badge").classList.toggle("overscale",isOver);Object.entries(vals).forEach(([k,v])=>{const m=STAT_META[k];if(!m)return;const lb=v>100;applyStatUI(m.desk,v,m.color,lb);applyStatUI(m.mob,v,m.color,lb);});const comboText=selSet?`${selSet.name}  /  ${selBlade.name} ・ ${selRatchet.name} ・ ${selBit.name}`:`${selBlade.name} / ${selRatchet.name} / ${selBit.name}`;const heightText=height+" mm";const mrowHtml=`<span class="mp">⚖ ${totalWeight}g</span>`;const max=Math.max(atk,def,sta);let type="平衡型",tc="#BA7517";if(max===atk&&atk-def>15&&atk-sta>15){type="攻擊型";tc="#D85A30";}else if(max===def&&def-atk>15&&def-sta>15){type="防禦型";tc="#378ADD";}else if(max===sta&&sta-atk>15&&sta-def>15){type="耐力型";tc="#1D9E75";}const score=calcScore(atk,def,sta,accel,endurance,totalWeight,type);const badgeText=`${score} 分・${type}`;const dn=document.getElementById("combo-name");if(dn)dn.textContent=comboText;const dh=document.getElementById("height-val");if(dh)dh.textContent=heightText;const dm=document.getElementById("mrow");if(dm)dm.innerHTML=mrowHtml;const dsb=document.getElementById("sbadge");if(dsb){dsb.textContent=badgeText;dsb.style.color=tc;dsb.style.borderColor=tc+"44";dsb.classList.toggle("limitbreak-score",isOver);}const mn=document.getElementById("mob-combo-name");if(mn)mn.textContent=comboText;const mh=document.getElementById("mob-height-val");if(mh)mh.textContent=heightText;const mm=document.getElementById("mob-mrow");if(mm)mm.innerHTML=mrowHtml;const msb=document.getElementById("mob-sbadge");if(msb){msb.textContent=badgeText;msb.style.color=tc;msb.style.borderColor=tc+"44";msb.classList.toggle("limitbreak-score",isOver);}document.getElementById("cl-atk").textContent=atk;document.getElementById("cl-def").textContent=def;document.getElementById("cl-sta").textContent=sta;}
+
+/* 目前配置快照供分享使用 */
+let currentCombo={comboName:"",score:0,type:"",totalWeight:0,bladeKey:"",ratchetKey:"",bitKey:""};
+
+function updateStats(){
+  if(!selBlade||!selRatchet||!selBit)return;
+  const b=selBlade.stats,r=selRatchet.stats,bt=selBit.stats;
+  const atk=(b.atk||0)+(r.atk||0)+(bt.atk||0);const def=(b.def||0)+(r.def||0)+(bt.def||0);const sta=(b.sta||0)+(r.sta||0)+(bt.sta||0);const accel=(b.accel||0)+(r.accel||0)+(bt.accel||0);const endurance=(b.endurance||0)+(r.endurance||0)+(bt.endurance||0);
+  const height=selRatchet.height||60;const totalWeight=parseFloat(((selBlade.weight||0)+(selRatchet.weight||0)+(selBit.weight||0)).toFixed(2));
+  const vals={atk,def,sta,accel,endurance};const ns=calcScale(vals);rScaleTarget=ns;rTarget={...vals};
+  const isOver=ns>100;
+  document.getElementById("radar-scale-label").textContent=isOver?`極限突破！刻度上限：${ns}`:`刻度上限：100`;
+  document.getElementById("radar-scale-badge").classList.toggle("overscale",isOver);
+  Object.entries(vals).forEach(([k,v])=>{const m=STAT_META[k];if(!m)return;const lb=v>100;applyStatUI(m.desk,v,m.color,lb);applyStatUI(m.mob,v,m.color,lb);});
+  const comboText=selSet?`${selSet.name}  /  ${selBlade.name} ・ ${selRatchet.name} ・ ${selBit.name}`:`${selBlade.name} / ${selRatchet.name} / ${selBit.name}`;
+  const max=Math.max(atk,def,sta);let type="平衡型",tc="#BA7517";
+  if(max===atk&&atk-def>15&&atk-sta>15){type="攻擊型";tc="#D85A30";}else if(max===def&&def-atk>15&&def-sta>15){type="防禦型";tc="#378ADD";}else if(max===sta&&sta-atk>15&&sta-def>15){type="耐力型";tc="#1D9E75";}
+  const score=calcScore(atk,def,sta,accel,endurance,totalWeight,type);
+  const badgeText=`${score} 分・${type}`;
+  ["combo-name","mob-combo-name"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=comboText;});
+  ["height-val","mob-height-val"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=height+" mm";});
+  ["mrow","mob-mrow"].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=`<span class="mp">⚖ ${totalWeight}g</span>`;});
+  ["sbadge","mob-sbadge"].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent=badgeText;el.style.color=tc;el.style.borderColor=tc+"44";el.classList.toggle("limitbreak-score",isOver);}});
+  document.getElementById("cl-atk").textContent=atk;document.getElementById("cl-def").textContent=def;document.getElementById("cl-sta").textContent=sta;
+  /* 儲存快照 */
+  currentCombo={comboName:comboText,score,type,totalWeight,bladeKey:selBlade._key,ratchetKey:selRatchet._key,bitKey:selBit._key,atk,def,sta,accel,endurance,height};
+}
+
+/* ═══════════════════════════════════════════
+   ★ 分享功能
+═══════════════════════════════════════════ */
+const SITE_URL="https://ghub.tw";
+
+function buildShareUrl(){
+  const{bladeKey,ratchetKey,bitKey}=currentCombo;
+  return `${SITE_URL}/?b=${encodeURIComponent(bladeKey)}&r=${encodeURIComponent(ratchetKey)}&bit=${encodeURIComponent(bitKey)}`;
+}
+function buildShareText(url){
+  const{comboName,score,totalWeight}=currentCombo;
+  return `我在 G-Hub 配出了一套 ${comboName}！評分 ${score} 分，總重 ${totalWeight}g。這組實戰有搞頭嗎？🔥 ${url}`;
+}
+
+function openShareModal(){
+  if(!selBlade||!selRatchet||!selBit)return;
+  document.getElementById("modal-share").classList.add("open");
+  /* 手機原生分享按鈕顯示 */
+  if(navigator.share)document.getElementById("share-native-btn").classList.add("show");
+  /* 連結預覽 */
+  const url=buildShareUrl();
+  document.getElementById("share-link-preview").textContent=url;
+  /* 重設 IG 提示 */
+  document.getElementById("share-ig-hint").style.display="none";
+  /* 重設複製按鈕 */
+  const cpBtn=document.getElementById("copy-link-btn");cpBtn.classList.remove("copied");cpBtn.innerHTML='<span class="share-btn-icon">🔗</span> 複製連結';
+  /* 生成 Canvas 卡片 */
+  generateShareCard();
+}
+function closeShareModalOutside(e){if(e.target===document.getElementById("modal-share"))closeModal("modal-share");}
+
+/* ★ 生成分享卡片（Canvas 1:1） */
+function generateShareCard(){
+  const loading=document.getElementById("share-card-loading");loading.style.display="flex";
+  const sc=document.getElementById("share-canvas");const SIZE=600;sc.width=sc.height=SIZE;
+  const c=sc.getContext("2d");
+  /* 背景 */
+  c.fillStyle="#0a0a0f";c.fillRect(0,0,SIZE,SIZE);
+  /* 漸層光暈 */
+  const g=c.createRadialGradient(SIZE/2,SIZE/2,0,SIZE/2,SIZE/2,SIZE*.6);g.addColorStop(0,"rgba(55,138,221,0.14)");g.addColorStop(1,"rgba(10,10,15,0)");c.fillStyle=g;c.fillRect(0,0,SIZE,SIZE);
+  /* 邊框 */
+  c.strokeStyle="rgba(55,138,221,0.3)";c.lineWidth=1.5;c.strokeRect(1,1,SIZE-2,SIZE-2);
+  /* G-Hub logo 文字 */
+  c.fillStyle="#378ADD";c.font="bold 22px sans-serif";c.textAlign="left";c.fillText("G-Hub",22,40);
+  c.fillStyle="#5a5a70";c.font="11px sans-serif";c.fillText("戰鬥陀螺 X 台灣 × 神配置計算機",22,58);
+  /* 分隔線 */
+  c.strokeStyle="rgba(55,138,221,0.2)";c.lineWidth=.8;c.beginPath();c.moveTo(20,68);c.lineTo(SIZE-20,68);c.stroke();
+  /* 雷達圖 */
+  const{atk,def,sta,accel,endurance}=currentCombo;const vals={atk,def,sta,accel,endurance};
+  const sc2=calcScale(vals);const CX=SIZE/2,CY=SIZE/2-10,RM=130;
+  const SAXES=[{key:"atk",label:"攻擊",color:"#D85A30"},{key:"def",label:"防禦",color:"#378ADD"},{key:"endurance",label:"耐久",color:"#D85070"},{key:"accel",label:"加速",color:"#D8A030"},{key:"sta",label:"耐力",color:"#1D9E75"}];
+  function spt(idx,v){const a=(idx/5)*Math.PI*2-Math.PI/2,r=(v/sc2)*RM;return{x:CX+Math.cos(a)*r,y:CY+Math.sin(a)*r};}
+  function sgpt(idx,step){const a=(idx/5)*Math.PI*2-Math.PI/2,r=(step/5)*RM;return{x:CX+Math.cos(a)*r,y:CY+Math.sin(a)*r};}
+  /* 格線 */
+  for(let s=1;s<=5;s++){c.beginPath();for(let i=0;i<5;i++){const p=sgpt(i,s);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}c.closePath();c.strokeStyle=s===5?"#363648dd":"#2a2a3866";c.lineWidth=s===5?1:.6;c.stroke();}
+  for(let i=0;i<5;i++){const o=sgpt(i,5);c.beginPath();c.moveTo(CX,CY);c.lineTo(o.x,o.y);c.strokeStyle="#2a2a3888";c.lineWidth=.7;c.stroke();}
+  /* 填充多邊形 */
+  c.beginPath();for(let i=0;i<5;i++){const p=spt(i,vals[SAXES[i].key]);if(i===0)c.moveTo(p.x,p.y);else c.lineTo(p.x,p.y);}c.closePath();
+  const rg=c.createRadialGradient(CX,CY,0,CX,CY,RM);rg.addColorStop(0,"rgba(55,138,221,0.4)");rg.addColorStop(1,"rgba(55,138,221,0.08)");c.fillStyle=rg;c.fill();c.strokeStyle="rgba(133,183,235,0.8)";c.lineWidth=1.8;c.stroke();
+  /* 頂點 dot + 標籤 */
+  const LR=RM+22,VR=RM+38;for(let i=0;i<5;i++){const ax=SAXES[i];const angle=(i/5)*Math.PI*2-Math.PI/2;const rv=Math.round(vals[ax.key]);const dp=spt(i,vals[ax.key]);c.beginPath();c.arc(dp.x,dp.y,5,0,Math.PI*2);c.fillStyle=rv>100?"#FF4500":ax.color;c.fill();const cos=Math.cos(angle),sin=Math.sin(angle);const ta=cos>0.3?"left":cos<-0.3?"right":"center";const tb=sin<-0.3?"bottom":sin>0.3?"top":"middle";const lx=CX+cos*LR,ly=CY+sin*LR;c.save();c.font="12px sans-serif";c.fillStyle="#9090a8";c.textAlign=ta;c.textBaseline=tb;c.fillText(ax.label,lx,ly);c.restore();const vx=CX+cos*VR,vy=CY+sin*VR;c.save();c.font="bold 15px sans-serif";c.fillStyle=rv>100?"#FF4500":ax.color;c.textAlign=ta;c.textBaseline=tb;c.fillText(rv,vx,vy);c.shadowBlur=0;c.restore();}
+  /* 底部資訊欄 */
+  const bY=SIZE-150;c.strokeStyle="rgba(55,138,221,0.2)";c.lineWidth=.8;c.beginPath();c.moveTo(20,bY);c.lineTo(SIZE-20,bY);c.stroke();
+  /* 組合名稱 */
+  c.fillStyle="#f0f0f8";c.font="bold 15px sans-serif";c.textAlign="left";
+  const cname=currentCombo.comboName.length>38?currentCombo.comboName.slice(0,38)+"…":currentCombo.comboName;
+  c.fillText(cname,24,bY+22);
+  /* 屬性標籤 */
+  const tc=TYPE_COLOR[currentCombo.type]||"#9090a8";c.fillStyle=tc;c.font="13px sans-serif";c.textAlign="left";c.fillText(currentCombo.type,24,bY+46);
+  /* 分數 */
+  c.fillStyle="#f0f0f8";c.font="bold 36px sans-serif";c.textAlign="right";c.fillText(currentCombo.score+" 分",SIZE-24,bY+46);
+  /* 重量 */
+  c.fillStyle="#B8C8DC";c.font="13px sans-serif";c.textAlign="left";c.fillText(`⚖ ${currentCombo.totalWeight}g`,24,bY+70);
+  /* 高度 */
+  c.fillStyle="#9090a8";c.font="12px sans-serif";c.fillText(`↕ ${currentCombo.height} mm`,110,bY+70);
+  /* 水印 URL */
+  c.fillStyle="rgba(133,183,235,0.5)";c.font="11px sans-serif";c.textAlign="right";c.fillText(buildShareUrl(),SIZE-24,SIZE-18);
+  loading.style.display="none";
+}
+
+function downloadCard(){
+  generateShareCard();
+  const sc=document.getElementById("share-canvas");const link=document.createElement("a");
+  link.download=`ghub_${selBlade?._key||"config"}_${selRatchet?._key||""}_${selBit?._key||""}.png`;
+  link.href=sc.toDataURL("image/png");link.click();
+}
+
+async function copyShareLink(){
+  const url=buildShareUrl();const btn=document.getElementById("copy-link-btn");
+  try{await navigator.clipboard.writeText(url);}catch(e){const t=document.createElement("textarea");t.value=url;document.body.appendChild(t);t.select();document.execCommand("copy");document.body.removeChild(t);}
+  btn.classList.add("copied");btn.innerHTML='<span class="share-btn-icon">✅</span> 已複製！';
+  setTimeout(()=>{btn.classList.remove("copied");btn.innerHTML='<span class="share-btn-icon">🔗</span> 複製連結';},2500);
+}
+
+function openThreads(){
+  const url=buildShareUrl();const text=buildShareText(url);
+  window.open(`https://www.threads.net/intent/post?text=${encodeURIComponent(text)}`,"_blank");return false;
+}
+function openLine(){
+  const url=buildShareUrl();const text=buildShareText(url);
+  window.open(`https://line.me/R/msg/text/?${encodeURIComponent(text)}`,"_blank");return false;
+}
+function openFBShare(){
+  const url=buildShareUrl();
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,"_blank","width=600,height=400");return false;
+}
+function openIG(){
+  const url=buildShareUrl();const text=buildShareText(url);
+  try{navigator.clipboard.writeText(text);}catch(e){const t=document.createElement("textarea");t.value=text;document.body.appendChild(t);t.select();document.execCommand("copy");document.body.removeChild(t);}
+  document.getElementById("share-ig-hint").style.display="block";
+  downloadCard();
+}
+async function nativeShare(){
+  const url=buildShareUrl();const text=buildShareText(url);
+  if(navigator.share){try{await navigator.share({title:"G-Hub 神配置",text,url});}catch(e){}}
+}
+
+/* ─── 一般 Modal ─── */
 let footerOpen=false;
 function toggleFooter(){footerOpen=!footerOpen;document.getElementById("footer-body").classList.toggle("open",footerOpen);document.getElementById("footer-chevron").classList.toggle("open",footerOpen);}
 function openModal(id){document.getElementById("modal-"+id).classList.add("open");}
 function closeModal(id){document.getElementById(id).classList.remove("open");}
 function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
-document.addEventListener("keydown",e=>{if(e.key==="Escape")document.querySelectorAll(".modal-overlay.open").forEach(m=>closeModal(m.id));});
-const FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLSfOET3LO_fbMNnPVmx_dNSt4IfbdxrmPtAueEJxtJ8BaFICYg/formResponse";
-const ENTRY_ID="entry.1318000550";
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){document.querySelectorAll(".modal-overlay.open").forEach(m=>m.classList.remove("open"));}});
+
+/* ─── 回饋 ─── */
+const FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLSfOET3LO_fbMNnPVmx_dNSt4IfbdxrmPtAueEJxtJ8BaFICYg/formResponse";const ENTRY_ID="entry.1318000550";
 const handleFeedbackSubmit=async(msg)=>{const fd=new FormData();fd.append(ENTRY_ID,msg);try{await fetch(FORM_URL,{method:"POST",mode:"no-cors",body:fd});return true;}catch(e){return false;}};
 let selectedRating=0,selectedCat="",fbHistory=[];
 function selectRating(btn){document.querySelectorAll(".rating-btn").forEach(b=>{b.classList.remove("selected");b.style.cssText="";});btn.classList.add("selected");const c=["","#D85A30","#D8A030","#D8D030","#1D9E75","#5DCAA5"];const v=parseInt(btn.dataset.val);selectedRating=v;btn.style.color=c[v];btn.style.borderColor=c[v]+"88";btn.style.background=c[v]+"18";}
@@ -816,6 +1002,8 @@ function selectCat(btn){document.querySelectorAll(".cat-btn").forEach(b=>b.class
 function updateChar(){document.getElementById("char-count").textContent=document.getElementById("fb-text").value.length;}
 async function submitFeedback(){const txt=document.getElementById("fb-text").value.trim();if(!txt){document.getElementById("fb-text").style.borderColor="#A32D2D";setTimeout(()=>document.getElementById("fb-text").style.borderColor="",1500);return;}const btn=document.getElementById("fb-submit-btn");btn.disabled=true;btn.innerHTML='<i class="ti ti-loader-2"></i>送出中…';const r=selectedRating?`[滿意度: ${"⭐".repeat(selectedRating)}]`:"";const ct=selectedCat?`[${selectedCat}]`:"";const ok=await handleFeedbackSubmit([r,ct,txt].filter(Boolean).join(" "));btn.disabled=false;btn.innerHTML='<i class="ti ti-send"></i>送出回饋';if(ok){const el=document.getElementById("fb-ok");el.style.display="flex";setTimeout(()=>el.style.display="none",4000);const now=new Date();fbHistory.push({msg:txt,rating:selectedRating,cat:selectedCat,time:`${now.getHours().toString().padStart(2,"0")}:${now.getMinutes().toString().padStart(2,"0")}`});renderFbHistory();document.getElementById("fb-text").value="";document.getElementById("char-count").textContent="0";document.querySelectorAll(".rating-btn").forEach(b=>{b.classList.remove("selected");b.style.cssText="";});document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("selected"));selectedRating=0;selectedCat="";}else{const el=document.getElementById("fb-err");el.style.display="flex";setTimeout(()=>el.style.display="none",4000);}}
 function renderFbHistory(){if(!fbHistory.length)return;document.getElementById("fb-history").style.display="block";const c=["","#D85A30","#D8A030","#D8D030","#1D9E75","#5DCAA5"];document.getElementById("fb-history-list").innerHTML=fbHistory.slice(-3).reverse().map(h=>`<div class="fb-history-item">${h.msg.length>60?h.msg.slice(0,60)+"…":h.msg}<div class="fb-history-meta">${h.rating?`<span style="color:${c[h.rating]}">${"⭐".repeat(h.rating)}</span>`:""}${h.cat?`<span>${h.cat}</span>`:""}<span>${h.time}</span></div></div>`).join("");}
+
+/* ─── 賽事中心 ─── */
 const TODAY=new Date();TODAY.setHours(0,0,0,0);
 function parseEventDate(str){const[y,m,d]=str.split("/").map(Number);return new Date(y,m-1,d);}
 function classifyEvents(){const upcoming=[],past=[];EVT_RAW.forEach(e=>{const ed=parseEventDate(e.date);const diff=Math.round((ed-TODAY)/86400000);let item={...e,_diffDays:diff};if(ed.getTime()<TODAY.getTime()){item.badge="badge-past";item.bt="已結束";past.push(item);}else{if(diff===0){item.badge="badge-open";item.bt="今天開賽";}else if(diff<=7){item.badge="badge-soon";item.bt="即將開始";}else{item.badge="badge-open";item.bt="報名中";}upcoming.push(item);}});upcoming.sort((a,b)=>a._diffDays-b._diffDays);past.sort((a,b)=>b._diffDays-a._diffDays);return{upcoming,past};}
@@ -827,5 +1015,6 @@ function renderEvents(tab){const list=EVT[tab];document.getElementById("count-up
 function switchTab(tab,el){curTab=tab;document.querySelectorAll(".etab").forEach(b=>b.classList.remove("active"));el.classList.add("active");renderEvents(tab);if(lmap)renderMapMarkers(tab);}
 function goto(page,el){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("page-"+page).classList.add("active");document.querySelectorAll(".nav-item").forEach(b=>b.classList.remove("active"));document.querySelectorAll("[data-m]").forEach(b=>b.classList.remove("active"));const ids={home:"nb-home",bey:"nb-bey",cl:"nb-cl"};if(ids[page])document.getElementById(ids[page]).classList.add("active");document.querySelectorAll(`[data-m="${{home:"home",bey:"bey",cl:"cl"}[page]}"]`).forEach(b=>b.classList.add("active"));if(page==="home"){setTimeout(()=>{initMap();if(lmap)lmap.invalidateSize();},80);}if(page==="bey"){setTimeout(resizeRadar,50);}}
 function toggleMob(){const menu=document.getElementById("mob-menu");const btn=document.getElementById("hamburger-btn");const isOpen=menu.classList.toggle("open");btn.classList.toggle("open",isOpen);btn.setAttribute("aria-expanded",isOpen);btn.setAttribute("aria-label",isOpen?"關閉選單":"開啟選單");}
+
 EVT=classifyEvents();renderEvents("upcoming");setTimeout(()=>initMap(),200);initRadar();renderSetsDropdown();renderFilteredList("blade");renderFilteredList("ratchet");renderFilteredList("bit");applySet(0);window.addEventListener("resize",()=>resizeRadar());
 </script>
