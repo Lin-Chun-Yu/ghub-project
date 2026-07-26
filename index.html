@@ -904,7 +904,39 @@ function applyDeepLink() {
   if (rKey)   selectPart("ratchet", rKey);
   if (bitKey) selectPart("bit",     bitKey);
 
-  // 顯示 Banner 提示
+  // ★ 修復：比對官方套組，同步更新套組欄位
+  const matchedSetIdx = BEYBLADE_DATABASE.sets.findIndex(set =>
+    set.components.blade   === bKey &&
+    set.components.ratchet === rKey &&
+    set.components.bit     === bitKey
+  );
+
+  if (matchedSetIdx !== -1) {
+    // 三個零件完全匹配某官方套組 → 顯示套組資訊
+    const matchedSet = BEYBLADE_DATABASE.sets[matchedSetIdx];
+    selSet = matchedSet;
+    const st = matchedSet.type || "平衡型";
+    const tc = TYPE_COLOR[st] || "#9090a8";
+    document.getElementById("disp-sets-name").textContent = matchedSet.name;
+    const tEl = document.getElementById("disp-sets-type");
+    tEl.textContent = st;
+    tEl.style.cssText = `display:inline;font-size:9px;padding:1px 6px;border-radius:20px;color:${tc};background:${tc}18;border:.5px solid ${tc}44`;
+    document.getElementById("disp-sets-ver").textContent =
+      matchedSet.versions?.length ? versStr(matchedSet.versions) : "";
+    const sw = document.getElementById("disp-sets-weight");
+    sw.textContent = getSetTotalWeight(matchedSet) + "g";
+    sw.style.display = "";
+    renderSetsDropdown(); // 更新下拉列表的 active 狀態
+  } else {
+    // 沒有對應的官方套組 → 清空套組欄位（自訂配置）
+    selSet = null;
+    document.getElementById("disp-sets-name").textContent = "自訂配置";
+    document.getElementById("disp-sets-type").style.display = "none";
+    document.getElementById("disp-sets-ver").textContent = "—";
+    document.getElementById("disp-sets-weight").style.display = "none";
+    renderSetsDropdown();
+  }
+
   const parts = [
     bKey   ? blades[bKey].name   : null,
     rKey   || null,
