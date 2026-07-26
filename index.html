@@ -867,46 +867,61 @@ function updateStats(){
    讀取 ?b=<bladeKey>&r=<ratchetKey>&bit=<bitKey>
    若三個參數都有效，自動載入並切換至神配置計算機
 ═══════════════════════════════ */
-function applyDeepLink(){
-  const params=new URLSearchParams(window.location.search);
-  const bKey=params.get("b");
-  const rKey=params.get("r");
-  const bitKey=params.get("bit");
-  if(!bKey&&!rKey&&!bitKey)return;           // 沒有參數，不做事
+function applyDeepLink() {
+  const params = new URLSearchParams(window.location.search);
+  const bRaw  = params.get("b");
+  const rRaw  = params.get("r");
+  const bitRaw = params.get("bit");
 
-  const blades=BEYBLADE_DATABASE.parts.blades;
-  const ratchets=BEYBLADE_DATABASE.parts.ratchets;
-  const bits=BEYBLADE_DATABASE.parts.bits;
+  if (!bRaw && !rRaw && !bitRaw) return; // 沒有參數，直接跳出
 
-  const validB=bKey&&blades[bKey];
-  const validR=rKey&&ratchets[rKey];
-  const validBit=bitKey&&bits[bitKey];
+  const blades   = BEYBLADE_DATABASE.parts.blades;
+  const ratchets = BEYBLADE_DATABASE.parts.ratchets;
+  const bits     = BEYBLADE_DATABASE.parts.bits;
 
-  if(!validB&&!validR&&!validBit)return;     // 全部無效，不切換
+  // 容錯：先嘗試直接 key，找不到就 decode 後再比對一次
+  function resolveKey(raw, dict) {
+    if (!raw) return null;
+    if (dict[raw]) return raw;
+    const decoded = decodeURIComponent(raw);
+    if (dict[decoded]) return decoded;
+    // 最後再做不分大小寫的 fallback
+    const lower = decoded.toLowerCase();
+    return Object.keys(dict).find(k => k.toLowerCase() === lower) || null;
+  }
 
-  /* 自動切換至神配置計算機 */
-  goto("bey",document.getElementById("nb-bey"));
+  const bKey   = resolveKey(bRaw,   blades);
+  const rKey   = resolveKey(rRaw,   ratchets);
+  const bitKey = resolveKey(bitRaw, bits);
 
-  /* 逐一套用有效的零件 */
-  if(validB)   selectPart("blade",  bKey);
-  if(validR)   selectPart("ratchet",rKey);
-  if(validBit) selectPart("bit",    bitKey);
+  if (!bKey && !rKey && !bitKey) return; // 全部無效，不切換
 
-  /* 顯示 Banner 告知使用者 */
-  const banner=document.getElementById("deeplink-banner");
-  const parts=[];
-  if(validB)   parts.push(blades[bKey].name);
-  if(validR)   parts.push(rKey);
-  if(validBit) parts.push(bits[bitKey].name);
-  document.getElementById("deeplink-msg").textContent=`✅ 已從分享連結載入：${parts.join(" ＋ ")}`;
+  // ★ 自動切換到神配置計算機
+  goto("bey", document.getElementById("nb-bey"));
+
+  // 套用有效的零件
+  if (bKey)   selectPart("blade",   bKey);
+  if (rKey)   selectPart("ratchet", rKey);
+  if (bitKey) selectPart("bit",     bitKey);
+
+  // 顯示 Banner 提示
+  const parts = [
+    bKey   ? blades[bKey].name   : null,
+    rKey   || null,
+    bitKey ? bits[bitKey].name   : null,
+  ].filter(Boolean);
+
+  const banner = document.getElementById("deeplink-banner");
+  document.getElementById("deeplink-msg").textContent =
+    `✅ 已從分享連結載入：${parts.join(" ＋ ")}`;
   banner.classList.add("show");
-  setTimeout(()=>banner.classList.remove("show"),5000);
+  setTimeout(() => banner.classList.remove("show"), 5000);
 }
 
 /* ═══════════════════════════════
    分享功能
 ═══════════════════════════════ */
-const SITE_URL="https://ghub.tw";
+const SITE_URL = window.location.origin + (window.location.pathname !== '/' ? window.location.pathname.replace(/\/$/, '') : '');
 function buildShareUrl(){const{bladeKey,ratchetKey,bitKey}=currentCombo;return `${SITE_URL}/?b=${encodeURIComponent(bladeKey)}&r=${encodeURIComponent(ratchetKey)}&bit=${encodeURIComponent(bitKey)}`;}
 function buildShareText(url){const{comboName,score,totalWeight}=currentCombo;return `我在 G-Hub 配出了一套 ${comboName}！評分 ${score} 分，總重 ${totalWeight}g。這組實戰有搞頭嗎？🔥 ${url}`;}
 
@@ -993,10 +1008,20 @@ function toggleMob(){const menu=document.getElementById("mob-menu");const btn=do
 /* ═══════════════════════════════
    初始化
 ═══════════════════════════════ */
-EVT=classifyEvents();renderEvents("upcoming");setTimeout(()=>initMap(),200);
-initRadar();renderSetsDropdown();renderFilteredList("blade");renderFilteredList("ratchet");renderFilteredList("bit");
-applySet(0);  // 預設載入第一組套組
-window.addEventListener("resize",()=>resizeRadar());
+EVT = classifyEvents();
+renderEvents("upcoming");
+setTimeout(() => initMap(), 200);
+initRadar();
+renderSetsDropdown();
+renderFilteredList("blade");
+renderFilteredList("ratchet");
+renderFilteredList("bit");
+applySet(0); // 先載入預設套組，確保 selBlade / selRatchet / selBit 已初始化
+
+// ★ Bug 1 & 2 修復：資料全部就緒後，再解析 URL 參數
+// 用 setTimeout(0) 讓 DOM 先走完一輪 microtask，確保渲染完成
+setTimeout(() => applyDeepLink(), 0);
+window.addEventListener("resize", () => resizeRadar());
 
 /* ★ Bug 1：初始化完成後再解析 Deep Link，確保 selectPart 可以正常執行 */
 /* 在 visualize 預覽環境用 Demo URL 示範（實際網站直接讀 window.location.search）*/
